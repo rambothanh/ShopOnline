@@ -2,6 +2,8 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,visualstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,visualstudio
+#### my Gitignore
+knguhtml-10/
 
 ### VisualStudioCode ###
 .vscode/*
