@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopOnline.API.Models.UserModels
+namespace Models.Entities.UserModels
 {
     public class Role
     {

@@ -1,8 +1,9 @@
 namespace Models.Entities.Products
 {
-    public class Type
+    public class ProductBrand
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
     }
 }

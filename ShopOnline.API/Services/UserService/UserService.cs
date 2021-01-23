@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using ShopOnline.API.Models;
 using ShopOnline.API.Models.Helpers;
-using ShopOnline.API.Models.UserModels;
+using Models.Entities.UserModels;
 
 namespace ShopOnline.API.Services.UserService
 {
     public class UserService : IUserService
     {
-        private TodoContext _context;
+        private ShopOnlineContext _context;
 
-        public UserService(TodoContext context)
+        public UserService(ShopOnlineContext context)
         {
             _context = context;
         }

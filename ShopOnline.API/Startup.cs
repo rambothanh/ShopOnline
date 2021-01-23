@@ -15,9 +15,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ShopOnline.API.Models;
-using ShopOnline.API.Models.CrawlerModels;
 using ShopOnline.API.Models.Helpers;
 using ShopOnline.API.Services.UserService;
+using Models.Infrastructure.Context;
 
 namespace ShopOnline.API
 {
@@ -35,7 +35,7 @@ namespace ShopOnline.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ProductContext>(opt => opt.UseSqlite("Data Source=ProductData.db"));
+            services.AddDbContext<ShopOnlineContext>(opt => opt.UseSqlite("Data Source=ProductData.db"));
 
             //Xử lý lỗi at System.Text.Json.ThrowHelper.ThrowJsonException_SerializerCycleDetected(Int32 maxDepth)
             services.AddControllersWithViews().AddNewtonsoftJson(options =>

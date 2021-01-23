@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ShopOnline.API.Models.UserModels
+namespace Models.Entities.UserModels
 {
     public class AuthenticateModel
     {

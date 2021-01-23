@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using ShopOnline.API.Models;
 using ShopOnline.API.Models.Helpers;
-using ShopOnline.API.Models.UserModels;
+using Models.Entities.UserModels;
 using ShopOnline.API.Services.UserService;
 
 namespace ShopOnline.API.Controllers
@@ -20,12 +20,12 @@ namespace ShopOnline.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly TodoContext _context;
+        private readonly ShopOnlineContext _context;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly AppSettings _appSettings;
 
-        public UsersController(TodoContext context, IMapper mapper,
+        public UsersController(ShopOnlineContext context, IMapper mapper,
         IUserService userService,
         IOptions<AppSettings> appSettings)
         {

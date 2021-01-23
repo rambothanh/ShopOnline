@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ShopOnline.API.Models.UserModels;
+using Models.Entities.UserModels;
 
 namespace ShopOnline.API.Services.UserService
 {

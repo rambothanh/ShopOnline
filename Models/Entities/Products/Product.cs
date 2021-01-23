@@ -9,11 +9,11 @@ namespace Models.Entities.Products
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string PictureUri { get; set; }
-        [ForeignKey("Type")]
-        public int TypeRefId { get; set; }
-        public Type Type { get; set; }
-        [ForeignKey("Brand")]
-        public int BrandRefId { get; set; }
-        public Brand Brand { get; set; }
+        [ForeignKey("ProductType")]
+        public int ProductTypeRefId { get; set; }
+        public ProductType ProductType { get; set; }
+        [ForeignKey("ProductBrand")]
+        public int ProductBrandRefId { get; set; }
+        public ProductBrand ProductBrand { get; set; }
     }
 }

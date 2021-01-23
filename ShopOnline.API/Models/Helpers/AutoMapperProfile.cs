@@ -1,6 +1,5 @@
 using AutoMapper;
-using ShopOnline.API.Models.UserModels;
-using ShopOnline.API.Models.CrawlerModels;
+using Models.Entities.UserModels;
 
 namespace ShopOnline.API.Models.Helpers
 {
@@ -12,10 +11,8 @@ namespace ShopOnline.API.Models.Helpers
             CreateMap<User, UserModel>();
             CreateMap<RegisterModel, User>();
             CreateMap<UpdateModel, User>();
-            CreateMap<TodoItem, TodoItemDTO>();
-             CreateMap<TodoItemDTO, TodoItem>();
-             CreateMap<News,NewsDTO>();
-             CreateMap<NewsDTO,News>();
+                 
+       
         }
     }
 }
