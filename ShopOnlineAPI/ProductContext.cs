@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models.Entities.Products;
 
-namespace Models.Infrastructure.Context
+namespace ShopOnlineAPI
 {
     public class ProductContext : DbContext
     {
