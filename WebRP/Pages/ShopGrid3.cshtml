@@ -1,10 +1,11 @@
 @page
 @model ShopGrid3Model
+@using System.Text.Json
 
 @{
     ViewData["Title"] = "ShopGrid3";
 }
-
+@* 
 <!--Page Banner Start-->
         <div class="page-banner" style="background-image: url(assets/images/testimonial-bg.jpg);">
             <div class="container">
@@ -888,4 +889,67 @@
                 </div>
             </div>
         </div>
-        <!--Quick View Tags End-->
+        <!--Quick View Tags End--> *@
+
+<script>
+
+     $(document).ready(function () {
+        @* if (!sessionStorage.hasOwnProperty("token")) {
+            window.location.href = "/EmployeeManager/SignIn";
+        } *@
+        var options = {};
+        options.url = "http://localhost:5000/api/Products";
+        options.type = "GET";
+        @* options.beforeSend = function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+            $("h3.message").html("Wait...");
+        }; *@
+        options.dataType = "json";
+        options.success = function (data) {
+            
+            data.forEach(function (product) {
+                var row = "<tr>";
+                row += "<td>";
+                row += product.id;
+                row += "</td>";
+                row += "<td>";
+                row += product.name;
+                row += "</td>";
+                row += "<td>";
+                row += product.description;
+                row += "</td>";
+                row += "</tr>";
+                $("#ProductList").append(row);
+                console.log(product.name);
+            });
+            $("h3.message").html("");
+            @* if (sessionStorage.hasOwnProperty("message")) {
+                $("h3.message").html(sessionStorage.getItem("message"));
+                sessionStorage.removeItem("message");
+            } *@
+        };
+        options.error = function (xhr) {
+            @* if (xhr.status == 401) {
+                window.location.href = "/EmployeeManager/SignIn";
+            } *@
+            $("h3.message").html("Error while calling the API");
+        }
+        $.ajax(options);
+    });
+ 
+ $(document).ready(function(){
+    console.log('hi from jQuery!');
+});
+</script>
+<h3 class="message"></h3>
+<table id="ProductList" border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Title</th>
+        <th colspan="2">Actions</th>
+    </tr>
+</table>
+<h3 class="test"></h3>
+

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using ShopOnline.API.Models;
 using ShopOnline.API.Models.Helpers;
 using ShopOnline.API.Services.UserService;
-using Models.Infrastructure.Context;
+
 
 namespace ShopOnline.API
 {
