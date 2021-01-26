@@ -58,6 +58,42 @@
             <div class="tab-pane fade show active" id="grid" role="tabpanel">
                 <div class="row">
                     <!--Show a Products as grid-->
+                    <!--A Product-->
+                    <div class="col-lg-4 col-sm-6">
+                            <div class="single-product">
+                                <div class="product-image">
+                                    <a href="shopsingle">
+                                        <img src="assets/images/product/product-1.jpg" alt="">
+                                    </a>
+                                    <span class="sticker-new soldout-title">Soldout</span>
+                                    <div class="action-links">
+                                        <ul>
+                                            <li><a href="cart.html" data-tooltip="tooltip" data-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
+                                            <li><a href="compare.html" data-tooltip="tooltip" data-placement="left" title="Compare"><i class="icon-sliders"></i></a></li>
+                                            <li><a href="wishlist.html" data-tooltip="tooltip" data-placement="left" title="Add to Wishlist"><i class="icon-heart"></i></a></li>
+                                            <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="left" title="Quick View" data-toggle="modal" data-target="#exampleModal"><i class="icon-eye"></i></a></li>
+                                        </ul>
+                                    </div>
+                                        <div class="product-countdown">
+                                            <div data-countdown="2020/12/31"></div>
+                                        </div>
+                                </div>
+                                <div class="product-content text-center">
+                                    <ul class="rating">
+                                        <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                                        <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                                        <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                                        <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                                        <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                                    </ul>
+                                    <h4 class="product-name"><a href="shopsingle">Sản phẩm thử</a></h4>
+                                    <div class="price-box">
+                                        <span class="current-price">$19.00</span>
+                                        <span class="old-price">$29.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
 
                     
                 </div>
@@ -512,7 +548,7 @@
 
             <!--Right Start-->
             <div class="copyright-content">
-                <p>Copyright 2020 &copy; <a href="https://hasthemes.com/">HasThemes</a> . All Rights Reserved</p>
+                <p>Copyright 2021 &copy; <a href="https://sofsog.com/">Sofsog</a> . All Rights Reserved</p>
             </div>
             <!--Right End-->
             <!--Right Start-->
@@ -606,97 +642,141 @@
                 }else{
                     var stickerNew = `<span class="sticker-new label-sale">-`+product.productPrice.salePercent+`%</span>`;
                 }
+                //Create product grid
+                var divProductGrid = `
+                <div class="col-lg-4 col-sm-6">
+                    <div class="single-product">
+                        <div class="product-image">
+                            <a href="shopsingle">
+                                <img src="`+ product.pictureUri + `" alt="">
+                            </a>
+                            `+stickerNew+`
+                            <div class="action-links">
+                                <ul>
+                                    <li><a href="cart.html" data-tooltip="tooltip" data-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
+                                    <li><a href="compare.html" data-tooltip="tooltip" data-placement="left" title="Compare"><i class="icon-sliders"></i></a></li>
+                                    <li><a href="wishlist.html" data-tooltip="tooltip" data-placement="left" title="Add to Wishlist"><i class="icon-heart"></i></a></li>
+                                    <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="left" title="Quick View" data-toggle="modal" data-target="#Modal`+product.id+`"><i class="icon-eye"></i></a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="product-content text-center">
+                            <ul class="rating">
+                                <li class="rating-on"><i class="fa fa-star"></i></li>
+                                <li class="rating-on"><i class="fa fa-star"></i></li>
+                                <li class="rating-on"><i class="fa fa-star"></i></li>
+                                <li class="rating-on"><i class="fa fa-star-half-o"></i></li>
+                                <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                            </ul>
+                            <h4 class="product-name"><a href="shopsingle">`+ product.name+`</a></h4>
+                            <div class="price-box">
+                                <span class="current-price">$`+ product.productPrice.currentPrice+`</span>
+                                <span class="old-price">$`+ product.productPrice.oldPrice +`</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+                //Add divProduct grid
+                $("#grid > div").append(divProductGrid);
+
                 //Create product list
-                var divProduct = `
-        <div class="col-lg-4 col-sm-6">
-            <div class="single-product">
-                <div class="product-image">
-                    <a href="shopsingle">
-                        <img src="`+ product.pictureUri + `" alt="">
-                    </a>
-                    `+stickerNew+`
-                    <div class="action-links">
-                        <ul>
-                            <li><a href="cart.html" data-tooltip="tooltip" data-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                            <li><a href="compare.html" data-tooltip="tooltip" data-placement="left" title="Compare"><i class="icon-sliders"></i></a></li>
-                            <li><a href="wishlist.html" data-tooltip="tooltip" data-placement="left" title="Add to Wishlist"><i class="icon-heart"></i></a></li>
-                            <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="left" title="Quick View" data-toggle="modal" data-target="#Modal`+product.id+`"><i class="icon-eye"></i></a></li>
+                var divProductList =`
+                <div class="single-product product-list">
+                    <div class="product-image">
+                        <a href="shopsingle">
+                            <img src="`+product.pictureUri+`" alt="">
+                        </a>
+
+                        `+stickerNew+`
+
+                        <div class="action-links">
+                            <ul>
+                                <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="left" title="Quick View" data-toggle="modal" data-target="#Modal`+product.id+`"><i class="icon-eye"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <ul class="rating">
+                            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+                        </ul>
+                        <h4 class="product-name"><a href="shopsingle">`+ product.name+`</a></h4>
+                        <div class="price-box">
+                            <span class="current-price">$`+ product.productPrice.currentPrice+`</span>
+                            <span class="old-price">$`+ product.productPrice.oldPrice+`</span>
+                        </div>
+                        <p>`+ product.shortDescription+`</p>
+
+                        <ul class="action-links">
+                            <li><a href="javascript:void(0);" class="add-cart" data-tooltip="tooltip" data-placement="top" title="Add to cart"> Add to cart </a></li>
+                            <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" class="wishlist"><i class="icon-heart"></i></a></li>
+                            <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="top" title="Compare" class="compare"><i class="icon-sliders"></i></a></li>
                         </ul>
                     </div>
+                </div>`;
 
-                </div>
-                <div class="product-content text-center">
-                    <ul class="rating">
-                        <li class="rating-on"><i class="fa fa-star"></i></li>
-                        <li class="rating-on"><i class="fa fa-star"></i></li>
-                        <li class="rating-on"><i class="fa fa-star"></i></li>
-                        <li class="rating-on"><i class="fa fa-star-half-o"></i></li>
-                        <li class="rating-on"><i class="fa fa-star-o"></i></li>
-                    </ul>
-                    <h4 class="product-name"><a href="shopsingle">`+ product.name+`</a></h4>
-                    <div class="price-box">
-                        <span class="current-price">$`+ product.productPrice.currentPrice+`</span>
-                        <span class="old-price">$`+ product.productPrice.oldPrice +`</span>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-
-                //Add divProduct
-                $("#grid > div").append(divProduct);
+                //Add product list
+                $("div#list").append(divProductList);
 
                 //Create quick view
                 var quickView =`
-<div class="modal fade" id="Modal`+product.id+`">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="quick-view-image">
-                            <img src="`+ product.pictureUri + `" alt="">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="quick-view-content">
-                            <h4 class="product-title">`+ product.name+`</h4>
-                            <div class="thumb-price">
-                                <span class="current-price">$`+ product.productPrice.currentPrice+`</span>
-                                <span class="old-price">$`+ product.productPrice.oldPrice+`</span>
-                                <span class="discount">-`+ product.productPrice.salePercent+`%</span>
-                            </div>
-                            <div class="product-rating">
-                                <ul class="rating-star">
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                </ul>
-                                <span>No reviews</span>
-                            </div>
-                            <p>`+ product.description+`</p>
-
-                            <div class="quick-view-quantity-addcart d-flex flex-wrap">
-                                <form action="#">
-                                    <div class="quantity d-inline-flex">
-                                        <button type="button" class="sub"><i class="ti-minus"></i></button>
-                                        <input type="text" value="1" />
-                                        <button type="button" class="add"><i class="ti-plus"></i></button>
+                <div class="modal fade" id="Modal`+product.id+`">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="quick-view-image">
+                                            <img src="`+ product.pictureUri + `" alt="">
+                                        </div>
                                     </div>
-                                </form>
-                                <div class="addcart-btn">
-                                    <button class="btn btn-primary">Add to cart</button>
+                                    <div class="col-md-6">
+                                        <div class="quick-view-content">
+                                            <h4 class="product-title">`+ product.name+`</h4>
+                                            <div class="thumb-price">
+                                                <span class="current-price">$`+ product.productPrice.currentPrice+`</span>
+                                                <span class="old-price">$`+ product.productPrice.oldPrice+`</span>
+                                                <span class="discount">-`+ product.productPrice.salePercent+`%</span>
+                                            </div>
+                                            <div class="product-rating">
+                                                <ul class="rating-star">
+                                                    <li><i class="fa fa-star-o"></i></li>
+                                                    <li><i class="fa fa-star-o"></i></li>
+                                                    <li><i class="fa fa-star-o"></i></li>
+                                                    <li><i class="fa fa-star-o"></i></li>
+                                                    <li><i class="fa fa-star-o"></i></li>
+                                                </ul>
+                                                <span>No reviews</span>
+                                            </div>
+                                            <p>`+ product.shortDescription+`</p>
+
+                                            <div class="quick-view-quantity-addcart d-flex flex-wrap">
+                                                <form action="#">
+                                                    <div class="quantity d-inline-flex">
+                                                        <button type="button" class="sub"><i class="ti-minus"></i></button>
+                                                        <input type="text" value="1" />
+                                                        <button type="button" class="add"><i class="ti-plus"></i></button>
+                                                    </div>
+                                                </form>
+                                                <div class="addcart-btn">
+                                                    <button class="btn btn-primary">Add to cart</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>`;        //Add quick view
+                </div>`;
+
+                //Add quick view
                 $("div.main-wrapper").append(quickView);
             });
             //Error message change to ""
@@ -717,22 +797,56 @@
         //Start call API
         $.ajax(options);
     });
+    
 </script>
+<!--A Product list-->
+@*<div class="single-product product-list">
+    <div class="product-image">
+        <a href="shopsingle">
+            <img src="assets/images/product/product-1.jpg" alt="">
+        </a>
 
-@* Nơi add *@
-@* <div class="tab-content" id="myTabContent">
-    <!--Show Products as grid-->
-    <div class="tab-pane fade show active" id="grid" role="tabpanel">
-        <div class="row"> *@
+        <span class="sticker-new soldout-title">Soldout</span>
+
+        <div class="action-links">
+            <ul>
+                <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="left" title="Quick View" data-toggle="modal" data-target="#exampleModal"><i class="icon-eye"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="product-content">
+        <ul class="rating">
+            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+            <li class="rating-on"><i class="fa fa-star-o"></i></li>
+        </ul>
+        <h4 class="product-name"><a href="shopsingle">Spring Snowflake</a></h4>
+        <div class="price-box">
+            <span class="current-price">$19.00</span>
+            <span class="old-price">$29.00</span>
+        </div>
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+
+        <ul class="action-links">
+            <li><a href="javascript:void(0);" class="add-cart" data-tooltip="tooltip" data-placement="top" title="Add to cart"> Add to cart </a></li>
+            <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" class="wishlist"><i class="icon-heart"></i></a></li>
+            <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="top" title="Compare" class="compare"><i class="icon-sliders"></i></a></li>
+        </ul>
+    </div>
+</div> *@
 
 
-<!--A Product-->
+
+<!--A Product grid-->
 @* <div class="col-lg-4 col-sm-6">
         <div class="single-product">
             <div class="product-image">
                 <a href="shopsingle">
                     <img src="assets/images/product/product-1.jpg" alt="">
                 </a>
+                
                 <span class="sticker-new soldout-title">Soldout</span>
                 <div class="action-links">
                     <ul>

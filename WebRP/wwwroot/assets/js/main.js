@@ -53,10 +53,19 @@
 		tooltip
 	-----------------------------------*/
 	
-	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-tooltip="tooltip"]'))
-	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	// var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-tooltip="tooltip"]'))
+	// var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	// 	return new bootstrap.Tooltip(tooltipTriggerEl)
+	// })
+
+	//re-bind the tooltip after the ajax call.
+	$( document ).ajaxStop( function() {
+		//chuyển đổi DOM NodeList thành một mảng thông thường
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-tooltip="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new bootstrap.Tooltip(tooltipTriggerEl)
-	})
+		})
+	});
 
 	
 	/*--
@@ -275,13 +284,28 @@
 		product quantity Script
 	-----------------------------------*/
 
+	// function quantity() {
+	// 	$('.add').on('click', function () {
+	// 		if ($(this).prev().val()) {
+	// 			$(this).prev().val(+$(this).prev().val() + 1);
+	// 		}
+	// 	});
+	// 	$('.sub').on('click', function () {
+	// 		if ($(this).next().val() > 1) {
+	// 			if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+	// 		}
+	// 	});
+	// }
+	// Vì nội dung xuất hiện khi gọi ajax nên phải điều chỉnh lại 
+	// function một chút mới có tác dụng trên các nội dung được get
+	// bằng cách call API
 	function quantity() {
-		$('.add').on('click', function () {
+		$(document).on('click','.add', function () {
 			if ($(this).prev().val()) {
 				$(this).prev().val(+$(this).prev().val() + 1);
 			}
 		});
-		$('.sub').on('click', function () {
+		$(document).on('click','.sub', function () {
 			if ($(this).next().val() > 1) {
 				if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
 			}

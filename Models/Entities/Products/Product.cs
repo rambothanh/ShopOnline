@@ -7,6 +7,7 @@ namespace Models.Entities.Products
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string ShortDescription { get; set; }
         public string PictureUri { get; set; }
         [ForeignKey("ProductType")]
         public int ProductTypeRefId { get; set; }
