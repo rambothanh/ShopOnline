@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopOnline.API.Models;
 
 namespace ShopOnline.API.Migrations.SQLiteMigrations
 {
     [DbContext(typeof(ShopOnlineContext))]
-    partial class ShopOnlineContextModelSnapshot : ModelSnapshot
+    [Migration("20210126055830_V1")]
+    partial class V1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +39,6 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                     b.Property<int>("ProductTypeRefId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("quantity")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductBrandRefId");
@@ -56,8 +55,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Iphone 7 Plus",
                             PictureUri = "assets/images/product/product-5.jpg",
                             ProductBrandRefId = 4,
-                            ProductTypeRefId = 4,
-                            quantity = 1
+                            ProductTypeRefId = 4
                         },
                         new
                         {
@@ -66,8 +64,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Lity Majesty Palm",
                             PictureUri = "assets/images/product/product-4.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 1
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -76,8 +73,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Spring Snowflake",
                             PictureUri = "assets/images/product/product-1.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 1
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -86,8 +82,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Rock Soapwort",
                             PictureUri = "assets/images/product/product-2.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 0
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -96,8 +91,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Scarlet Sage",
                             PictureUri = "assets/images/product/product-3.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 1
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -106,8 +100,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Foxglove Flower",
                             PictureUri = "assets/images/product/product-4.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 1
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -116,8 +109,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Wild Roses",
                             PictureUri = "assets/images/product/product-5.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 1
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -126,8 +118,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Sweet Alyssum",
                             PictureUri = "assets/images/product/product-6.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 1
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -136,8 +127,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Lity Majesty Palm",
                             PictureUri = "assets/images/product/product-7.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 1
+                            ProductTypeRefId = 1
                         },
                         new
                         {
@@ -146,8 +136,7 @@ namespace ShopOnline.API.Migrations.SQLiteMigrations
                             Name = "Majesty Palm",
                             PictureUri = "assets/images/product/product-8.jpg",
                             ProductBrandRefId = 1,
-                            ProductTypeRefId = 1,
-                            quantity = 0
+                            ProductTypeRefId = 1
                         });
                 });
 
