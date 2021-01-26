@@ -1,0 +1,61 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<h1>Create Product</h1>
+
+
+
+<EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        Product Name: <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        Short Description: <InputTextArea id="ShortDescription" @bind-Value="ProductModel.ShortDescription" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        Description: <InputTextArea id="Description" @bind-Value="ProductModel.Description" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        Product Brand Id: <InputNumber id="BrandId" @bind-Value="ProductModel.ProductBrandRefId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        Quantity: <InputNumber id="Quantity" @bind-Value="ProductModel.Quantity" class="form-control" />
+    </div>
+    <div class="form-group">
+        Product Brand:
+        <select name="Brand" id="Brand">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+    </div>
+   
+
+    <br />
+
+    <button type="submit" class="btn btn-success">Submit</button>
+</EditForm>
+
+
+
+@code{
+    private Product ProductModel = new Product();
+
+    private void HandleValidSubmit()
+    {
+        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        @*products = await Http.GetFromJsonAsync<List<Product>>($"Products");*@
+    }
+}
