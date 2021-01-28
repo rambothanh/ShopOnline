@@ -78,6 +78,9 @@ namespace ShopOnline.API.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductPrice>> PostProductPrice(ProductPrice productPrice)
         {
+            //Calculate SalePercent
+            productPrice.SalePercent = Decimal.Round((productPrice.OldPrice-productPrice.CurrentPrice)/productPrice.OldPrice*100);
+            //add productPrice to context
             _context.ProductPrices.Add(productPrice);
             try
             {
