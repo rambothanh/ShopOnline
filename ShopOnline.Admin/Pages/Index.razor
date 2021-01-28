@@ -106,8 +106,10 @@
 
         if (response.IsSuccessStatusCode)
         {
-            messageSuccess = "A Product has added";
-            errorSuccess = "";
+           
+            //---------- Lấy product vừa thêm--------------
+            //Mục đích là lấy id product cung cấp của ProductPrice
+            //Vì ProductPrice có khóa chính là khóa ngoại với Product
             //Phương thức ReadAsStringAsync() đọc chuỗi Json
             //từ đối tượng dạng HttpResponseMessage
             string stringJsonData = await response.Content.ReadAsStringAsync();
@@ -122,7 +124,7 @@
             };
             //Lấy product vừa add
             Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
-            
+            //productPrice tương ứng với Pruduct vừa add
             productPrice = new ProductPrice
             {
                 Id = productHasAdd.Id,
@@ -130,21 +132,23 @@
                 OldPrice = oldPrice,
                 @* SalePercent = Decimal.Round((currentPrice - oldPrice)/oldPrice*100) *@
             };
-            test = productHasAdd.Id;
-            {
-
-            };
-
+            
+            //Add productPrice by call API
             if (productPrice != null)
             {
-                await Http.PostAsJsonAsync("ProductPrices", productPrice);
+                var responsePP = await Http.PostAsJsonAsync("ProductPrices", productPrice);
+                if(responsePP.IsSuccessStatusCode){
+                     messageSuccess = "A Product has added";
+                     errorSuccess = "";
+                }else{
+                    errorSuccess = "Error while calling API to create product price";
+                    messageSuccess = "";
+                }
             }
-
-
         }
         else
         {
-            errorSuccess = "Error while calling API";
+            errorSuccess = "Error while calling API to create new Product";
             messageSuccess = "";
         }
 
