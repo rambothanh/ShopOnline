@@ -9,9 +9,9 @@ namespace Models.Entities.Products
         [ForeignKey("Product")]
 
         public int Id { get; set; }
-        public decimal CurrentPrice { get; set; }
-        public decimal OldPrice { get; set; }
-        public decimal SalePercent { get; set; }
+        public decimal CurrentPrice { get; set; } =0;
+        public decimal OldPrice { get; set; } =0;
+        public decimal SalePercent { get; set; }=0;
         public virtual Product Product { get; set; }
         
         // SalePercent = Decimal.Round((CurrentPrice - OldPrice) / OldPrice * 100);

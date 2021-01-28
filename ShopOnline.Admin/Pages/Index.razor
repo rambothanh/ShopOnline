@@ -1,73 +1,158 @@
 ﻿@page "/"
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @inject HttpClient Http
 
-<h1>Create Product</h1>
 
-
+<h1>Add a Product</h1>
 
 <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
+    @* Product Name *@
     <div class="form-group">
-        Product Name: <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+        Product Name:
+        <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
     </div>
+    @* Product Type *@
+    @if (productTypes == null)
+    {
+        <p> Loadding...</p>
+    }
+    else
+    {
+        <div class="form-group">
+            Product Type:
+            <select name="Type" id="Type" @bind="ProductModel.ProductTypeRefId" class="form-control">
 
-    <div class="form-group">
-        Short Description: <InputTextArea id="ShortDescription" @bind-Value="ProductModel.ShortDescription" class="form-control" />
-    </div>
+                @foreach (var type in productTypes)
+                {
+                    <option value="@type.Id">@type.Name</option>
+                }
 
-    <div class="form-group">
-        Description: <InputTextArea id="Description" @bind-Value="ProductModel.Description" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        Product Brand Id: <InputNumber id="BrandId" @bind-Value="ProductModel.ProductBrandRefId" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        Quantity: <InputNumber id="Quantity" @bind-Value="ProductModel.Quantity" class="form-control" />
-    </div>
+            </select>
+        </div>
+    }
+    @* Product Brands *@
     @if (productBrands == null)
     {
-       <p> Loadding...</p>
-}
+        <p> Loadding...</p>
+    }
     else
     {
         <div class="form-group">
             Product Brand:
             <select name="Brand" id="Brand" @bind="ProductModel.ProductBrandRefId" class="form-control">
-                <option selected>Select Brand</option>
+
                 @foreach (var brand in productBrands)
                 {
                     <option value="@brand.Id">@brand.Name</option>
                 }
-                
+
             </select>
         </div>
     }
 
+    <div class="form-group">
+        Short Description:
+        <InputTextArea id="ShortDescription" @bind-Value="ProductModel.ShortDescription" class="form-control" />
+    </div>
 
+    <div class="form-group">
+        Description:
+        <InputTextArea id="Description" @bind-Value="ProductModel.Description" class="form-control" />
+    </div>
 
+    <div class="form-group">
+        Quantity:
+        <InputNumber min=0 id="Quantity" @bind-Value="ProductModel.Quantity" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        Old Price: <input type="number" min=0 step=0.01 id="OldPrice" @bind="oldPrice" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        Current Price: <input type="number" min=0 step=0.01 id="CurrentPrice" @bind="currentPrice"
+            class="form-control" />
+    </div>
     <br />
-
+    <div class="@((string.IsNullOrEmpty(errorSuccess)? "d-none" : "")) alert alert-danger" role="alert">
+        @errorSuccess
+    </div>
+    <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
+        @messageSuccess
+    </div>
     <button type="submit" class="btn btn-success">Submit</button>
 </EditForm>
 
+
+@test
 
 
 @code{
     private Product ProductModel = new Product();
     private List<ProductBrand> productBrands;
-
-
-    private void HandleValidSubmit()
+    private List<ProductType> productTypes;
+    private string messageSuccess;
+    private string errorSuccess;
+    private ProductPrice productPrice;
+    private Decimal currentPrice;
+    private Decimal oldPrice;
+    private int test;
+    private async Task HandleValidSubmit()
     {
+        var response = await Http.PostAsJsonAsync("Products", ProductModel);
+
+        if (response.IsSuccessStatusCode)
+        {
+            messageSuccess = "A Product has added";
+            errorSuccess = "";
+            //Phương thức ReadAsStringAsync() đọc chuỗi Json
+            //từ đối tượng dạng HttpResponseMessage
+            string stringJsonData = await response.Content.ReadAsStringAsync();
+            //Để chuyển đổi nội dung Json sang dạng List<Employee>
+            //Dùng phương thức Deserialize() của lớp JsonSerializer
+            //Deserialize() có tham số thứ nhất là chuỗi Json
+            //tham số thứ 2 là cấu hình, chuẩn bị cấu hình:
+            var options = new JsonSerializerOptions
+            {
+                //ko phân biệt chữ hoa chữ thường
+                PropertyNameCaseInsensitive = true
+            };
+            //Lấy product vừa add
+            Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
+            
+            productPrice = new ProductPrice
+            {
+                Id = productHasAdd.Id,
+                CurrentPrice = currentPrice,
+                OldPrice = oldPrice,
+                @* SalePercent = Decimal.Round((currentPrice - oldPrice)/oldPrice*100) *@
+            };
+            test = productHasAdd.Id;
+            {
+
+            };
+
+            if (productPrice != null)
+            {
+                await Http.PostAsJsonAsync("ProductPrices", productPrice);
+            }
+
+
+        }
+        else
+        {
+            errorSuccess = "Error while calling API";
+            messageSuccess = "";
+        }
 
     }
 
     protected override async Task OnInitializedAsync()
     {
         productBrands = await Http.GetFromJsonAsync<List<ProductBrand>>($"ProductBrands");
+        productTypes = await Http.GetFromJsonAsync<List<ProductType>>($"ProductTypes");
     }
 }

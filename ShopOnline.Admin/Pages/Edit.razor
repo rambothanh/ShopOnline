@@ -1,0 +1,116 @@
+﻿@page "/edit/{producId:int?}"
+@inject HttpClient Http
+
+
+<h1>Edit Product</h1>
+@if (ProductModel == null)
+{
+    <p>Loading ... </p>
+}
+else
+{
+    <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        @* Product Name *@
+        <div class="form-group d-none">
+            Product Id:
+            <InputNumber id="Id" @bind-Value="ProductModel.Id" class="form-control" />
+        </div>
+        @* Product Name *@
+        <div class="form-group">
+            Product Name:
+            <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+        </div>
+        @* Product Type *@
+        @if (productTypes == null)
+        {
+            <p> Loadding...</p>
+        }
+        else
+        {
+            <div class="form-group">
+                Product Type:
+                <select name="Type" id="Type" @bind="ProductModel.ProductTypeRefId" class="form-control">
+
+                    @foreach (var type in productTypes)
+                    {
+                        <option value="@type.Id">@type.Name</option>
+                    }
+
+                </select>
+            </div>
+        }
+        @* Product Brands *@
+        @if (productBrands == null)
+        {
+            <p> Loadding...</p>
+        }
+        else
+        {
+            <div class="form-group">
+                Product Brand:
+                <select name="Brand" id="Brand" @bind="ProductModel.ProductBrandRefId" class="form-control">
+
+                    @foreach (var brand in productBrands)
+                    {
+                        <option value="@brand.Id">@brand.Name</option>
+                    }
+
+                </select>
+            </div>
+        }
+
+        <div class="form-group">
+            Short Description:
+            <InputTextArea id="ShortDescription" @bind-Value="ProductModel.ShortDescription" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Description:
+            <InputTextArea id="Description" @bind-Value="ProductModel.Description" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Quantity:
+            <InputNumber id="Quantity" @bind-Value="ProductModel.Quantity" class="form-control" />
+        </div>
+        
+        @* id Product Price *@
+        <div class="form-group d-none">
+            Quantity:
+            <InputNumber id="PriceProductId" @bind-Value="ProductModel.ProductPrice.Id" class="form-control" />
+        </div>
+
+        <br />
+        @* <div class="@((string.IsNullOrEmpty(errorSuccess)? "d-none" : "")) alert alert-danger" role="alert">
+            @errorSuccess
+            </div>
+            <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
+            @messageSuccess
+            </div> *@
+        <button type="submit" class="btn btn-success">Submit</button>
+    </EditForm>
+}
+
+
+@code {
+    [Parameter]
+    public int producId { get; set; }
+    private Product ProductModel = new Product();
+    private List<ProductBrand> productBrands;
+    private List<ProductType> productTypes;
+    protected override async Task OnInitializedAsync()
+    {
+        ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
+        productBrands = await Http.GetFromJsonAsync<List<ProductBrand>>($"ProductBrands");
+        productTypes = await Http.GetFromJsonAsync<List<ProductType>>($"ProductTypes");
+        ProductModel.ProductPrice.Id = ProductModel.Id;
+    }
+    private async Task HandleValidSubmit()
+    {
+        
+
+
+    }
+}
