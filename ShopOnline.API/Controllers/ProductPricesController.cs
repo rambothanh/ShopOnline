@@ -47,11 +47,13 @@ namespace ShopOnline.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductPrice(int id, ProductPrice productPrice)
         {
+            
             if (id != productPrice.Id)
             {
                 return BadRequest();
             }
-
+            //Calculate SalePercent
+            productPrice.SalePercent = Decimal.Round((productPrice.OldPrice-productPrice.CurrentPrice)/productPrice.OldPrice*100);
             _context.Entry(productPrice).State = EntityState.Modified;
 
             try
