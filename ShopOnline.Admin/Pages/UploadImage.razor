@@ -2,47 +2,52 @@
 @using System.Text.Json
 @inject HttpClient Http
 @using System.IO
-
-
+@inject IJSRuntime JSRuntime
 
 <h1>Blazor WebAssembly File Upload</h1>
 
 <h3>@message</h3>
 
 <form @onsubmit="OnSubmit">
-    <InputFile OnChange="OnInputFileChange" multiple />
+    <InputFile OnChange="OnInputFileChange" multiple accept="image/png, image/jpeg" />
     <br /><br />
     <button type="submit">Upload Selected File(s)</button>
 </form>
-
 
 <br>
 <div class="container">
     <div class="row">
         <div class="col-sm-2 imgUp">
             <div class="imagePreview"></div>
-            <label class="btn btn-primary">Upload<input type="file" class="uploadFile img" value="Upload Photo"
-                    style="width: 0px;height: 0px;overflow: hidden;">
+            <label class="btn btn-primary">Upload<InputFile OnChange="OnInputChange" type="file" class="uploadFile img" value="Upload Photo"
+                    style="width: 0px;height: 0px;overflow: hidden;"/>
             </label>
         </div><!-- col-2 -->
-        <i class="fa fa-plus imgAdd"></i>
+        <i onclick="MoreImage" class="fa fa-plus imgAdd"></i>
     </div><!-- row -->
 </div><!-- container -->
 
 
 
-
 @code {
+    string myMarkup = "<p class='markup'>This is a <em>markup string</em>.</p>";
     string message = "No file(s) selected";
     IReadOnlyList<IBrowserFile> selectedFiles;
-
+        IReadOnlyList<IBrowserFile> addnew;
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFiles = e.GetMultipleFiles();
+        
         message = $"{selectedFiles.Count} file(s) selected";
         this.StateHasChanged();
     }
-
+    private void OnInputChange(InputFileChangeEventArgs e)
+    {
+        addnew = e.GetMultipleFiles();
+        selectedFiles.Append(addnew[0]);
+        message = $"{selectedFiles.Count} file(s) selected";
+        this.StateHasChanged();
+    }
     private async void OnSubmit()
     {
         foreach (var file in selectedFiles)
@@ -62,5 +67,13 @@
         message = $"{selectedFiles.Count} file(s) uploaded on server";
         this.StateHasChanged();
     }
+
+    //JS
+    private IJSObjectReference _jsModule;
+    protected override async Task OnInitializedAsync()
+    {
+        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Scripts.js");
+    }
+
 
 }
