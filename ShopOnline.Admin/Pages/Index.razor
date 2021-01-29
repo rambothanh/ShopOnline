@@ -5,7 +5,9 @@
 
 
 <h1>Add a Product</h1>
+@* Upload Image *@
 <UploadImage></UploadImage>
+
 <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
