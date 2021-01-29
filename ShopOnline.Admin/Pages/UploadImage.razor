@@ -4,41 +4,46 @@
 @using System.IO
 @inject IJSRuntime JSRuntime
 
-<h1>Blazor WebAssembly File Upload</h1>
-
-<h3>@message</h3>
-
 <form @onsubmit="OnSubmit">
-    <InputFile OnChange="OnInputFileChange" multiple accept="image/png, image/jpeg" />
-    <br /><br />
-    <button type="submit">Upload Selected File(s)</button>
+    <div class="form-group">
+        Product Image: @((MarkupString)message)
+        <div class="row">
+            <div class="col-sm">
+                <InputFile class="form-control" OnChange="OnInputFileChange" multiple accept="image/png, image/jpeg" />
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-primary" type="submit">Upload</button>
+            </div>
+        </div>
+
+    </div>
 </form>
 
-<br>
-<div class="container">
+@* <br>
+    <div class="container">
     <div class="row">
-        <div class="col-sm-2 imgUp">
-            <div class="imagePreview"></div>
-            <label class="btn btn-primary">Upload<InputFile OnChange="OnInputChange" type="file" class="uploadFile img" value="Upload Photo"
-                    style="width: 0px;height: 0px;overflow: hidden;"/>
-            </label>
-        </div><!-- col-2 -->
-        <i onclick="MoreImage" class="fa fa-plus imgAdd"></i>
+    <div class="col-sm-2 imgUp">
+    <div class="imagePreview"></div>
+    <label class="btn btn-primary">Upload<InputFile OnChange="OnInputChange" type="file" class="uploadFile img"
+    value="Upload Photo"
+    style="width: 0px;height: 0px;overflow: hidden;"/>
+    </label>
+    </div><!-- col-2 -->
+    <i onclick="MoreImage" class="fa fa-plus imgAdd"></i>
     </div><!-- row -->
-</div><!-- container -->
+    </div><!-- container --> *@
 
 
 
 @code {
-    string myMarkup = "<p class='markup'>This is a <em>markup string</em>.</p>";
     string message = "No file(s) selected";
     IReadOnlyList<IBrowserFile> selectedFiles;
-        IReadOnlyList<IBrowserFile> addnew;
+    IReadOnlyList<IBrowserFile> addnew;
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFiles = e.GetMultipleFiles();
-        
-        message = $"{selectedFiles.Count} file(s) selected";
+
+        message = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
         this.StateHasChanged();
     }
     private void OnInputChange(InputFileChangeEventArgs e)
@@ -64,16 +69,16 @@
             await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
                 ("UploadImage", uploadImage);
         }
-        message = $"{selectedFiles.Count} file(s) uploaded on server";
+        message = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
         this.StateHasChanged();
     }
 
-    //JS
+    @* //JS
     private IJSObjectReference _jsModule;
     protected override async Task OnInitializedAsync()
     {
         _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Scripts.js");
-    }
+    } *@
 
 
 }

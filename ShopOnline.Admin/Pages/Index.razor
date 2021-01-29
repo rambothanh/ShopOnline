@@ -5,7 +5,7 @@
 
 
 <h1>Add a Product</h1>
-
+<UploadImage></UploadImage>
 <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -17,7 +17,9 @@
     @* Product Type *@
     @if (productTypes == null)
     {
-        <p> Loadding...</p>
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     }
     else
     {
@@ -36,7 +38,9 @@
     @* Product Brands *@
     @if (productBrands == null)
     {
-        <p> Loadding...</p>
+       <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     }
     else
     {
@@ -83,7 +87,10 @@
     <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
         @messageSuccess
     </div>
-    <button type="submit" class="btn btn-success">Submit</button>
+    <div class="spinner-border @(submiting?"":"d-none")" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <button type="submit" class="@(submiting?"d-none":"") btn btn-success">Submit</button>
 </EditForm>
 
 
@@ -98,13 +105,15 @@
     private Decimal currentPrice;
     private Decimal oldPrice;
     private int test;
+    private bool submiting =false;
     private async Task HandleValidSubmit()
     {
+        submiting = true;
         var response = await Http.PostAsJsonAsync("Products", ProductModel);
 
         if (response.IsSuccessStatusCode)
         {
-           
+
             //---------- Lấy product vừa thêm--------------
             //Mục đích là lấy id product cung cấp của ProductPrice
             //Vì ProductPrice có khóa chính là khóa ngoại với Product
@@ -128,19 +137,23 @@
                 Id = productHasAdd.Id,
                 CurrentPrice = currentPrice,
                 OldPrice = oldPrice,
-                @* SalePercent = Decimal.Round((currentPrice - oldPrice)/oldPrice*100) *@
             };
-            
+
             //Add productPrice by call API
             if (productPrice != null)
             {
                 var responsePP = await Http.PostAsJsonAsync("ProductPrices", productPrice);
-                if(responsePP.IsSuccessStatusCode){
-                     messageSuccess = "A Product has added";
-                     errorSuccess = "";
-                }else{
+                if (responsePP.IsSuccessStatusCode)
+                {
+                    messageSuccess = "A Product has added";
+                    errorSuccess = "";
+                    submiting = false;
+                }
+                else
+                {
                     errorSuccess = "Error while calling API to create product price";
                     messageSuccess = "";
+                    submiting = false;
                 }
             }
         }
@@ -148,6 +161,7 @@
         {
             errorSuccess = "Error while calling API to create new Product";
             messageSuccess = "";
+            submiting = false;
         }
 
     }
