@@ -24,18 +24,18 @@ namespace ShopOnline.API.Controllers
             _context = context;
             _env = env;
         }
-
-
-
         // POST: api/UploadImage
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public void Post(UploadImage uploadImage)
         {
-            var path = $"{_env.WebRootPath}\\{uploadImage.FileName}";
+            //Đường dẫn lưu ảnh
+            //var path = $"{_env.WebRootPath}\\{uploadImage.FileName}";
+            var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
+            var path = $"{pathInCompany}\\{uploadImage.FileName}";
             //Creates or overwrites a file in the specified path.
             var fs = System.IO.File.Create(path);
-            
+            //Viết nội dung dạng byte[] vào file ảnh vừa tạo. 
             fs.Write(uploadImage.FileContent, 0, uploadImage.FileContent.Length);
             fs.Close();
         }
