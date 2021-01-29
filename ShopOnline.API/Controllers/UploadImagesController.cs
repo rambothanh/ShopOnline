@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -29,14 +30,23 @@ namespace ShopOnline.API.Controllers
         [HttpPost]
         public void Post(UploadImage uploadImage)
         {
-            //Đường dẫn lưu ảnh
-            //var path = $"{_env.WebRootPath}\\{uploadImage.FileName}";
+            // Đường dẫn lưu ảnh
+            // var path = $"{_env.WebRootPath}\\{uploadImage.FileName}";
             var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
-            var path = $"{pathInCompany}\\{uploadImage.FileName}";
-            //Creates or overwrites a file in the specified path.
+
+            // ---------Đổi tên file-----------
+            // Lấy tên file cũ, không bao gồm phần mở rộng
+            string oldName = Path.GetFileNameWithoutExtension(uploadImage.FileName);
+            // Tạo tên file mới bằng cách replace phần tên cũ với phần tên mới
+            string newName = uploadImage.FileName.Replace(oldName, uploadImage.ProductId.ToString());
+
+            //đường dẫn lưu file
+            var path = $"{pathInCompany}\\{newName}";
+            // Creates or overwrites a file in the specified path.
             var fs = System.IO.File.Create(path);
-            //Viết nội dung dạng byte[] vào file ảnh vừa tạo. 
+            // Viết nội dung dạng byte[] vào file ảnh vừa tạo. 
             fs.Write(uploadImage.FileContent, 0, uploadImage.FileContent.Length);
+
             fs.Close();
         }
 

@@ -2,11 +2,11 @@
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @inject HttpClient Http
+@using System.IO
 
 
 <h1>Add a Product</h1>
-@* Upload Image *@
-<UploadImage></UploadImage>
+
 
 <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -46,7 +46,7 @@
     }
     else
     {
-        <div class="form-group">
+        <div @onfocusout="PostToGetIdProduct" class="form-group">
             Product Brand:
             <select name="Brand" id="Brand" @bind="ProductModel.ProductBrandRefId" class="form-control">
 
@@ -82,9 +82,26 @@
         Current Price: <input type="number" min=0 step=0.01 id="CurrentPrice" @bind="currentPrice"
             class="form-control" />
     </div>
+    @* Upload Image *@
+    <form @onsubmit="OnSubmit">
+    <div class="form-group">
+            Product Image: @((MarkupString)messageImage)
+            <div class="row">
+                <div class="col-sm">
+                    <InputFile class="form-control" OnChange="OnInputFileChange" multiple accept="image/png, image/jpeg" />
+                </div>
+                <div class="col-sm">
+                    <button class="btn btn-primary" type="submit">Upload</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    @* End Upload Image *@
+
     <br />
-    <div class="@((string.IsNullOrEmpty(errorSuccess)? "d-none" : "")) alert alert-danger" role="alert">
-        @errorSuccess
+    <div class="@((string.IsNullOrEmpty(messageError)? "d-none" : "")) alert alert-danger" role="alert">
+        @messageError
     </div>
     <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
         @messageSuccess
@@ -95,48 +112,91 @@
     <button type="submit" class="@(submiting?"d-none":"") btn btn-success">Submit</button>
 </EditForm>
 
-
-
 @code{
+    private int idProductNow;
     private Product ProductModel = new Product();
     private List<ProductBrand> productBrands;
     private List<ProductType> productTypes;
     private string messageSuccess;
-    private string errorSuccess;
+    private string messageError;
     private ProductPrice productPrice;
     private Decimal currentPrice;
     private Decimal oldPrice;
     private int test;
     private bool submiting =false;
-    private async Task HandleValidSubmit()
+        
+
+    string messageImage = "No file(s) selected";
+    IReadOnlyList<IBrowserFile> selectedFiles;
+    
+    @* When choose images *@
+    private void OnInputFileChange(InputFileChangeEventArgs e)
     {
-        submiting = true;
-        var response = await Http.PostAsJsonAsync("Products", ProductModel);
+        selectedFiles = e.GetMultipleFiles();
 
-        if (response.IsSuccessStatusCode)
+        messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
+        this.StateHasChanged();
+    }
+    
+    @* OnSubmit upload image *@
+    private async void OnSubmit()
+    {
+        foreach (var file in selectedFiles)
         {
+            
+            Stream stream = file.OpenReadStream();
+            MemoryStream ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            stream.Close();
+            Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
+            uploadImage.ProductId = idProductNow;
+            uploadImage.FileName = file.Name;
+            uploadImage.FileContent = ms.ToArray();
+            ms.Close();
 
+            await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
+                ("UploadImage", uploadImage);
+        }
+        messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
+        this.StateHasChanged();
+    }
+    @* End OnSubmit upload image *@
+
+    @* Post to server When choosed Brand  *@
+    private async Task PostToGetIdProduct(){
+        var response = await Http.PostAsJsonAsync("Products", ProductModel);
+       if (response.IsSuccessStatusCode)
+        {
             //---------- Lấy product vừa thêm--------------
             //Mục đích là lấy id product cung cấp của ProductPrice
             //Vì ProductPrice có khóa chính là khóa ngoại với Product
             //Phương thức ReadAsStringAsync() đọc chuỗi Json
             //từ đối tượng dạng HttpResponseMessage
             string stringJsonData = await response.Content.ReadAsStringAsync();
-            //Để chuyển đổi nội dung Json sang dạng List<Employee>
-            //Dùng phương thức Deserialize() của lớp JsonSerializer
-            //Deserialize() có tham số thứ nhất là chuỗi Json
-            //tham số thứ 2 là cấu hình, chuẩn bị cấu hình:
             var options = new JsonSerializerOptions
-            {
-                //ko phân biệt chữ hoa chữ thường
+            {            
                 PropertyNameCaseInsensitive = true
             };
-            //Lấy product vừa add
             Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
-            //productPrice tương ứng với Pruduct vừa add
+        
+            idProductNow = productHasAdd.Id;
+        }
+    }
+    @* End Post to server When choosed Brand  *@
+
+    @* PUT a Product to server *@
+    private async Task HandleValidSubmit()
+    {
+        submiting = true;
+        ProductModel.Id = idProductNow;
+        var productResponse = await Http.PutAsJsonAsync($"Products/{idProductNow}", ProductModel);
+
+        if (productResponse.IsSuccessStatusCode)
+        {
+            
             productPrice = new ProductPrice
             {
-                Id = productHasAdd.Id,
+                Id = idProductNow,
                 CurrentPrice = currentPrice,
                 OldPrice = oldPrice,
             };
@@ -148,12 +208,12 @@
                 if (responsePP.IsSuccessStatusCode)
                 {
                     messageSuccess = "A Product has added";
-                    errorSuccess = "";
+                    messageError = "";
                     submiting = false;
                 }
                 else
                 {
-                    errorSuccess = "Error while calling API to create product price";
+                    messageError = "Error while calling API to create product price";
                     messageSuccess = "";
                     submiting = false;
                 }
@@ -161,7 +221,7 @@
         }
         else
         {
-            errorSuccess = "Error while calling API to create new Product";
+            messageError = "Error while calling API to create new Product";
             messageSuccess = "";
             submiting = false;
         }

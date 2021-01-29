@@ -38,7 +38,7 @@
 @code {
     string message = "No file(s) selected";
     IReadOnlyList<IBrowserFile> selectedFiles;
-    IReadOnlyList<IBrowserFile> addnew;
+    
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFiles = e.GetMultipleFiles();
@@ -46,13 +46,7 @@
         message = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
         this.StateHasChanged();
     }
-    private void OnInputChange(InputFileChangeEventArgs e)
-    {
-        addnew = e.GetMultipleFiles();
-        selectedFiles.Append(addnew[0]);
-        message = $"{selectedFiles.Count} file(s) selected";
-        this.StateHasChanged();
-    }
+    
     private async void OnSubmit()
     {
         foreach (var file in selectedFiles)
