@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using ShopOnline.API.Models;
 using ShopOnline.API.Models.Helpers;
 using ShopOnline.API.Services.UserService;
+using ShopOnline.API.Services.ProductService;
 
 
 namespace ShopOnline.API
@@ -90,6 +91,7 @@ namespace ShopOnline.API
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProductService, ProductService>();
 
             //configure các đối tượng được gõ trong file AppSettings.json/AppSettings
             var appSettingsSection = _configuration.GetSection("AppSettings");

@@ -38,8 +38,10 @@ namespace ShopOnline.API.Controllers
             // Lấy tên file cũ, không bao gồm phần mở rộng
             string oldName = Path.GetFileNameWithoutExtension(uploadImage.FileName);
             // Tạo tên file mới bằng cách replace phần tên cũ với phần tên mới
-            string newName = uploadImage.FileName.Replace(oldName, uploadImage.ProductId.ToString());
-
+            // DateTime.Now.Ticks để tạo số Tick ngày giờ hiện tại
+            // Chuyển qua dùng Guid.NewGuid() cho chắc ăn, tránh trùng lập
+            string newName = uploadImage.FileName.Replace(oldName, $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}");
+            //{new DateTime().Ticks}
             //đường dẫn lưu file
             var path = $"{pathInCompany}\\{newName}";
             // Creates or overwrites a file in the specified path.
@@ -48,6 +50,14 @@ namespace ShopOnline.API.Controllers
             fs.Write(uploadImage.FileContent, 0, uploadImage.FileContent.Length);
 
             fs.Close();
+            //var productsController = DependencyResolver.Current.GetService<productsController>();
+            Product product = new Product(){
+                Id = uploadImage.ProductId,
+                PictureUri = path 
+            };
+            //ProductsController productsController = new ProductsController(_context);
+            //await productsController.PutProduct(uploadImage.ProductId,product);
+
         }
 
     }
