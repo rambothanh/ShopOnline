@@ -71,15 +71,20 @@ namespace ShopOnline.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteImage(int id)
         {
+            //Get pictureUri
             var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var pictureUri = product.PictureUri;
+            // assets/images/product/130-c75f797d-dd4a-4da3-b89d-6971b52b83fe.jpg
+            var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
+            //Lấy tên file bao gồm phần mở rộng
+            string fileName = Path.GetFileName(pictureUri);
+            //Lấy toàn bộ file trong thư mục pathInCompany có tên giống fileName
+            string[] picList = Directory.GetFiles(pathInCompany, fileName);
+            //Delete
+            foreach (string f in picList)
             {
-                return NotFound();
+                 System.IO.File.Delete(f);
             }
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
     }

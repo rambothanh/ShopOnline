@@ -135,6 +135,7 @@ else
 
 
 @code {
+    
     [Parameter]
     public int producId { get; set; }
     private Product productModel = new Product();
@@ -148,6 +149,9 @@ else
     private string messageError;
     string messageImage = "No images selected";
     IReadOnlyList<IBrowserFile> selectedFiles;
+    
+
+
     protected override async Task OnInitializedAsync()
     {
         productModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
@@ -190,6 +194,9 @@ else
     @* When choose images *@
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
+        //Mở lại nút upload
+        disableUploadImage = false;
+
         selectedFiles = e.GetMultipleFiles();
 
         messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
@@ -201,12 +208,15 @@ else
      @* OnSubmit upload image *@
     private async void OnSubmitUploadImage()
     {
-
         // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
         // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
         if(selectedFiles !=null){
             submitingUploadImage=true;
+            //Delete Old Image
+            var deleteImage = await Http.DeleteAsync($"UploadImage/{producId}");
+            //Run Update Product đồng thời
             await HandleValidSubmit();
+            // Handle file upload and upload file
             foreach (var file in selectedFiles)
             {
                 
@@ -222,7 +232,10 @@ else
 
                 await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
                     ("UploadImage", uploadImage);
+                
             }
+            
+
             messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
             //Reload Product
             productModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
