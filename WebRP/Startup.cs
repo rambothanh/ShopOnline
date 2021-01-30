@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace WebRP
 {
@@ -25,6 +28,7 @@ namespace WebRP
         {
            
             services.AddRazorPages(); 
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +47,8 @@ namespace WebRP
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            
 
             app.UseRouting();
 

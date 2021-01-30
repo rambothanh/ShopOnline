@@ -1,26 +1,27 @@
 ﻿@page "/edit/{producId:int?}"
 @inject HttpClient Http
+@using System.IO
 
 
 <h1>Edit Product</h1>
-@if (ProductModel == null)
+@if (productModel == null)
 {
     <p>Loading ... </p>
 }
 else
 {
-    <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
+    <EditForm Model="@productModel" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         @* Product Name *@
         <div class="form-group d-none">
             Product Id:
-            <InputNumber id="Id" @bind-Value="ProductModel.Id" class="form-control" />
+            <InputNumber id="Id" @bind-Value="productModel.Id" class="form-control" />
         </div>
         @* Product Name *@
         <div class="form-group">
             Product Name:
-            <InputText id="Name" @bind-Value="ProductModel.Name" class="form-control" />
+            <InputText id="Name" @bind-Value="productModel.Name" class="form-control" />
         </div>
         @* Product Type *@
         @if (productTypes == null)
@@ -31,7 +32,7 @@ else
         {
             <div class="form-group">
                 Product Type:
-                <select name="Type" id="Type" @bind="ProductModel.ProductTypeRefId" class="form-control">
+                <select name="Type" id="Type" @bind="productModel.ProductTypeRefId" class="form-control">
 
                     @foreach (var type in productTypes)
                     {
@@ -50,7 +51,7 @@ else
         {
             <div class="form-group">
                 Product Brand:
-                <select name="Brand" id="Brand" @bind="ProductModel.ProductBrandRefId" class="form-control">
+                <select name="Brand" id="Brand" @bind="productModel.ProductBrandRefId" class="form-control">
 
                     @foreach (var brand in productBrands)
                     {
@@ -63,33 +64,72 @@ else
 
         <div class="form-group">
             Short Description:
-            <InputTextArea id="ShortDescription" @bind-Value="ProductModel.ShortDescription" class="form-control" />
+            <InputTextArea id="ShortDescription" @bind-Value="productModel.ShortDescription" class="form-control" />
         </div>
 
         <div class="form-group">
             Description:
-            <InputTextArea id="Description" @bind-Value="ProductModel.Description" class="form-control" />
+            <InputTextArea id="Description" @bind-Value="productModel.Description" class="form-control" />
         </div>
 
         <div class="form-group">
             Quantity:
-            <InputNumber id="Quantity" @bind-Value="ProductModel.Quantity" class="form-control" />
-        </div>
-        
-        @* id Product Price *@
-        <div class="form-group d-none">
-            Quantity:
-            <InputNumber id="PriceProductId" @bind-Value="ProductModel.ProductPrice.Id" class="form-control" />
+            <InputNumber id="Quantity" @bind-Value="productModel.Quantity" class="form-control" />
         </div>
 
-        <br />
-        @* <div class="@((string.IsNullOrEmpty(errorSuccess)? "d-none" : "")) alert alert-danger" role="alert">
-            @errorSuccess
+        @* Product Price *@
+        @if(productPrice == null){
+            <p>Loadding...</p>
+        }else{
+            <div class="form-group">
+                Old Price: <input @bind="productPrice.CurrentPrice" type="number" min=0 step=0.01 id="OldPrice"
+                 class="form-control" />
             </div>
-            <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
+
+            <div class="form-group">
+                Current Price: <input @bind="productPrice.OldPrice" type="number" min=0 step=0.01 id="CurrentPrice"
+                    class="form-control" />
+            </div>
+        }
+         @* Upload Image *@
+        <form @onsubmit="OnSubmitUploadImage">
+        <div class="form-group">
+            <div>
+                <p style="margin:0px">Current Product Image:</p> 
+                <img src="http://localhost:4000/@productModel.PictureUri" class="img-fluid" 
+                alt="Product Image" 
+                style="max-width: 20%">
+            </div>
+
+            Change Image: @((MarkupString)messageImage)
+            <div class="input-group mb-3">
+                <InputFile class="form-control" placeholder="Select image to change" OnChange="OnInputFileChange" multiple accept="image/png, image/jpeg" />
+                @* <input type="text" class="form-control"  > *@
+                <div class="input-group-append">
+                    <button  disabled=@disableUploadImage class="btn btn-outline-secondary" type="submit">
+                        <i class="@(submitingUploadImage?"":"d-none") fa fa-spinner fa-spin"></i>
+                        Upload
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        </form>
+         @* End Upload Image *@
+          <br />
+        @* Message Success or Error *@
+        <div class="@((string.IsNullOrEmpty(messageError)? "d-none" : "")) alert alert-danger" role="alert">
+            @messageError
+        </div>
+        <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
             @messageSuccess
-            </div> *@
-        <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+        @* End Message Success or Error *@
+
+        <button type="submit" class="btn btn-success">
+            <i class="@(submitingProduct?"":"d-none") fa fa-spinner fa-spin"></i>
+            Submit
+        </button>
     </EditForm>
 }
 
@@ -97,20 +137,103 @@ else
 @code {
     [Parameter]
     public int producId { get; set; }
-    private Product ProductModel = new Product();
+    private Product productModel = new Product();
     private List<ProductBrand> productBrands;
     private List<ProductType> productTypes;
+    private ProductPrice productPrice;
+    private bool submitingUploadImage =false;
+    private bool disableUploadImage = false;
+    private bool submitingProduct = false;
+    private string messageSuccess;
+    private string messageError;
+    string messageImage = "No images selected";
+    IReadOnlyList<IBrowserFile> selectedFiles;
     protected override async Task OnInitializedAsync()
     {
-        ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
+        productModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
         productBrands = await Http.GetFromJsonAsync<List<ProductBrand>>($"ProductBrands");
         productTypes = await Http.GetFromJsonAsync<List<ProductType>>($"ProductTypes");
-        ProductModel.ProductPrice.Id = ProductModel.Id;
-    }
-    private async Task HandleValidSubmit()
-    {
+        productPrice = await Http.GetFromJsonAsync<ProductPrice>($"ProductPrices/{producId}");
         
-
-
     }
+    private  async Task HandleValidSubmit()
+    {
+        submitingProduct = true;
+        var productResponse = await Http.PutAsJsonAsync($"Products/{producId}", productModel);
+        if (productResponse.IsSuccessStatusCode)
+        {
+            //Add productPrice by call API
+            var responsePP = await Http.PutAsJsonAsync($"ProductPrices/{producId}", productPrice);
+            
+            if (responsePP.IsSuccessStatusCode)
+            {
+                messageSuccess = "A Product has edited";
+                messageError = "";
+                submitingProduct = false;
+            }
+            else
+            {
+                messageError = "Error while calling API to edit product price";
+                messageSuccess = "";
+                submitingProduct = false;
+            }
+            
+        }
+        else
+        {
+            messageError = "Error while calling API to edit product";
+            messageSuccess = "";
+            submitingProduct = false;
+        }
+    }
+
+    @* When choose images *@
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFiles = e.GetMultipleFiles();
+
+        messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
+        this.StateHasChanged();
+    }
+
+    @* End choosed image *@
+
+     @* OnSubmit upload image *@
+    private async void OnSubmitUploadImage()
+    {
+
+        // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
+        // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
+        if(selectedFiles !=null){
+            submitingUploadImage=true;
+            await HandleValidSubmit();
+            foreach (var file in selectedFiles)
+            {
+                
+                Stream stream = file.OpenReadStream();
+                MemoryStream ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                stream.Close();
+                Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
+                uploadImage.ProductId = producId;
+                uploadImage.FileName = file.Name;
+                uploadImage.FileContent = ms.ToArray();
+                ms.Close();
+
+                await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
+                    ("UploadImage", uploadImage);
+            }
+            messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
+            //Reload Product
+            productModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
+            
+            //Delete oldImage
+            
+            disableUploadImage = true;
+            submitingUploadImage= false;
+            this.StateHasChanged();
+            
+        }
+    }
+    @* End OnSubmit upload image *@
 }

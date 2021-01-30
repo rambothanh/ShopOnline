@@ -262,7 +262,7 @@
      $(document).ready(function () {
 
         @* if (!sessionStorage.hasOwnProperty("token")) {
-            window.location.href = "/EmployeeManager/SignIn";
+            window.location.href = "Chuyển qua trang đăng nhập";
         } *@
         var options = {};
         options.url = "http://localhost:5000/api/Products";
@@ -279,7 +279,7 @@
                 if(product.quantity===0){
                     var stickerNew = `<span class="sticker-new soldout-title">Soldout</span>`;
                 }else{
-                    var stickerNew = `<span class="sticker-new label-sale">-`+product.productPrice.salePercent+`%</span>`;
+                 var stickerNew = `<span class="sticker-new label-sale">-`+product.productPrice.salePercent+`%</span>`;
                 }
                 //Create product grid
                 var divProductGrid = `
@@ -287,7 +287,9 @@
                     <div class="single-product">
                         <div class="product-image">
                             <a href="shopsingle">
-                                <img src="`+ product.pictureUri + `" alt="">
+                                @* <img src="`+ product.pictureUri + `" alt=""> *@
+                                <img src="https://picsum.photos/384/480" alt="">
+                                
                             </a>
                             `+stickerNew+`
                             <div class="action-links">

@@ -119,14 +119,12 @@
     private List<ProductType> productTypes;
     private string messageSuccess;
     private string messageError;
+    string messageImage = "No file(s) selected";
     private ProductPrice productPrice;
     private Decimal currentPrice;
     private Decimal oldPrice;
     private int test;
     private bool submiting =false;
-        
-
-    string messageImage = "No file(s) selected";
     IReadOnlyList<IBrowserFile> selectedFiles;
     
     @* When choose images *@
@@ -137,6 +135,7 @@
         messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
         this.StateHasChanged();
     }
+    @* End choosed image *@
     
     @* OnSubmit upload image *@
     private async void OnSubmit()

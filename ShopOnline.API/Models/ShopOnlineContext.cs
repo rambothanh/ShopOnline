@@ -48,25 +48,25 @@ namespace ShopOnline.API.Models
 
             //Price
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 1, OldPrice = 500, CurrentPrice = 488, SalePercent = 50 });
+            new ProductPrice { Id = 1, OldPrice = 500, CurrentPrice = 488, SalePercent = 3 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 2, OldPrice = 100, CurrentPrice = 78, SalePercent = 50 });
+            new ProductPrice { Id = 2, OldPrice = 100, CurrentPrice = 78, SalePercent = 22 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 3, OldPrice = 188, CurrentPrice = 166, SalePercent = 50 });
+            new ProductPrice { Id = 3, OldPrice = 188, CurrentPrice = 166, SalePercent = 12 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 4, OldPrice = 88, CurrentPrice = 66, SalePercent = 50 });
+            new ProductPrice { Id = 4, OldPrice = 88, CurrentPrice = 66, SalePercent = 25 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 5, OldPrice = 168, CurrentPrice = 136, SalePercent = 50 });
+            new ProductPrice { Id = 5, OldPrice = 168, CurrentPrice = 136, SalePercent = 19 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 6, OldPrice = 179, CurrentPrice = 168, SalePercent = 50 });
+            new ProductPrice { Id = 6, OldPrice = 179, CurrentPrice = 168, SalePercent = 6 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 7, OldPrice = 268, CurrentPrice = 238, SalePercent = 50 });
+            new ProductPrice { Id = 7, OldPrice = 268, CurrentPrice = 238, SalePercent = 11 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 8, OldPrice = 158, CurrentPrice = 133, SalePercent = 50 });
+            new ProductPrice { Id = 8, OldPrice = 158, CurrentPrice = 133, SalePercent = 16 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 9, OldPrice = 208, CurrentPrice = 188, SalePercent = 50 });
+            new ProductPrice { Id = 9, OldPrice = 208, CurrentPrice = 188, SalePercent = 10 });
             modelBuilder.Entity<ProductPrice>().HasData(
-            new ProductPrice { Id = 10, OldPrice = 206, CurrentPrice = 166, SalePercent = 50 });
+            new ProductPrice { Id = 10, OldPrice = 206, CurrentPrice = 166, SalePercent = 19 });
 
 
             //Product
