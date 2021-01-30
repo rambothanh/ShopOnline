@@ -42,6 +42,8 @@ else
                 </select>
             </div>
         }
+        @*End Product Type *@
+
         @* Product Brands *@
         @if (productBrands == null)
         {
@@ -61,7 +63,7 @@ else
                 </select>
             </div>
         }
-
+         @* End Product Brands *@
         <div class="form-group">
             Short Description:
             <InputTextArea id="ShortDescription" @bind-Value="productModel.ShortDescription" class="form-control" />
@@ -91,7 +93,8 @@ else
                     class="form-control" />
             </div>
         }
-         @* Upload Image *@
+        @* End Produc Price *@
+        @* Upload Image *@
         <form @onsubmit="OnSubmitUploadImage">
         <div class="form-group">
             <div>
@@ -135,7 +138,6 @@ else
 
 
 @code {
-    
     [Parameter]
     public int producId { get; set; }
     private Product productModel = new Product();
@@ -147,7 +149,7 @@ else
     private bool submitingProduct = false;
     private string messageSuccess;
     private string messageError;
-    string messageImage = "No images selected";
+    string messageImage = "No images selected (384x480)";
     IReadOnlyList<IBrowserFile> selectedFiles;
     
 
