@@ -4,7 +4,8 @@ namespace ShopOnline.API.Services.ProductService
 {
     public interface IProductService
     {
-        void UpdateProductPictureUri(int idProduct,string pictureUri =null);
+        void UpdateProductPictureUri(int idProduct, string pictureUri =null);
+        void UpdateProduct (int idProduct, Product product);
         
     }
 }

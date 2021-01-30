@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities.Products;
 using ShopOnline.API.Models;
+using ShopOnline.API.Models.Helpers;
+using ShopOnline.API.Services.ProductService;
+
 
 namespace ShopOnline.API.Controllers
 {
@@ -15,10 +18,12 @@ namespace ShopOnline.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ShopOnlineContext _context;
-
-        public ProductsController(ShopOnlineContext context)
+        private readonly IProductService _productService;
+        public ProductsController(ShopOnlineContext context,
+        IProductService productService)
         {
             _context = context;
+            _productService = productService;
         }
 
         // GET: api/Products
@@ -49,32 +54,19 @@ namespace ShopOnline.API.Controllers
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        public IActionResult PutProduct(int id, Product product)
         {
-            if (id != product.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(product).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                // update product
+                _productService.UpdateProduct(id, product);
+                return Ok();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (AppException ex)
             {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
             }
-
-            return NoContent();
         }
 
         // POST: api/Products

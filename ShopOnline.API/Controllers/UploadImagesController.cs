@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities.Products;
 using ShopOnline.API.Models;
+using ShopOnline.API.Services.ProductService;
 
 namespace ShopOnline.API.Controllers
 {
@@ -18,12 +19,16 @@ namespace ShopOnline.API.Controllers
     {
         private readonly ShopOnlineContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly IProductService _productService;
 
 
-        public UploadImageController(ShopOnlineContext context, IWebHostEnvironment env)
+        public UploadImageController(ShopOnlineContext context, 
+        IWebHostEnvironment env,
+        IProductService productService)
         {
             _context = context;
             _env = env;
+            _productService = productService;
         }
         // POST: api/UploadImage
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -55,6 +60,8 @@ namespace ShopOnline.API.Controllers
                 Id = uploadImage.ProductId,
                 PictureUri = path 
             };
+            //Add PictureUri to Product
+            _productService.UpdateProductPictureUri(uploadImage.ProductId,$"assets/images/product/{newName}");
             //ProductsController productsController = new ProductsController(_context);
             //await productsController.PutProduct(uploadImage.ProductId,product);
 
