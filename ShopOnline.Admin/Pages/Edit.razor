@@ -47,7 +47,7 @@ else
         @* Product Brands *@
         @if (productBrands == null)
         {
-            <p> Loadding...</p>
+            <p> Loading...</p>
         }
         else
         {
@@ -97,6 +97,7 @@ else
         @* Upload Image *@
         <form @onsubmit="OnSubmitUploadImage">
         <div class="form-group">
+
             <div>
                 <p style="margin:0px">Current Product Image:</p> 
                 <img src="http://localhost:4000/@productModel.PictureUri" class="img-fluid" 
@@ -153,7 +154,7 @@ else
     private List<ProductType> productTypes;
     private ProductPrice productPrice;
     private bool submitingUploadImage =false;
-    private bool disableUploadImage = false;
+    private bool disableUploadImage = true;
     private bool submitingProduct = false;
     private string messageSuccess;
     private string messageError;
@@ -216,48 +217,49 @@ else
     @* End choosed image *@
 
     @* OnSubmit upload image *@
-    private async void OnSubmitUploadImage()
-    {
-        // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
-        // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
-        if(selectedFiles !=null){
-            submitingUploadImage=true;
-            //Delete Old Image
-            var deleteImage = await Http.DeleteAsync($"UploadImage/{producId}");
-            //Run Update Product đồng thời
-            await HandleValidSubmit();
-            // Handle file upload and upload file
-            foreach (var file in selectedFiles)
-            {
-                
-                Stream stream = file.OpenReadStream();
-                MemoryStream ms = new MemoryStream();
-                await stream.CopyToAsync(ms);
-                stream.Close();
-                Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
-                uploadImage.ProductId = producId;
-                uploadImage.FileName = file.Name;
-                uploadImage.FileContent = ms.ToArray();
-                ms.Close();
+private async void OnSubmitUploadImage()
+{
+    // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
+    // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
+    if(selectedFiles !=null){
+        submitingUploadImage=true;
+        //Delete Old Image
+        var deleteImage = await Http.DeleteAsync($"UploadImage/{producId}");
+        //Run Update Product đồng thời
+        await HandleValidSubmit();
+        // Handle file upload and upload file
+        foreach (var file in selectedFiles)
+        {
 
-                await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
-                    ("UploadImage", uploadImage);
-                
-            }
-            
+            Stream stream = file.OpenReadStream();
+            MemoryStream ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            stream.Close();
+            Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
+            uploadImage.ProductId = producId;
+            uploadImage.FileName = file.Name;
+            uploadImage.FileContent = ms.ToArray();
+            ms.Close();
 
-            messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
-            //Reload Product
-            productModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
-            
-            //Delete oldImage
-            
-            disableUploadImage = true;
-            submitingUploadImage= false;
-            this.StateHasChanged();
-            
+            await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
+                ("UploadImage", uploadImage);
+
         }
+
+
+        messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
+        //Reload Product
+        productModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
+
+        //Vô hiệu hoá nút Upload
+        disableUploadImage = true;
+        //Tắt hiệu ứng loading
+        submitingUploadImage = false;
+
+        this.StateHasChanged();
+
     }
+}
     @* End OnSubmit upload image *@
 
     @* Delete Product*@
