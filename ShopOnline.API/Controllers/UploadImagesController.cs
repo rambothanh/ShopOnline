@@ -67,5 +67,20 @@ namespace ShopOnline.API.Controllers
 
         }
 
+        // DELETE: api/UploadImage/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteImage(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
