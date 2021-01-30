@@ -129,10 +129,18 @@ else
         </div>
         @* End Message Success or Error *@
 
-        <button type="submit" class="btn btn-success">
-            <i class="@(submitingProduct?"":"d-none") fa fa-spinner fa-spin"></i>
-            Submit
-        </button>
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" >
+                <button type="submit" class="btn btn-success">
+                    <i class="@(submitingProduct?"":"d-none") fa fa-spinner fa-spin"></i>
+                    Submit
+                </button>
+            </div>
+            <div class="btn-group mr-2" role="group">
+                <button @onclick="ClickDeleteButton" type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+        
     </EditForm>
 }
 
@@ -207,7 +215,7 @@ else
 
     @* End choosed image *@
 
-     @* OnSubmit upload image *@
+    @* OnSubmit upload image *@
     private async void OnSubmitUploadImage()
     {
         // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
@@ -251,4 +259,9 @@ else
         }
     }
     @* End OnSubmit upload image *@
+
+    @* Delete Product*@
+    private async void ClickDeleteButton(){
+        
+    } 
 }

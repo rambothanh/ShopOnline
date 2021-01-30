@@ -46,7 +46,7 @@ namespace ShopOnline.API.Controllers
             // DateTime.Now.Ticks để tạo số Tick ngày giờ hiện tại
             // Chuyển qua dùng Guid.NewGuid() cho chắc ăn, tránh trùng lập
             string newName = uploadImage.FileName.Replace(oldName, $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}");
-            //{new DateTime().Ticks}
+            
             //đường dẫn lưu file
             var path = $"{pathInCompany}\\{newName}";
             // Creates or overwrites a file in the specified path.
