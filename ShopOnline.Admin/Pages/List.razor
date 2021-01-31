@@ -1,0 +1,66 @@
+﻿@page "/list"
+@using System.Text.Json
+@using System.IO
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
+@if (products == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    
+        <table id="table_id" class="table table-dark table-striped table-hover table-sm table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Brand</th>
+                    <th>Short Description</th>
+                    <th>Quantity</th>
+                    <th>Current Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Product product in products)
+                {
+                <tr>
+
+                    <td>@product.Name</td>
+                    <td>@product.ProductTypeRefId</td>
+                    <td>@product.ProductBrand</td>
+                    <td>@product.ShortDescription</td>
+                    @*<td>@product.Quantity</td>
+        <td>@product.ProductPrice.CurrentPrice</td>
+        <td>Action</td>*@
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Brand</th>
+                    <th>Short Description</th>
+                    <th>Quantity</th>
+                    <th>Current Price</th>
+                    <th>Action</th>
+                </tr>
+            </tfoot>
+        </table>
+   
+    @**@
+}
+
+@code {
+
+
+    private List<Product> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Http.GetFromJsonAsync<List<Product>>($"Products");
+    }
+}

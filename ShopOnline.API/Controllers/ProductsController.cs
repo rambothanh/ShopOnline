@@ -32,7 +32,8 @@ namespace ShopOnline.API.Controllers
         {
             return await _context.Products
                                     .Include(x=>x.ProductPrice)
-                                    
+                                    .Include(x => x.ProductBrand)
+                                    .Include(x => x.ProductType)
                                     .AsSplitQuery()
                                     .ToListAsync();
         }

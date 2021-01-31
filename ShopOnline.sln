@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRP", "WebRP\WebRP.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopOnline.API", "ShopOnline.API\ShopOnline.API.csproj", "{BBCB358C-41FC-4DA4-833B-16CF71B69899}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopOnline.Admin", "ShopOnline.Admin\ShopOnline.Admin.csproj", "{4B799760-1C1D-4A40-97C9-BCFA7B7DB59C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopOnline.Admin", "ShopOnline.Admin\ShopOnline.Admin.csproj", "{4B799760-1C1D-4A40-97C9-BCFA7B7DB59C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
