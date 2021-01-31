@@ -11,13 +11,12 @@
 else
 {
     
-        <table id="table_id" class="table table-dark table-striped table-hover table-sm table-bordered" style="width:100%">
+        <table id="table_id" class="table table-striped table-hover table-sm table-bordered" style="width:100%">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
                     <th>Brand</th>
-                    <th>Short Description</th>
                     <th>Quantity</th>
                     <th>Current Price</th>
                     <th>Action</th>
@@ -29,16 +28,16 @@ else
                 <tr>
 
                     <td>@product.Name</td>
-                    <td>@product.ProductTypeRefId</td>
-                    <td>@product.ProductBrand</td>
-                    <td>@product.ShortDescription</td>
-                    @*<td>@product.Quantity</td>
-        <td>@product.ProductPrice.CurrentPrice</td>
-        <td>Action</td>*@
+                    <td>@product.ProductType.Name</td>
+                    <td>@product.ProductBrand.Name</td>
+
+                    <td>@product.Quantity</td>
+                    <td>@product.ProductPrice.CurrentPrice</td>
+                    @*<td>Action</td>*@
                 </tr>
                 }
             </tbody>
-            <tfoot>
+            @*<tfoot>
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
@@ -48,7 +47,7 @@ else
                     <th>Current Price</th>
                     <th>Action</th>
                 </tr>
-            </tfoot>
+            </tfoot>*@
         </table>
    
     @**@
