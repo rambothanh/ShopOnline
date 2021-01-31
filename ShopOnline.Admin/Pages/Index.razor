@@ -155,6 +155,14 @@ private void OnInputFileChange(InputFileChangeEventArgs e)
     @* OnSubmit upload image *@
 private async void OnSubmitUploadImage()
 {
+    //Check if not get idProduct yet
+    if (idProductNow == 0)
+        return;
+
+    //Delete image if existed
+    //Delete Old Image
+    var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
+
     // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
     // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
     if (selectedFiles != null)
@@ -195,31 +203,31 @@ private async void OnSubmitUploadImage()
 
     }
 }
-    @* End OnSubmit upload image *@
+@* End OnSubmit upload image *@
 
-    @* Post to server When choosed Brand  *@
-    private async Task PostToGetIdProduct(){
-        var response = await Http.PostAsJsonAsync("Products", ProductModel);
-       if (response.IsSuccessStatusCode)
-        {
-            //---------- Lấy product vừa thêm--------------
-            //Mục đích là lấy id product cung cấp của ProductPrice
-            //Vì ProductPrice có khóa chính là khóa ngoại với Product
-            //Phương thức ReadAsStringAsync() đọc chuỗi Json
-            //từ đối tượng dạng HttpResponseMessage
-            string stringJsonData = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {            
-                PropertyNameCaseInsensitive = true
-            };
-            Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
+@* Post to server When choosed Brand  *@
+private async Task PostToGetIdProduct(){
+    var response = await Http.PostAsJsonAsync("Products", ProductModel);
+    if (response.IsSuccessStatusCode)
+    {
+        //---------- Lấy product vừa thêm--------------
+        //Mục đích là lấy id product cung cấp của ProductPrice
+        //Vì ProductPrice có khóa chính là khóa ngoại với Product
+        //Phương thức ReadAsStringAsync() đọc chuỗi Json
+        //từ đối tượng dạng HttpResponseMessage
+        string stringJsonData = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+        {            
+            PropertyNameCaseInsensitive = true
+        };
+        Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
         
-            idProductNow = productHasAdd.Id;
-        }
+        idProductNow = productHasAdd.Id;
     }
-    @* End Post to server When choosed Brand  *@
+}
+@* End Post to server When choosed Brand  *@
 
-    @* PUT a Product to server *@
+@* PUT a Product to server *@
 private async Task HandleValidSubmit()
 {
 

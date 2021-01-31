@@ -35,6 +35,7 @@ namespace ShopOnline.API.Controllers
         [HttpPost]
         public void Post(UploadImage uploadImage)
         {
+            
             // Đường dẫn lưu ảnh
             // var path = $"{_env.WebRootPath}\\{uploadImage.FileName}";
             //var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
@@ -73,6 +74,7 @@ namespace ShopOnline.API.Controllers
         {
             //Get pictureUri like: assets/images/product/130-c75f797d-dd4a-4da3-b89d-6971b52b83fe.jpg
             var product = await _context.Products.FindAsync(id);
+            
             var pictureUri = product.PictureUri;
             //Get Directory contain file will delete
             //var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
@@ -81,6 +83,11 @@ namespace ShopOnline.API.Controllers
             string fileName = Path.GetFileName(pictureUri);
             //Lấy toàn bộ file trong thư mục pathInCompany có tên giống fileName
             string[] picList = Directory.GetFiles(pathInCompany, fileName);
+
+            //If Null or empty
+            if (!(picList?.Length >0))
+                return NoContent();
+
             //Delete
             foreach (string f in picList)
             {
