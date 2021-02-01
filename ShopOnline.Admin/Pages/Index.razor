@@ -3,6 +3,7 @@
 @using System.Text.Json.Serialization
 @inject HttpClient Http
 @using System.IO
+@inject NavigationManager NavigationManager
 
 
 <h1>Add a Product</h1>
@@ -112,11 +113,21 @@
     <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
         @messageSuccess
     </div>
-    <div class="btn-group mr-2" role="group">
-        <button disabled=@disableSubmitProduct type="submit" class="btn btn-success ">
-            <i class="@(submitingProduct?"":"d-none") fa fa-spinner fa-spin"></i>
-            Add Product
-        </button>
+   
+     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group">
+            <button disabled=@disableSubmitProduct type="submit" class="btn btn-success ">
+                <i class="@(submitingProduct?"":"d-none") fa fa-spinner fa-spin"></i>
+                Add Product
+            </button>
+        </div>
+        <div class="btn-group mr-2" role="group">
+            <button disabled=@(!disableSubmitProduct) @onclick="ClickContinueButton" type="button" class="btn btn-danger">
+                <i class="@(continuingButton?"":"d-none") fa fa-spinner fa-spin"></i>
+                Continue Add
+            </button>
+        </div>
+        
     </div>
 </EditForm>
 
@@ -131,13 +142,21 @@
     private ProductPrice productPrice;
     private Decimal currentPrice;
     private Decimal oldPrice;
-    private int test;
+
+    private bool continuingButton = false;
     private bool submitingUploadImage = false;
     private bool disableUploadImage = false;
     private bool submitingProduct = false;
     private bool disableSubmitProduct = false;
 
     IReadOnlyList<IBrowserFile> selectedFiles;
+
+    private void ClickContinueButton(){
+        continuingButton = true;
+        //Nagigation to Edit page
+        NavigationManager.NavigateTo($"");
+        continuingButton = false;
+    }
 
     @* When choose images *@
 private void OnInputFileChange(InputFileChangeEventArgs e)
