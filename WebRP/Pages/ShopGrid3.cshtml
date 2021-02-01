@@ -287,9 +287,9 @@
                     <div class="single-product">
                         <div class="product-image">
                             <a href="shopsingle">
-                                @* <img src="`+ product.pictureUri + `" alt=""> *@
-                                <img src="https://picsum.photos/384/480" alt="">
-                                
+                                 <img src="`+ product.pictureUri + `" alt="">
+                                @* <img src="https://picsum.photos/384/480" alt=""> *@
+
                             </a>
                             `+stickerNew+`
                             <div class="action-links">
@@ -432,13 +432,13 @@
             @* if (xhr.status == 401) {
                 window.location.href = "/EmployeeManager/SignIn";
             } *@
-            
+
             $("h3.message").html("Error while calling the API");
          }
         //Start call API
         $.ajax(options);
     });
-    
+
 </script>
 <!--A Product list-->
 @*<div class="single-product product-list">
