@@ -153,9 +153,13 @@
 
     private void ClickContinueButton(){
         continuingButton = true;
+        //ProductModel = null;
         //Nagigation to Edit page
         NavigationManager.NavigateTo($"");
         continuingButton = false;
+        disableSubmitProduct = false;
+        StateHasChanged();
+        
     }
 
     @* When choose images *@
