@@ -205,7 +205,7 @@ private async void OnSubmitUploadImage()
 }
 @* End OnSubmit upload image *@
 
-@* Post to server When choosed Brand  *@
+@* Post to server When choosed Brand , purpose: get Id*@
 private async Task PostToGetIdProduct(){
     var response = await Http.PostAsJsonAsync("Products", ProductModel);
     if (response.IsSuccessStatusCode)
@@ -221,8 +221,13 @@ private async Task PostToGetIdProduct(){
             PropertyNameCaseInsensitive = true
         };
         Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
-        
+        //Get id
         idProductNow = productHasAdd.Id;
+        //Create price
+        productPrice = new ProductPrice{Id = idProductNow};
+        //Post price
+        await Http.PostAsJsonAsync("ProductPrices", productPrice);
+
     }
 }
 @* End Post to server When choosed Brand  *@
@@ -240,18 +245,12 @@ private async Task HandleValidSubmit()
 
     if (productResponse.IsSuccessStatusCode)
     {
-
-        productPrice = new ProductPrice
-        {
-            Id = idProductNow,
-            CurrentPrice = currentPrice,
-            OldPrice = oldPrice,
-        };
-
         //Add productPrice by call API
         if (productPrice != null)
         {
-            var responsePP = await Http.PostAsJsonAsync("ProductPrices", productPrice);
+            productPrice.CurrentPrice = currentPrice;
+            productPrice.OldPrice = oldPrice;
+            var responsePP = await Http.PutAsJsonAsync($"ProductPrices/{idProductNow}", productPrice);
             if (responsePP.IsSuccessStatusCode)
             {
                 messageSuccess = "A Product has added";
