@@ -34,6 +34,7 @@ namespace ShopOnline.API.Controllers
                                     .Include(x=>x.ProductPrice)
                                     .Include(x => x.ProductBrand)
                                     .Include(x => x.ProductType)
+                                    .OrderByDescending(x => x.Id)
                                     .AsSplitQuery()
                                     .ToListAsync();
         }

@@ -38,8 +38,8 @@ namespace ShopOnline.API.Controllers
             
             // Đường dẫn lưu ảnh
             // var path = $"{_env.WebRootPath}\\{uploadImage.FileName}";
-            //var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
-            var pathInCompany = @"F:\Document of Thanh\DotNetCore\ShopOnline\WebRP\wwwroot\assets\images\product";
+            var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
+            //var pathInCompany = @"F:\Document of Thanh\DotNetCore\ShopOnline\WebRP\wwwroot\assets\images\product";
             // ---------Đổi tên file-----------
             // Lấy tên file cũ, không bao gồm phần mở rộng
             string oldName = Path.GetFileNameWithoutExtension(uploadImage.FileName);
@@ -77,8 +77,8 @@ namespace ShopOnline.API.Controllers
             
             var pictureUri = product.PictureUri;
             //Get Directory contain file will delete
-            //var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
-            var pathInCompany = @"F:\Document of Thanh\DotNetCore\ShopOnline\WebRP\wwwroot\assets\images\product";
+            var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";
+            //var pathInCompany = @"F:\Document of Thanh\DotNetCore\ShopOnline\WebRP\wwwroot\assets\images\product";
             //Lấy tên file bao gồm phần mở rộng
             string fileName = Path.GetFileName(pictureUri);
             //Lấy toàn bộ file trong thư mục pathInCompany có tên giống fileName
