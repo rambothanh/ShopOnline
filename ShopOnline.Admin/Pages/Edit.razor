@@ -283,7 +283,9 @@ private async void ClickDeleteButton()
 {
 
     deletingButton = true;
+    //Delete image first
     await Http.DeleteAsync($"UploadImage/{producId}");
+    //Delete Product
     var deleteProductHttp = await Http.DeleteAsync($"Products/{producId}");
     if (deleteProductHttp.IsSuccessStatusCode)
     {

@@ -33,7 +33,10 @@ else
 
                     <td>@product.Quantity</td>
                     <td>@product.ProductPrice.CurrentPrice</td>
-                    <td class="text-center"><span class="oi oi-pencil" aria-hidden="true"></span></td>
+                    <td class="text-center">
+                        <span class="text-warning mr-2 oi oi-pencil" aria-hidden="true"></span>
+                        <span id="@("deleteproduct"+@product.Id)" @onclick="()=>DeleteProduct(product)" class="text-danger oi oi-delete" aria-hidden="true"></span>
+                    </td>
                 </tr>
                 }
             </tbody>
@@ -55,11 +58,22 @@ else
 
 @code {
 
-
+    //JS
+    private IJSObjectReference _jsModule;
     private List<Product> products;
 
     protected override async Task OnInitializedAsync()
     {
         products = await Http.GetFromJsonAsync<List<Product>>($"Products");
+        //import js
+        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./ListScripts.js");
+
     }
+    private async Task DeleteProduct(Product product){
+        //Delete image first
+        await Http.DeleteAsync($"UploadImage/{product.Id}");
+        //Delete Product
+        var deleteProductHttp = await Http.DeleteAsync($"Products/{product.Id}");
+    }
+
 }
