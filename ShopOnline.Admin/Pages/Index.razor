@@ -6,7 +6,7 @@
 @inject NavigationManager NavigationManager
 
 
-<h1>Add a Product</h1>
+<h1>Add a Product @ProductModel.Id</h1>
 
 
 <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
@@ -90,11 +90,11 @@
                      alt="Product Image"
                      style="max-width: 20%">
             </div>
-            
+
             Product Image: @((MarkupString)messageImage)
             <div class="input-group mb-3">
                 <InputFile class="form-control" placeholder="Select image to change" OnChange="OnInputFileChange" multiple accept="image/png, image/jpeg" />
-                
+
                 <div class="d-none input-group-append">
                     <button disabled=@disableUploadImage class="btn btn-outline-secondary" type="submit">
                         <i class="@(submitingUploadImage?"":"d-none") fa fa-spinner fa-spin"></i>
@@ -113,8 +113,8 @@
     <div class="@((string.IsNullOrEmpty(messageSuccess)? "d-none" : "")) alert alert-success" role="alert">
         @messageSuccess
     </div>
-   
-     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group mr-2" role="group">
             <button disabled=@disableSubmitProduct type="submit" class="btn btn-success ">
                 <i class="@(submitingProduct?"":"d-none") fa fa-spinner fa-spin"></i>
@@ -127,7 +127,7 @@
                 Continue Add
             </button>
         </div>
-        
+
     </div>
 </EditForm>
 
@@ -151,156 +151,179 @@
 
     IReadOnlyList<IBrowserFile> selectedFiles;
 
-    private void ClickContinueButton(){
+    private void ClickContinueButton()
+    {
         continuingButton = true;
-        //ProductModel = null;
         //Nagigation to Edit page
         NavigationManager.NavigateTo($"");
+        ClearForm();
         continuingButton = false;
         disableSubmitProduct = false;
+        disableUploadImage = false;
+        continuingButton = false;
         StateHasChanged();
-        
+
+    }
+
+    private void ClearForm()
+    {
+        idProductNow++;
+        ProductModel.Id = idProductNow;
+        continuingButton = false;
+        ProductModel.Name = "";
+        ProductModel.ProductBrandRefId = 0;
+        ProductModel.ProductTypeRefId = 0;
+        ProductModel.Quantity = 0;
+        ProductModel.PictureUri = "";
+        oldPrice = 0;
+        currentPrice = 0;
+        messageSuccess = "";
+        messageError = "";
+        messageImage = "No file(s) selected (384x480)";
+
     }
 
     @* When choose images *@
-private void OnInputFileChange(InputFileChangeEventArgs e)
-{
-    //Mở lại nút upload
-    disableUploadImage = false;
-    selectedFiles = e.GetMultipleFiles();
-    messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
-    this.StateHasChanged();
-    //submit, don't need click button
-    OnSubmitUploadImage();
-}
-    @* End choosed image *@
-    
-    @* OnSubmit upload image *@
-private async void OnSubmitUploadImage()
-{
-    //Check if not get idProduct yet
-    if (idProductNow == 0)
-        return;
-
-    //Delete image if existed
-    //Delete Old Image
-    var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
-
-    // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
-    // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
-    if (selectedFiles != null)
+    private void OnInputFileChange(InputFileChangeEventArgs e)
     {
-        submitingUploadImage = true;
-        ////Delete Old Image
-        //var deleteImage = await Http.DeleteAsync($"UploadImage/{producId}");
-        //Run Update Product đồng thời
-        //await HandleValidSubmit();
-        // Handle file upload and upload file
-        foreach (var file in selectedFiles)
-        {
-
-            Stream stream = file.OpenReadStream();
-            MemoryStream ms = new MemoryStream();
-            await stream.CopyToAsync(ms);
-            stream.Close();
-            Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
-            uploadImage.ProductId = idProductNow;
-            uploadImage.FileName = file.Name;
-            uploadImage.FileContent = ms.ToArray();
-            ms.Close();
-
-            await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
-                ("UploadImage", uploadImage);
-
-        }
-
-
-        messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
-        //Reload Product
-        ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{idProductNow}");
-        //Vô hiệu hoá nút Upload
-        disableUploadImage = true;
-        //Tắt hiệu ứng loading
-        submitingUploadImage = false;
+        //Mở lại nút upload
+        disableUploadImage = false;
+        selectedFiles = e.GetMultipleFiles();
+        messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
         this.StateHasChanged();
-
-    }
-}
-@* End OnSubmit upload image *@
-
-@* Post to server When choosed Brand , purpose: get Id*@
-private async Task PostToGetIdProduct(){
-    var response = await Http.PostAsJsonAsync("Products", ProductModel);
-    if (response.IsSuccessStatusCode)
-    {
-        //---------- Lấy product vừa thêm--------------
-        //Mục đích là lấy id product cung cấp của ProductPrice
-        //Vì ProductPrice có khóa chính là khóa ngoại với Product
-        //Phương thức ReadAsStringAsync() đọc chuỗi Json
-        //từ đối tượng dạng HttpResponseMessage
-        string stringJsonData = await response.Content.ReadAsStringAsync();
-        var options = new JsonSerializerOptions
-        {            
-            PropertyNameCaseInsensitive = true
-        };
-        Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
-        //Get id
-        idProductNow = productHasAdd.Id;
-        //Create price
-        productPrice = new ProductPrice{Id = idProductNow};
-        //Post price
-        await Http.PostAsJsonAsync("ProductPrices", productPrice);
-
-    }
-}
-@* End Post to server When choosed Brand  *@
-
-@* PUT a Product to server *@
-private async Task HandleValidSubmit()
-{
-
-    submitingProduct = true;
-    //Check if upload image button not click yet
-    if (!disableUploadImage)
+        //submit, don't need click button
         OnSubmitUploadImage();
-    ProductModel.Id = idProductNow;
-    var productResponse = await Http.PutAsJsonAsync($"Products/{idProductNow}", ProductModel);
+    }
+    @* End choosed image *@
 
-    if (productResponse.IsSuccessStatusCode)
+    @* OnSubmit upload image *@
+    private async void OnSubmitUploadImage()
     {
-        //Add productPrice by call API
-        if (productPrice != null)
+        //Check if not get idProduct yet
+        if (idProductNow == 0)
+            return;
+
+        //Delete image if existed
+        //Delete Old Image
+        var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
+
+        // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
+        // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
+        if (selectedFiles != null)
         {
-            productPrice.CurrentPrice = currentPrice;
-            productPrice.OldPrice = oldPrice;
-            var responsePP = await Http.PutAsJsonAsync($"ProductPrices/{idProductNow}", productPrice);
-            if (responsePP.IsSuccessStatusCode)
+            submitingUploadImage = true;
+            ////Delete Old Image
+            //var deleteImage = await Http.DeleteAsync($"UploadImage/{producId}");
+            //Run Update Product đồng thời
+            //await HandleValidSubmit();
+            // Handle file upload and upload file
+            foreach (var file in selectedFiles)
             {
-                messageSuccess = "A Product has added";
-                messageError = "";
-                submitingProduct = false;
-                disableSubmitProduct = true;
+
+                Stream stream = file.OpenReadStream();
+                MemoryStream ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                stream.Close();
+                Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
+                uploadImage.ProductId = idProductNow;
+                uploadImage.FileName = file.Name;
+                uploadImage.FileContent = ms.ToArray();
+                ms.Close();
+
+                await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
+                    ("UploadImage", uploadImage);
+
             }
-            else
-            {
-                messageError = "Error while calling API to create product price";
-                messageSuccess = "";
-                submitingProduct = false;
-            }
+
+
+            messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
+            //Reload Product
+            ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{idProductNow}");
+            //Vô hiệu hoá nút Upload
+            disableUploadImage = true;
+            //Tắt hiệu ứng loading
+            submitingUploadImage = false;
+            this.StateHasChanged();
+
         }
     }
-    else
+    @* End OnSubmit upload image *@
+
+    @* Post to server When choosed Brand , purpose: get Id*@
+    private async Task PostToGetIdProduct()
     {
-        messageError = "Error while calling API to create new Product";
-        messageSuccess = "";
-        submitingProduct = false;
+        var response = await Http.PostAsJsonAsync("Products", ProductModel);
+        if (response.IsSuccessStatusCode)
+        {
+            //---------- Lấy product vừa thêm--------------
+            //Mục đích là lấy id product cung cấp của ProductPrice
+            //Vì ProductPrice có khóa chính là khóa ngoại với Product
+            //Phương thức ReadAsStringAsync() đọc chuỗi Json
+            //từ đối tượng dạng HttpResponseMessage
+            string stringJsonData = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            Product productHasAdd = JsonSerializer.Deserialize<Product>(stringJsonData, options);
+            //Get id
+            idProductNow = productHasAdd.Id;
+            //Create price
+            productPrice = new ProductPrice { Id = idProductNow };
+            //Post price
+            await Http.PostAsJsonAsync("ProductPrices", productPrice);
+
+        }
+    }
+    @* End Post to server When choosed Brand  *@
+
+    @* PUT a Product to server *@
+    private async Task HandleValidSubmit()
+    {
+
+        submitingProduct = true;
+        //Check if upload image button not click yet
+        if (!disableUploadImage)
+            OnSubmitUploadImage();
+
+        ProductModel.Id = idProductNow;
+        var productResponse = await Http.PutAsJsonAsync($"Products/{idProductNow}", ProductModel);
+
+        if (productResponse.IsSuccessStatusCode)
+        {
+            //Add productPrice by call API
+            if (productPrice != null)
+            {
+                productPrice.CurrentPrice = currentPrice;
+                productPrice.OldPrice = oldPrice;
+                var responsePP = await Http.PutAsJsonAsync($"ProductPrices/{idProductNow}", productPrice);
+                if (responsePP.IsSuccessStatusCode)
+                {
+                    messageSuccess = "A Product has added";
+                    messageError = "";
+                    submitingProduct = false;
+                    disableSubmitProduct = true;
+                }
+                else
+                {
+                    messageError = "Error while calling API to create product price";
+                    messageSuccess = "";
+                    submitingProduct = false;
+                }
+            }
+        }
+        else
+        {
+            messageError = "Error while calling API to create new Product";
+            messageSuccess = "";
+            submitingProduct = false;
+        }
+
     }
 
-}
-
-protected override async Task OnInitializedAsync()
-{
-    productBrands = await Http.GetFromJsonAsync<List<ProductBrand>>($"ProductBrands");
-    productTypes = await Http.GetFromJsonAsync<List<ProductType>>($"ProductTypes");
-}
+    protected override async Task OnInitializedAsync()
+    {
+        productBrands = await Http.GetFromJsonAsync<List<ProductBrand>>($"ProductBrands");
+        productTypes = await Http.GetFromJsonAsync<List<ProductType>>($"ProductTypes");
+    }
 }
