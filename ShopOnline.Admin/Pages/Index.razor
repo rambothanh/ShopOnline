@@ -186,9 +186,15 @@
     @* When choose images *@
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
-        //Mở lại nút upload
+        //enable upload button
         disableUploadImage = false;
         selectedFiles = e.GetMultipleFiles();
+        //If choose more than 4 puctures
+        if(selectedFiles.Count>4)
+        {
+            messageImage = $"<span class='badge badge-pill badge-danger'>{selectedFiles.Count} image(s)</span> selected, only accept 4 pictures";
+            return;
+        }
         messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
         this.StateHasChanged();
         //submit, don't need click button
@@ -225,7 +231,8 @@
                 uploadImage.FileName = file.Name;
                 uploadImage.FileContent = ms.ToArray();
                 ms.Close();
-                //Save iamge to server by Post
+
+                //Save image to server by Post
                 await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
                     ("UploadImage", uploadImage);
 
@@ -233,10 +240,16 @@
 
 
             messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
-            //Reload Product
+            //Put product to reload product
+            ProductModel.Id = idProductNow;
+            await Http.PutAsJsonAsync($"Products/{idProductNow}", ProductModel);
+
+            //Reload Product to show image
             ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{idProductNow}");
+
             //Vô hiệu hoá nút Upload
             disableUploadImage = true;
+            
             //Tắt hiệu ứng loading
             submitingUploadImage = false;
             this.StateHasChanged();
@@ -251,7 +264,7 @@
         var response = await Http.PostAsJsonAsync("Products", ProductModel);
         if (response.IsSuccessStatusCode)
         {
-            //---------- Lấy product vừa thêm--------------
+            //---------- Get a product which has add--------------
             //Mục đích là lấy id product cung cấp của ProductPrice
             //Vì ProductPrice có khóa chính là khóa ngoại với Product
             //Phương thức ReadAsStringAsync() đọc chuỗi Json
