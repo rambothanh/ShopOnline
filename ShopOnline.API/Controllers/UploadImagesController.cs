@@ -109,6 +109,10 @@ namespace ShopOnline.API.Controllers
             //Get pictureUri like: assets/images/product/130-c75f797d-dd4a-4da3-b89d-6971b52b83fe.jpg
             var product = await _context.Products.FindAsync(id);
             var pictureUri = product.PictureUri;
+            
+            //Null or Empty: do nothing
+            if(String.IsNullOrEmpty(pictureUri))
+                return NoContent();
 
             //Get Directory contain file will delete
             var pathInCompany = @"D:\Soft\Project\My Git Project\ShopOnline\WebRP\wwwroot\assets\images\product";

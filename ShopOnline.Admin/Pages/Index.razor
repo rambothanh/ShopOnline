@@ -6,7 +6,7 @@
 @inject NavigationManager NavigationManager
 
 
-<h1>Add a Product @ProductModel.Id</h1>
+<h1>Add a Product</h1>
 
 
 <EditForm Model="@ProductModel" OnValidSubmit="@HandleValidSubmit">
@@ -206,16 +206,11 @@
         //Delete image if existed
         //Delete Old Image
         var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
-
-        // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
-        // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
+        
         if (selectedFiles != null)
         {
             submitingUploadImage = true;
-            ////Delete Old Image
-            //var deleteImage = await Http.DeleteAsync($"UploadImage/{producId}");
-            //Run Update Product đồng thời
-            //await HandleValidSubmit();
+           
             // Handle file upload and upload file
             foreach (var file in selectedFiles)
             {
@@ -224,12 +219,13 @@
                 MemoryStream ms = new MemoryStream();
                 await stream.CopyToAsync(ms);
                 stream.Close();
+                //Create uploadImage
                 Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
                 uploadImage.ProductId = idProductNow;
                 uploadImage.FileName = file.Name;
                 uploadImage.FileContent = ms.ToArray();
                 ms.Close();
-
+                //Save iamge to server by Post
                 await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
                     ("UploadImage", uploadImage);
 
