@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.Entities.Products
@@ -9,6 +10,7 @@ namespace Models.Entities.Products
         public string Description { get; set; }
         public string ShortDescription { get; set; }
         public string PictureUri { get; set; }
+        public ICollection<ProductImage> ProductImages { get; set; }
         [ForeignKey("ProductType")]
         public int ProductTypeRefId { get; set; }
         public ProductType ProductType { get; set; }

@@ -21,11 +21,12 @@ namespace ShopOnline.API.Models
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<ProductPrice> ProductPrices { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         //Seed data when Migration
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Type 
+            #region Seed Type 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ProductType>().HasData(
             new ProductType { Id = 1, Name = "Undifided" });
@@ -35,8 +36,8 @@ namespace ShopOnline.API.Models
             new ProductType { Id = 3, Name = "Tablet" });
             modelBuilder.Entity<ProductType>().HasData(
             new ProductType { Id = 4, Name = "Smart Phone" });
-
-            //Brand
+            #endregion
+            #region Seed Brand
             modelBuilder.Entity<ProductBrand>().HasData(
             new ProductBrand { Id = 1, Name = "Undifided" });
             modelBuilder.Entity<ProductBrand>().HasData(
@@ -45,8 +46,8 @@ namespace ShopOnline.API.Models
             new ProductBrand { Id = 3, Name = "VinSmart" });
             modelBuilder.Entity<ProductBrand>().HasData(
             new ProductBrand { Id = 4, Name = "Iphone" });
-
-            //Price
+            #endregion
+            #region Seed Price
             modelBuilder.Entity<ProductPrice>().HasData(
             new ProductPrice { Id = 1, OldPrice = 500, CurrentPrice = 488, SalePercent = 3 });
             modelBuilder.Entity<ProductPrice>().HasData(
@@ -67,9 +68,360 @@ namespace ShopOnline.API.Models
             new ProductPrice { Id = 9, OldPrice = 208, CurrentPrice = 188, SalePercent = 10 });
             modelBuilder.Entity<ProductPrice>().HasData(
             new ProductPrice { Id = 10, OldPrice = 206, CurrentPrice = 166, SalePercent = 19 });
-
-
-            //Product
+            #endregion
+            #region Seed Product Image
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =1, 
+                PictureUri = "assets/images/product/product-2.jpg",
+                IsMainPicture = true,
+                ProductRefId=1
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =2, 
+                PictureUri = "assets/images/product/product-2.jpg",
+                IsMainPicture = true,
+                ProductRefId=2
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =3, 
+                PictureUri = "assets/images/product/product-3.jpg",
+                IsMainPicture = true,
+                ProductRefId=3
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =4, 
+                PictureUri = "assets/images/product/product-4.jpg",
+                IsMainPicture = true,
+                ProductRefId=4
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =5, 
+                PictureUri = "assets/images/product/product-5.jpg",
+                IsMainPicture = true,
+                ProductRefId=5
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =6, 
+                PictureUri = "assets/images/product/product-6.jpg",
+                IsMainPicture = true,
+                ProductRefId=6
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =7, 
+                PictureUri = "assets/images/product/product-7.jpg",
+                IsMainPicture = true,
+                ProductRefId=7
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =8, 
+                PictureUri = "assets/images/product/product-8.jpg",
+                IsMainPicture = true,
+                ProductRefId=8
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =9, 
+                PictureUri = "assets/images/product/product-9.jpg",
+                IsMainPicture = true,
+                ProductRefId=9
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =10, 
+                PictureUri = "assets/images/product/product-10.jpg",
+                IsMainPicture = true,
+                ProductRefId=10
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =11, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=1
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =12, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=2
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =13, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=3
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =14, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=4
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =15, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=5
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =16, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=6
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =17, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=7
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =18, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=8
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =19, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=9
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =20, 
+                PictureUri = @"assets\images\product-single\product-1.jpg",
+                IsMainPicture = false,
+                ProductRefId=10
+            });
+             modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =21, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=1
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =22, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=2
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =23, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=3
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =24, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=4
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =25, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=5
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =26, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=6
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =27, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=7
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =28, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=8
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =29, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=9
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =30, 
+                PictureUri = @"assets\images\product-single\product-2.jpg",
+                IsMainPicture = false,
+                ProductRefId=10
+            });
+                         modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =31, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=1
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =32, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=2
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =33, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=3
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =34, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=4
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =35, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=5
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =36, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=6
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =37, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=7
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =38, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=8
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =39, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=9
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =40, 
+                PictureUri = @"assets\images\product-single\product-3.jpg",
+                IsMainPicture = false,
+                ProductRefId=10
+            });
+             modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =41, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=1
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =42, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=2
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =43, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=3
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =44, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=4
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =45, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=5
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =46, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=6
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =47, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=7
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =48, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=8
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =49, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=9
+            });
+            modelBuilder.Entity<ProductImage>().HasData(new ProductImage
+            { 
+                Id =50, 
+                PictureUri = @"assets\images\product-single\product-4.jpg",
+                IsMainPicture = false,
+                ProductRefId=10
+            });
+            #endregion
+            #region Seed Product
             modelBuilder.Entity<Product>().HasData(new Product
             {
                 Id = 1,
@@ -192,7 +544,7 @@ In a free hour, when our power of choice is untrammelled and when nothing preven
                 ProductBrandRefId = 1,
                 Quantity = 0
             });
-
+            #endregion
 
         }
 
