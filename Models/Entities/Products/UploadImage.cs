@@ -4,6 +4,7 @@ namespace Models.Entities.Products
     {
         public int ProductId { get; set; }
         public string FileName { get; set; }
+        public bool IsMainImage { get; set; } = false;
         public byte[] FileContent { get; set; }
     }
 }

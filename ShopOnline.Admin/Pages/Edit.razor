@@ -96,17 +96,18 @@ else
                                       class="form-control" />
             </div>
         }
-        @* End Produc Price *@
+        @* End Product Price *@
+        
         @* Upload Image *@
         <form @onsubmit="OnSubmitUploadImage">
             <div class="form-group">
 
-                <div>
+                @* <div>
                     <p style="margin:0px">Current Product Image:</p>
                     <img src="http://localhost:4000/@productModel.PictureUri" class="img-fluid"
                          alt="Product Image"
                          style="max-width: 20%">
-                </div>
+                </div> *@
 
                 Change Image: @((MarkupString)messageImage)
                 <div class="input-group mb-3">

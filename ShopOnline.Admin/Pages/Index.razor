@@ -84,12 +84,18 @@
     @* Upload Image *@
     <form @onsubmit="OnSubmitUploadImage">
         <div class="form-group">
-            <div class="@(disableUploadImage?"":"d-none")">
-                <p style="margin:0px">Current Product Image:</p>
-                <img src="http://localhost:4000/@ProductModel.PictureUri" class="img-fluid"
-                     alt="Product Image"
-                     style="max-width: 20%">
-            </div>
+            @if(!(productImages?.Any() != true)){
+                
+                    <div class="@(disableUploadImage?"":"d-none")">
+                        <p style="margin:0px">Current Product Images:</p>
+                        @foreach (var productImage in productImages)
+                        {
+                            <img src="http://localhost:4000/@productImage.PictureUri" class="mr-2 img-fluid"
+                                alt="Product Image"
+                                style="max-width: 20%">
+                        }
+                    </div>
+            }
 
             Product Image: @((MarkupString)messageImage)
             <div class="input-group mb-3">
@@ -134,6 +140,7 @@
 @code{
     private int idProductNow;
     private Product ProductModel = new Product();
+    private List<ProductImage> productImages;
     private List<ProductBrand> productBrands;
     private List<ProductType> productTypes;
     private string messageSuccess;
@@ -162,6 +169,7 @@
         disableUploadImage = false;
         continuingButton = false;
         StateHasChanged();
+        
 
     }
 
@@ -176,7 +184,7 @@
         ProductModel.ProductBrandRefId = 0;
         ProductModel.ProductTypeRefId = 0;
         ProductModel.Quantity = 0;
-        ProductModel.PictureUri = "";
+        //ProductModel.PictureUri = "";
         oldPrice = 0;
         currentPrice = 0;
         messageSuccess = "";
@@ -211,9 +219,7 @@
         if (idProductNow == 0)
             return;
 
-        //Delete image if existed
-        //Delete Old Image
-        var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
+      
         
         if (selectedFiles != null)
         {
@@ -242,12 +248,18 @@
 
 
             messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
-            //Put product to reload product
+            @* //Put product to reload product
             ProductModel.Id = idProductNow;
             await Http.PutAsJsonAsync($"Products/{idProductNow}", ProductModel);
 
             //Reload Product to show image
-            ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{idProductNow}");
+            ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{idProductNow}"); *@
+            
+            //Delete image if 5 image existed
+            var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
+            
+            //Get Image to show
+            productImages = await Http.GetFromJsonAsync<List<ProductImage>>($"UploadImage/{idProductNow}");
 
             //Vô hiệu hoá nút Upload
             disableUploadImage = true;

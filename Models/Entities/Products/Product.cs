@@ -9,7 +9,7 @@ namespace Models.Entities.Products
         public string Name { get; set; }
         public string Description { get; set; }
         public string ShortDescription { get; set; }
-        public string PictureUri { get; set; }
+        //public string PictureUri { get; set; }
         public ICollection<ProductImage> ProductImages { get; set; }
         [ForeignKey("ProductType")]
         public int ProductTypeRefId { get; set; }

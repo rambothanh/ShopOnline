@@ -14,20 +14,31 @@ namespace ShopOnline.API.Services.ProductService
             _context = context;
         }
 
-        public void UpdateProductPictureUri(int idProduct, string pictureUri = null)
-        {
-            var product = _context.Products.Find(idProduct);
-
-            if (product == null)
-                throw new AppException("Product not found");
-            
-            // update product properties if provided
-            if (!string.IsNullOrWhiteSpace(pictureUri))
-                product.PictureUri = pictureUri;
-
-            _context.Products.Update(product);
+        
+        public void CreateProductPictureUri(ProductImage paraProductImage){
+            _context.ProductImages.Add(paraProductImage);
             _context.SaveChanges();
         }
+
+        public void UpdateProductPictureUri(int idProductImage, ProductImage paraProductImage)
+        {
+            if(idProductImage != paraProductImage.Id)
+                throw new AppException("Bad Request");
+
+            //Lấy productImage ra
+            var productImage = _context.ProductImages.Find(idProductImage);
+
+            if (productImage == null)
+                throw new AppException("Image not found");
+            
+            // update productImage properties if provided
+            if (!string.IsNullOrWhiteSpace(paraProductImage.PictureUri))
+                productImage.PictureUri = paraProductImage.PictureUri;
+
+            _context.ProductImages.Update(productImage);
+            _context.SaveChanges();
+        }
+
         public  void UpdateProduct(int idProduct, Product productPara ){
             if (idProduct != productPara.Id)
             {
@@ -49,8 +60,8 @@ namespace ShopOnline.API.Services.ProductService
                 product.Description = productPara.Description;
             if (!string.IsNullOrWhiteSpace(productPara.ShortDescription))
                 product.ShortDescription = productPara.ShortDescription;
-            if (!string.IsNullOrWhiteSpace(productPara.PictureUri))
-                product.PictureUri = productPara.PictureUri;
+            // if (!string.IsNullOrWhiteSpace(productPara.PictureUri))
+            //     product.PictureUri = productPara.PictureUri;
             if (productPara.Quantity!= 0)
                 product.Quantity = productPara.Quantity;
             // if (productPara.ProductPrice.CurrentPrice!= 0)
