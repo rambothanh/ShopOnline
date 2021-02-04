@@ -127,17 +127,15 @@ namespace ShopOnline.API.Controllers
         }
 
         
-        // DELETE: api/UploadImage/5
-        [HttpDelete("{idProduct}")]
-        // Check if Image in Product >=5 will delete one or more
-        public async Task<IActionResult> CheckAndDeleteOneImage(int idProduct)
+        
+        private async Task CheckAndDeleteOneImage(int idProduct)
         {
             var productImages = await _context.ProductImages.Where(x=>x.ProductRefId==idProduct).ToListAsync();
             
             //If null or empty
             if(productImages?.Any() != true)
             {
-                return NoContent();
+                return;
             }
 
             //OrderBy Id
@@ -157,7 +155,7 @@ namespace ShopOnline.API.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
-            return NoContent();
+            
         }
 
         //// Check if Image in Product has a MainPicture
@@ -280,6 +278,24 @@ namespace ShopOnline.API.Controllers
                 
         }
 
+        // DELETE: api/UploadImage/5
+        [HttpDelete("{idProduct}")]
+        // Check if Image in Product >=5 will delete one or more
+        public async Task<IActionResult> DeleteAllImage(int idProduct)
+        {
+            var productImages = await _context.ProductImages.Where(x=>x.ProductRefId==idProduct).ToListAsync();
+            //If null or empty
+            if(productImages?.Any() != true)
+            {
+                return NoContent();
+            }
+            foreach(var productImage in productImages){
+                await DeleteImage(productImage.Id);
+                _context.ProductImages.Remove(productImage);
+                await _context.SaveChangesAsync();
+            }
+            return NoContent();
+        }
 
     }//end class UploadImageController
 }//end namespace ShopOnline.API.Controllers

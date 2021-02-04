@@ -144,7 +144,7 @@ namespace ShopOnline.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //Mục đích để test Deploy lên Ubtuntu, 
-            //Dự án thực không cần để lung tung như vầy
+            //Dự án thực không nên để lung tung như vầy
             if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
