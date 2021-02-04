@@ -249,14 +249,14 @@
 
             messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
             @* //Put product to reload product
-            ProductModel.Id = idProductNow;
-            await Http.PutAsJsonAsync($"Products/{idProductNow}", ProductModel);
+            //ProductModel.Id = idProductNow;
+            //await Http.PutAsJsonAsync($"Products/{idProductNow}", ProductModel);
 
             //Reload Product to show image
-            ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{idProductNow}"); *@
+            //ProductModel = await Http.GetFromJsonAsync<Product>($"Products/{idProductNow}"); *@
             
             //Delete image if 5 image existed
-            var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
+            //var deleteImage = await Http.DeleteAsync($"UploadImage/{idProductNow}");
             
             //Get Image to show
             productImages = await Http.GetFromJsonAsync<List<ProductImage>>($"UploadImage/{idProductNow}");

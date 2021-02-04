@@ -47,7 +47,7 @@ namespace ShopOnline.API.Controllers
         // POST: api/UploadImage
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void Post(UploadImage uploadImage)
+        public async Task Post(UploadImage uploadImage)
         {
             //root Path
             // var rootPath = $"{_env.WebRootPath}";
@@ -61,17 +61,18 @@ namespace ShopOnline.API.Controllers
             //Folder Single720x900
             var pathSingle720x900 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Single720x900";
             
-            // ---------Đổi tên file-----------
-            // Lấy tên file cũ, không bao gồm phần mở rộng
-            string oldName = Path.GetFileNameWithoutExtension(uploadImage.FileName);
+            // // ---------Đổi tên file-----------
+            // // Lấy tên file cũ, không bao gồm phần mở rộng
+            // string oldName = Path.GetFileNameWithoutExtension(uploadImage.FileName);
 
-            // Tạo tên file mới bằng cách replace phần tên cũ với phần tên mới
-            // DateTime.Now.Ticks để tạo số Tick ngày giờ hiện tại
-            // Chuyển qua dùng Guid.NewGuid() cho chắc ăn, tránh trùng lập
-            string newName = uploadImage.FileName.Replace(
-                oldName, 
-                $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}"); // fileName: Id-Guid
-           
+            // // Tạo tên file mới bằng cách replace phần tên cũ với phần tên mới
+            // // DateTime.Now.Ticks để tạo số Tick ngày giờ hiện tại
+            // // Chuyển qua dùng Guid.NewGuid() cho chắc ăn, tránh trùng lập
+            // string newName = uploadImage.FileName.Replace(
+            //     oldName, 
+            //     $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}"); 
+
+            string newName = RenameFile(uploadImage.FileName, $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}");// fileName: Id-Guid
             // Creates or overwrites a file in the specified path.
             var fs = System.IO.File.Create($"{pathTemp}\\{newName}");
 
@@ -117,6 +118,9 @@ namespace ShopOnline.API.Controllers
                 //Create new product on database
                 _productService.CreateProductPictureUri(productImage384x480);
             }
+            //Check and Create Main Image
+            await CheckAndDeleteOneImage(uploadImage.ProductId);
+            await CheckMainPicture(uploadImage.ProductId);
 
             //----------Xóa ảnh lưu tạm -------------
             DeleteFile(pathTemp, newName);
@@ -128,8 +132,6 @@ namespace ShopOnline.API.Controllers
         // Check if Image in Product >=5 will delete one or more
         public async Task<IActionResult> CheckAndDeleteOneImage(int idProduct)
         {
-            //Check and create MainImage if not Existed
-            await CheckMainPicture(idProduct);
             var productImages = await _context.ProductImages.Where(x=>x.ProductRefId==idProduct).ToListAsync();
             
             //If null or empty
@@ -140,36 +142,27 @@ namespace ShopOnline.API.Controllers
 
             //OrderBy Id
             productImages = productImages.OrderBy(x=>x.Id).ToList();
-            productImages.Last();
+            
             //if Exist more than 5 picture
             var countDelete = productImages.Count() - 5;
-            Console.WriteLine(countDelete);
+            
             if(countDelete > 0)
             {
                 for(var i=1; i<=countDelete ;i++)
                 {
-                    
-                    bool isMainImage  = productImages.ElementAt(i-1).IsMainPicture;
-                    
                     //Delete Image in folder server with oldest Id
                     await DeleteImage((productImages.ElementAt(i-1)).Id);
-
-                    //If has just delete mainImage
-                    if(isMainImage){
-                        //Check and create MainImage again
-                        await CheckMainPicture(idProduct);
-                    }
                     //Delete record ProductImage in database
                     _context.ProductImages.Remove(productImages.ElementAt(i-1));
                     await _context.SaveChangesAsync();
                 }
-                
             }
-
             return NoContent();
         }
 
         //// Check if Image in Product has a MainPicture
+        // If existed main : return
+        // If hasn't exited yet : create one from newest Image
         private async Task CheckMainPicture(int idProduct)
         {
             
@@ -179,33 +172,45 @@ namespace ShopOnline.API.Controllers
             {
                 return;
             }
+            productImages = productImages.OrderByDescending(x=>x.Id).ToList();
             var rootPath =  @"D:\Soft\Project\My Git Project\ShopOnline";
             var pathMain384x480 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Main384x480";
             //Check each productImage if its is mainImage
+            var countMainImage = 0;
             foreach (var productImage in productImages){
-                //Get file name
-                string fileName = Path.GetFileName(productImage.PictureUri);
-                //Search in folder Main384x480
-                string[] picList = Directory.GetFiles(pathMain384x480, fileName);
-                //If Existed
-                if(picList?.Length > 0) return;
+                // //Get file name
+                // string fileName = Path.GetFileName(productImage.PictureUri);
+                // //Search in folder Main384x480
+                // string[] picList = Directory.GetFiles(pathMain384x480, fileName);
+                // If mainImage 
+                if(productImage.IsMainPicture) countMainImage++;
+                if(countMainImage>1)
+                {
+                    //Delete Image in folder server with oldest Id
+                    await DeleteImage(productImage.Id);
+                    //Remove from database
+                    _context.ProductImages.Remove(productImage);
+                }
             }
 
+            if(countMainImage==1) return;
             //--------------Create MainImage by Newest Id ProductImage----------
             productImages= productImages.OrderByDescending(x=>x.Id).ToList();
             string fileNameAdd = Path.GetFileName(productImages.ElementAt(0).PictureUri);
             var pathSingle720x900 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Single720x900";
+
+            string newName384x480 = RenameFile(fileNameAdd, $"{idProduct.ToString()}-{Guid.NewGuid()}"); // fileName: Id-Guid, 
             _uploadImageService.ResizeImageAndRatio(
                 pathSingle720x900,
                 pathMain384x480,
                 fileNameAdd,
-                fileNameAdd,
+                newName384x480,
                 384,
                 480);
 
                 //Create ProductImage
                 ProductImage productImage384x480 = new ProductImage(){
-                    PictureUri = $"assets\\images\\product\\Main384x480\\{fileNameAdd}",
+                    PictureUri = $"assets\\images\\product\\Main384x480\\{newName384x480}",
                     ProductRefId = idProduct,
                     IsMainPicture = true
                 };
@@ -264,5 +269,17 @@ namespace ShopOnline.API.Controllers
             }
         }
         
+        //Rename exclude extenstion
+        private string RenameFile(string pathOriFile, string newName )
+        {
+            // ---------Đổi tên file-----------
+            // Lấy tên file cũ, không bao gồm phần mở rộng
+            string oldName = Path.GetFileNameWithoutExtension(pathOriFile);
+            //Replace phần oldName bên trong pathOriFile thành newName
+           return pathOriFile.Replace(oldName, newName);  
+                
+        }
+
+
     }//end class UploadImageController
 }//end namespace ShopOnline.API.Controllers
