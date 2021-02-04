@@ -46,7 +46,6 @@ namespace ShopOnline.API.Controllers
 
 
         // POST: api/UploadImage
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task Post(UploadImage uploadImage)
         {
@@ -59,18 +58,7 @@ namespace ShopOnline.API.Controllers
             var pathMain384x480 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Main384x480";
             //Folder Single720x900
             var pathSingle720x900 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Single720x900";
-
-            // // ---------Đổi tên file-----------
-            // // Lấy tên file cũ, không bao gồm phần mở rộng
-            // string oldName = Path.GetFileNameWithoutExtension(uploadImage.FileName);
-
-            // // Tạo tên file mới bằng cách replace phần tên cũ với phần tên mới
-            // // DateTime.Now.Ticks để tạo số Tick ngày giờ hiện tại
-            // // Chuyển qua dùng Guid.NewGuid() cho chắc ăn, tránh trùng lập
-            // string newName = uploadImage.FileName.Replace(
-            //     oldName, 
-            //     $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}"); 
-
+            //Change file name
             string newName = RenameFile(uploadImage.FileName, $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}");// fileName: Id-Guid
             // Creates or overwrites a file in the specified path.
             var fs = System.IO.File.Create($"{pathTemp}\\{newName}");
@@ -124,12 +112,31 @@ namespace ShopOnline.API.Controllers
             await CheckAndDeleteOneImage(uploadImage.ProductId);
             await CheckMainPicture(uploadImage.ProductId);
 
-            //----------Xóa ảnh lưu tạm -------------
+            //----------Delete temp image -------------
             DeleteFile(pathTemp, newName);
         }
 
+         // DELETE: api/UploadImage/5
+        [HttpDelete("{idProduct}")]
+        // Check if Image in Product >=5 will delete one or more
+        public async Task<IActionResult> DeleteAllImage(int idProduct)
+        {
+            var productImages = await _context.ProductImages.Where(x => x.ProductRefId == idProduct).ToListAsync();
+            //If null or empty
+            if (productImages?.Any() != true)
+            {
+                return NoContent();
+            }
+            foreach (var productImage in productImages)
+            {
+                await DeleteImage(productImage.Id);
+                _context.ProductImages.Remove(productImage);
+                await _context.SaveChangesAsync();
+            }
+            return NoContent();
+        }
 
-
+        //Check if a product has more than 5 image and delete
         private async Task CheckAndDeleteOneImage(int idProduct)
         {
             var productImages = await _context.ProductImages.Where(x => x.ProductRefId == idProduct).ToListAsync();
@@ -274,26 +281,6 @@ namespace ShopOnline.API.Controllers
             //Replace phần oldName bên trong pathOriFile thành newName
             return pathOriFile.Replace(oldName, newName);
 
-        }
-
-        // DELETE: api/UploadImage/5
-        [HttpDelete("{idProduct}")]
-        // Check if Image in Product >=5 will delete one or more
-        public async Task<IActionResult> DeleteAllImage(int idProduct)
-        {
-            var productImages = await _context.ProductImages.Where(x => x.ProductRefId == idProduct).ToListAsync();
-            //If null or empty
-            if (productImages?.Any() != true)
-            {
-                return NoContent();
-            }
-            foreach (var productImage in productImages)
-            {
-                await DeleteImage(productImage.Id);
-                _context.ProductImages.Remove(productImage);
-                await _context.SaveChangesAsync();
-            }
-            return NoContent();
         }
 
         //Get Directory: ...ShopOnline\
