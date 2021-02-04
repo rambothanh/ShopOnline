@@ -24,7 +24,7 @@ namespace ShopOnline.API.Controllers
         private readonly IUploadImageService _uploadImageService;
 
 
-        public UploadImageController(ShopOnlineContext context, 
+        public UploadImageController(ShopOnlineContext context,
         IWebHostEnvironment env,
         IProductService productService,
         IUploadImageService uploadImageService)
@@ -32,7 +32,7 @@ namespace ShopOnline.API.Controllers
             _context = context;
             _env = env;
             _productService = productService;
-            _uploadImageService=uploadImageService;
+            _uploadImageService = uploadImageService;
         }
 
 
@@ -41,26 +41,25 @@ namespace ShopOnline.API.Controllers
         [HttpGet("{idProduct}")]
         public async Task<ActionResult<IEnumerable<ProductImage>>> GetProductImages(int idProduct)
         {
-            return await _context.ProductImages.Where(x=>x.ProductRefId==idProduct).ToListAsync();
+            return await _context.ProductImages.Where(x => x.ProductRefId == idProduct).ToListAsync();
         }
+
 
         // POST: api/UploadImage
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task Post(UploadImage uploadImage)
         {
-            //root Path
-            // var rootPath = $"{_env.WebRootPath}";
             //var rootPath =  @"F:\Document of Thanh\DotNetCore\ShopOnline";
-            var rootPath =  @"D:\Soft\Project\My Git Project\ShopOnline";
-            
+            var rootPath = GetRootDirectoryOfWebRP();
+
             // Đường dẫn lưu ảnh tạm trước khi crop
             var pathTemp = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Temp";
             //Path save MainImage
             var pathMain384x480 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Main384x480";
             //Folder Single720x900
             var pathSingle720x900 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Single720x900";
-            
+
             // // ---------Đổi tên file-----------
             // // Lấy tên file cũ, không bao gồm phần mở rộng
             // string oldName = Path.GetFileNameWithoutExtension(uploadImage.FileName);
@@ -89,18 +88,20 @@ namespace ShopOnline.API.Controllers
                 newName,
                 720,
                 900);
-                
-                //Create ProductImage
-                ProductImage productImage720x900 = new ProductImage(){
-                    PictureUri =$"assets\\images\\product\\Single720x900\\{newName}",
-                    ProductRefId = uploadImage.ProductId,
-                    IsMainPicture = false
-                };
-                //Save new product on database
-                _productService.CreateProductPictureUri(productImage720x900);
+
+            //Create ProductImage
+            ProductImage productImage720x900 = new ProductImage()
+            {
+                PictureUri = $"assets\\images\\product\\Single720x900\\{newName}",
+                ProductRefId = uploadImage.ProductId,
+                IsMainPicture = false
+            };
+            //Save new product on database
+            _productService.CreateProductPictureUri(productImage720x900);
 
             //If IsMainImage --> Crop a image 384x480
-            if(uploadImage.IsMainImage){
+            if (uploadImage.IsMainImage)
+            {
                 _uploadImageService.ResizeImageAndRatio(
                 pathTemp,
                 pathMain384x480,
@@ -110,7 +111,8 @@ namespace ShopOnline.API.Controllers
                 480);
 
                 //Create ProductImage
-                ProductImage productImage384x480 = new ProductImage(){
+                ProductImage productImage384x480 = new ProductImage()
+                {
                     PictureUri = $"assets\\images\\product\\Main384x480\\{newName}",
                     ProductRefId = uploadImage.ProductId,
                     IsMainPicture = true
@@ -126,36 +128,36 @@ namespace ShopOnline.API.Controllers
             DeleteFile(pathTemp, newName);
         }
 
-        
-        
+
+
         private async Task CheckAndDeleteOneImage(int idProduct)
         {
-            var productImages = await _context.ProductImages.Where(x=>x.ProductRefId==idProduct).ToListAsync();
-            
+            var productImages = await _context.ProductImages.Where(x => x.ProductRefId == idProduct).ToListAsync();
+
             //If null or empty
-            if(productImages?.Any() != true)
+            if (productImages?.Any() != true)
             {
                 return;
             }
 
             //OrderBy Id
-            productImages = productImages.OrderBy(x=>x.Id).ToList();
-            
+            productImages = productImages.OrderBy(x => x.Id).ToList();
+
             //if Exist more than 5 picture
             var countDelete = productImages.Count() - 5;
-            
-            if(countDelete > 0)
+
+            if (countDelete > 0)
             {
-                for(var i=1; i<=countDelete ;i++)
+                for (var i = 1; i <= countDelete; i++)
                 {
                     //Delete Image in folder server with oldest Id
-                    await DeleteImage((productImages.ElementAt(i-1)).Id);
+                    await DeleteImage((productImages.ElementAt(i - 1)).Id);
                     //Delete record ProductImage in database
-                    _context.ProductImages.Remove(productImages.ElementAt(i-1));
+                    _context.ProductImages.Remove(productImages.ElementAt(i - 1));
                     await _context.SaveChangesAsync();
                 }
             }
-            
+
         }
 
         //// Check if Image in Product has a MainPicture
@@ -163,26 +165,27 @@ namespace ShopOnline.API.Controllers
         // If hasn't exited yet : create one from newest Image
         private async Task CheckMainPicture(int idProduct)
         {
-            
-            var productImages = await _context.ProductImages.Where(x=>x.ProductRefId==idProduct).ToListAsync();
+
+            var productImages = await _context.ProductImages.Where(x => x.ProductRefId == idProduct).ToListAsync();
             //If null or empty
-            if(productImages?.Any() != true)
+            if (productImages?.Any() != true)
             {
                 return;
             }
-            productImages = productImages.OrderByDescending(x=>x.Id).ToList();
-            var rootPath =  @"D:\Soft\Project\My Git Project\ShopOnline";
+            productImages = productImages.OrderByDescending(x => x.Id).ToList();
+            var rootPath = GetRootDirectoryOfWebRP();
             var pathMain384x480 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Main384x480";
             //Check each productImage if its is mainImage
             var countMainImage = 0;
-            foreach (var productImage in productImages){
+            foreach (var productImage in productImages)
+            {
                 // //Get file name
                 // string fileName = Path.GetFileName(productImage.PictureUri);
                 // //Search in folder Main384x480
                 // string[] picList = Directory.GetFiles(pathMain384x480, fileName);
                 // If mainImage 
-                if(productImage.IsMainPicture) countMainImage++;
-                if(countMainImage>1)
+                if (productImage.IsMainPicture) countMainImage++;
+                if (countMainImage > 1)
                 {
                     //Delete Image in folder server with oldest Id
                     await DeleteImage(productImage.Id);
@@ -191,9 +194,9 @@ namespace ShopOnline.API.Controllers
                 }
             }
 
-            if(countMainImage==1) return;
+            if (countMainImage == 1) return;
             //--------------Create MainImage by Newest Id ProductImage----------
-            productImages= productImages.OrderByDescending(x=>x.Id).ToList();
+            productImages = productImages.OrderByDescending(x => x.Id).ToList();
             string fileNameAdd = Path.GetFileName(productImages.ElementAt(0).PictureUri);
             var pathSingle720x900 = $"{rootPath}\\WebRP\\wwwroot\\assets\\images\\product\\Single720x900";
 
@@ -206,43 +209,38 @@ namespace ShopOnline.API.Controllers
                 384,
                 480);
 
-                //Create ProductImage
-                ProductImage productImage384x480 = new ProductImage(){
-                    PictureUri = $"assets\\images\\product\\Main384x480\\{newName384x480}",
-                    ProductRefId = idProduct,
-                    IsMainPicture = true
-                };
-                //Create new product on database
-                _productService.CreateProductPictureUri(productImage384x480);
-                //Check and delete imaga Product
-                await CheckAndDeleteOneImage(idProduct);
+            //Create ProductImage
+            ProductImage productImage384x480 = new ProductImage()
+            {
+                PictureUri = $"assets\\images\\product\\Main384x480\\{newName384x480}",
+                ProductRefId = idProduct,
+                IsMainPicture = true
+            };
+            //Create new product on database
+            _productService.CreateProductPictureUri(productImage384x480);
+            //Check and delete imaga Product
+            await CheckAndDeleteOneImage(idProduct);
         }
 
         // Delete image in folder server by idProductImage 
         private async Task DeleteImage(int idProductImage)
         {
-            //root Path
-            //var rootPath = $"{_env.WebRootPath}";
-            //var rootPath =  @"F:\Document of Thanh\DotNetCore\ShopOnline";
-            var rootPath =  @"D:\Soft\Project\My Git Project\ShopOnline";
+            var rootPath = GetRootDirectoryOfWebRP();
             //Path save MainImage
-            var pathMain384x480 = rootPath+ @"\WebRP\wwwroot\assets\images\product\Main384x480";
+            var pathMain384x480 = rootPath + @"\WebRP\wwwroot\assets\images\product\Main384x480";
             //Folder Single720x900
-            var pathSingle720x900 = rootPath+ @"\WebRP\wwwroot\assets\images\product\Single720x900";
+            var pathSingle720x900 = rootPath + @"\WebRP\wwwroot\assets\images\product\Single720x900";
 
             //Get pictureUri like: assets/images/product/130-c75f797d-dd4a-4da3-b89d-6971b52b83fe.jpg
             var productImage = await _context.ProductImages.FindAsync(idProductImage);
             var pictureUri = productImage.PictureUri;
-            
+
             //Null or Empty: do nothing
-            if(String.IsNullOrEmpty(pictureUri))
+            if (String.IsNullOrEmpty(pictureUri))
                 return;
-                    
 
             //Lấy tên file bao gồm phần mở rộng
             string fileName = Path.GetFileName(pictureUri);
-            
-            
 
             //Delete
             DeleteFile(pathMain384x480, fileName);
@@ -254,28 +252,28 @@ namespace ShopOnline.API.Controllers
         {
             string[] picList = Directory.GetFiles(path, fileName);
             if (!(picList?.Length > 0))
-            { 
+            {
                 // Null or empty: do nothing 
             }
             else
             {
-                 //Delete
+                //Delete
                 foreach (string f in picList)
                 {
                     System.IO.File.Delete(f);
                 }
             }
         }
-        
+
         //Rename exclude extenstion
-        private string RenameFile(string pathOriFile, string newName )
+        private string RenameFile(string pathOriFile, string newName)
         {
             // ---------Đổi tên file-----------
             // Lấy tên file cũ, không bao gồm phần mở rộng
             string oldName = Path.GetFileNameWithoutExtension(pathOriFile);
             //Replace phần oldName bên trong pathOriFile thành newName
-           return pathOriFile.Replace(oldName, newName);  
-                
+            return pathOriFile.Replace(oldName, newName);
+
         }
 
         // DELETE: api/UploadImage/5
@@ -283,18 +281,32 @@ namespace ShopOnline.API.Controllers
         // Check if Image in Product >=5 will delete one or more
         public async Task<IActionResult> DeleteAllImage(int idProduct)
         {
-            var productImages = await _context.ProductImages.Where(x=>x.ProductRefId==idProduct).ToListAsync();
+            var productImages = await _context.ProductImages.Where(x => x.ProductRefId == idProduct).ToListAsync();
             //If null or empty
-            if(productImages?.Any() != true)
+            if (productImages?.Any() != true)
             {
                 return NoContent();
             }
-            foreach(var productImage in productImages){
+            foreach (var productImage in productImages)
+            {
                 await DeleteImage(productImage.Id);
                 _context.ProductImages.Remove(productImage);
                 await _context.SaveChangesAsync();
             }
             return NoContent();
+        }
+
+        //Get Directory: ...ShopOnline\
+        //Config this function when Deploy Unbuntu
+        private string GetRootDirectoryOfWebRP()
+        {
+            //root Path
+            //var rootPathTest = $"{_env.WebRootPath}" ---> wwwroot;
+            ///Get: ///D:/Soft/Project/My Git Project/ShopOnline/ShopOnline.API/bin/Debug/net5.0/ShopOnline.API.dll
+            var rootDir = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            //Get: D:\Soft\Project\My Git Project\ShopOnline\ShopOnline.API\bin\Debug\net5.0
+            //var parent = Directory.GetParent(applicationPath); <--Một cách lấy parent
+            return Path.Combine(rootDir, @"..\..\..\..\.."); // parent 5 level
         }
 
     }//end class UploadImageController
