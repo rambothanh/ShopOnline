@@ -101,7 +101,21 @@ else
         @* Upload Image *@
         <form @onsubmit="OnSubmitUploadImage">
             <div class="form-group">
-
+                @if(!(productImages?.Any() != true)){
+                    <div class="@(disableUploadImage?"":"d-none")">
+                        <p style="margin:0px">Current Product Images:</p>
+                        @foreach (var productImage in productImages)
+                        { 
+                            if(!productImage.IsMainPicture){
+                                <img src="http://localhost:4000/@productImage.PictureUri"
+                                                class="mr-2 img-fluid"
+                                                alt="Product Image"
+                                                style="max-width: 8%">
+                            }
+                           
+                        }
+                    </div>
+                }
                 @* <div>
                     <p style="margin:0px">Current Product Image:</p>
                     <img src="http://localhost:4000/@productModel.PictureUri" class="img-fluid"
@@ -160,6 +174,8 @@ else
     private Product productModel = new Product();
     private List<ProductBrand> productBrands;
     private List<ProductType> productTypes;
+    
+    private List<ProductImage> productImages;
     private ProductPrice productPrice;
     private bool submitingUploadImage = false;
     private bool disableUploadImage = true;
@@ -171,7 +187,7 @@ else
 
     private string messageSuccess;
     private string messageError;
-    string messageImage = "No images selected (384x480)";
+    string messageImage = "No images selected (720x900)";
     IReadOnlyList<IBrowserFile> selectedFiles;
 
 
@@ -183,6 +199,7 @@ else
         productBrands = await Http.GetFromJsonAsync<List<ProductBrand>>($"ProductBrands");
         productTypes = await Http.GetFromJsonAsync<List<ProductType>>($"ProductTypes");
         productPrice = await Http.GetFromJsonAsync<ProductPrice>($"ProductPrices/{producId}");
+        productImages = await Http.GetFromJsonAsync<List<ProductImage>>($"UploadImage/{producId}");
 
     }
 
@@ -224,8 +241,13 @@ else
         disableUploadImage = false;
 
         selectedFiles = e.GetMultipleFiles();
-
+        if(selectedFiles.Count>4)
+        {
+            messageImage = $"<span class='badge badge-pill badge-danger'>{selectedFiles.Count} image(s)</span> selected, only accept 4 pictures";
+            return;
+        }
         messageImage = $"<span class='badge badge-pill badge-light'>{selectedFiles.Count} image(s)</span> selected";
+        
         this.StateHasChanged();
         OnSubmitUploadImage();
     }
@@ -240,10 +262,7 @@ else
         if (selectedFiles != null)
         {
             submitingUploadImage = true;
-            //Delete Old Image
-            await Http.DeleteAsync($"UploadImage/{producId}");
-            //Run Update Product đồng thời
-            await HandleValidSubmit();
+                        
             // Handle file upload and upload file
             foreach (var file in selectedFiles)
             {
@@ -252,6 +271,7 @@ else
                 MemoryStream ms = new MemoryStream();
                 await stream.CopyToAsync(ms);
                 stream.Close();
+                //Create uploadImage
                 Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
                 uploadImage.ProductId = producId;
                 uploadImage.FileName = file.Name;
@@ -265,16 +285,14 @@ else
 
 
             messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
-            //Reload Product
-            productModel = await Http.GetFromJsonAsync<Product>($"Products/{producId}");
-
+            //Get Image to show
+            productImages = await Http.GetFromJsonAsync<List<ProductImage>>($"UploadImage/{producId}");
+            
             //Vô hiệu hoá nút Upload
             disableUploadImage = true;
             //Tắt hiệu ứng loading
             submitingUploadImage = false;
-
             this.StateHasChanged();
-
         }
     }
     @* End OnSubmit upload image *@

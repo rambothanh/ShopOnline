@@ -281,13 +281,22 @@
                 }else{
                  var stickerNew = `<span class="sticker-new label-sale">-`+product.productPrice.salePercent+`%</span>`;
                 }
+                //MainProductImage 
+                var mainProductImage ="";
+                product.productImages.forEach(function(productImage){
+                     if(productImage.isMainPicture){
+                        mainProductImage = productImage.pictureUri;
+                        //break; JAVASCRIPT can't break forEach
+                    }
+                });
+
                 //Create product grid
                 var divProductGrid = `
                 <div class="col-lg-4 col-sm-6">
                     <div class="single-product">
                         <div class="product-image">
                             <a href="shopsingle">
-                                 <img src="`+ product.pictureUri + `" alt="">
+                                 <img src="`+ mainProductImage + `" alt="">
                                 @* <img src="https://picsum.photos/384/480" alt=""> *@
 
                             </a>
@@ -327,7 +336,7 @@
                 <div class="single-product product-list">
                     <div class="product-image">
                         <a href="shopsingle">
-                            <img src="`+product.pictureUri+`" alt="">
+                            <img src="`+mainProductImage+`" alt="">
                         </a>
 
                         `+stickerNew+`
@@ -374,7 +383,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="quick-view-image">
-                                            <img src="`+ product.pictureUri + `" alt="">
+                                            <img src="`+ mainProductImage + `" alt="">
                                         </div>
                                     </div>
                                     <div class="col-md-6">

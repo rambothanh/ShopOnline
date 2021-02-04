@@ -89,10 +89,14 @@
                     <div class="@(disableUploadImage?"":"d-none")">
                         <p style="margin:0px">Current Product Images:</p>
                         @foreach (var productImage in productImages)
-                        {
-                            <img src="http://localhost:4000/@productImage.PictureUri" class="mr-2 img-fluid"
-                                alt="Product Image"
-                                style="max-width: 20%">
+                        { 
+                            if(!productImage.IsMainPicture){
+                                <img src="http://localhost:4000/@productImage.PictureUri"
+                                                class="mr-2 img-fluid"
+                                                alt="Product Image"
+                                                style="max-width: 8%">
+                            }
+                           
                         }
                     </div>
             }
@@ -145,7 +149,7 @@
     private List<ProductType> productTypes;
     private string messageSuccess;
     private string messageError;
-    string messageImage = "No file(s) selected (384x480)";
+    string messageImage = "No file(s) selected (720x900)";
     private ProductPrice productPrice;
     private Decimal currentPrice;
     private Decimal oldPrice;
