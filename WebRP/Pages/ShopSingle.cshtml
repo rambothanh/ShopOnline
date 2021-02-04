@@ -821,16 +821,29 @@
             $("h3.message").html("Wait...");
         }; *@
         options.dataType = "json";
-        options.success = function (data) {
+        options.success = function (product) {
+            @* //Handle this
+            //product.name;
+            //product.description;
+            //product.shortDescription
+            //product.productImages.pictureUri
+            //product.productImages.isMainPicture
+            //product.productType
+            //product.productBrand
+            //product.quantity
+            //product.productPrice.salePercent 
+            //product.productPrice.currentPrice
+            //product.productPrice.oldPrice *@
 
-
+            
             //Error message change to ""
             $("h3.message").html("");
             @* if (sessionStorage.hasOwnProperty("message")) {
                 $("h3.message").html(sessionStorage.getItem("message"));
                 sessionStorage.removeItem("message");
             } *@
-        };
+
+        };//end options.success
         options.error = function (xhr) {
             @* if (xhr.status == 401) {
                 window.location.href = "/EmployeeManager/SignIn";
