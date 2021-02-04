@@ -9,8 +9,10 @@ namespace WebRP.Pages
 {
     public class ShopSingleModel : PageModel
     {
-        public void OnGet()
+        public int Id { get; set; }
+        public void OnGet(int id)
         {
+            Id=id;
         }
     }
 }

@@ -253,7 +253,7 @@
 	-----------------------------------*/
 
 	var swiper = new Swiper('.shop-thumb-active', {
-		speed: 300,
+		speed: 180,
 		loop: false,
 		slidesPerView: 3,
 		spaceBetween: 20,
@@ -269,7 +269,7 @@
 	-----------------------------------*/
 
 	var swiper = new Swiper('.blog-gallery', {
-		speed: 300,
+		speed: 180,
 		loop: false,
 		slidesPerView: 1,
 		spaceBetween: 20,
@@ -301,8 +301,10 @@
 	// bằng cách call API
 	function quantity() {
 		$(document).on('click','.add', function () {
-			if ($(this).prev().val()) {
-				$(this).prev().val(+$(this).prev().val() + 1);
+			var max = +$(this).prev().attr("max");
+			if ($(this).prev().val() < max) {
+					console.log();
+					$(this).prev().val(+$(this).prev().val() + 1);
 			}
 		});
 		$(document).on('click','.sub', function () {

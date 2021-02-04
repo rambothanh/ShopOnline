@@ -34,8 +34,9 @@
 
 
     @* <!--====== Use the minified version files listed below for better performance and remove the files listed above ======--> *@
-    <link rel="stylesheet" href="assets/css/plugins-min/plugins.min.css">
-    <link rel="stylesheet" href="assets/css/style.min.css">
+    @* Không thêm dấu ~ sẽ bị lỗi khi dùng routing *@
+    <link rel="stylesheet" href="~/assets/css/plugins-min/plugins.min.css">
+    <link rel="stylesheet" href="~/assets/css/style.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
@@ -61,7 +62,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-2">
                             <div class="header-logo">
-                                <a href="index.html"><img src="assets/images/logo/logo.png" alt=""></a>
+                                <a href="index.html"><img src="~/assets/images/logo/logo.png" alt=""></a>
                             </div>
                         </div>
                         <div class="col-lg-7 position-static">
@@ -110,7 +111,7 @@
                                                 </li>
                                                 <li class="mega-dropdown">
                                                     <a class="menu-banner" href="#">
-                                                        <img src="assets/images/menu-banner.jpg" alt="">
+                                                        <img src="~/assets/images/menu-banner.jpg" alt="">
                                                     </a>
                                                 </li>
                                             </ul>
@@ -185,7 +186,7 @@
                                             <li class="product-cart">
                                                 <div class="single-cart-box">
                                                     <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="assets/images/cart/cart-1.jpg" alt=""></a>
+                                                        <a href="shop-single.html"><img src="~/assets/images/cart/cart-1.jpg" alt=""></a>
                                                         <span class="pro-quantity">1x</span>
                                                     </div>
                                                     <div class="cart-content">
@@ -199,7 +200,7 @@
                                                 </div>
                                                 <div class="single-cart-box">
                                                     <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="assets/images/cart/cart-2.jpg" alt=""></a>
+                                                        <a href="shop-single.html"><img src="~/assets/images/cart/cart-2.jpg" alt=""></a>
                                                         <span class="pro-quantity">1x</span>
                                                     </div>
                                                     <div class="cart-content">
@@ -213,7 +214,7 @@
                                                 </div>
                                                 <div class="single-cart-box">
                                                     <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="assets/images/cart/cart-3.jpg" alt=""></a>
+                                                        <a href="shop-single.html"><img src="~/assets/images/cart/cart-3.jpg" alt=""></a>
                                                         <span class="pro-quantity">1x</span>
                                                     </div>
                                                     <div class="cart-content">
@@ -252,7 +253,7 @@
                 <div class="row align-items-center">
                     <div class="col-6">
                         <div class="header-logo">
-                            <a href="index.html"><img src="assets/images/logo/logo.png" alt=""></a>
+                            <a href="index.html"><img src="~/assets/images/logo/logo.png" alt=""></a>
                         </div>
                     </div>
                     <div class="col-6">
@@ -352,7 +353,7 @@
                                 </li>
                                 <li class="mega-dropdown">
                                     <a class="menu-banner" href="#">
-                                        <img src="assets/images/menu-banner.jpg" alt="">
+                                        <img src="~/assets/images/menu-banner.jpg" alt="">
                                     </a>
                                 </li>
                             </ul>
@@ -414,7 +415,7 @@
         <!--Overlay-->
     
         @RenderBody()
-    </div>
+    </div> <!--End main-wrapper"-->
   
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -440,7 +441,7 @@
 
 
     @* <!--====== Use the minified version files listed below for better performance and remove the files listed above ======--> *@
-    <script src="assets/js/plugins.min.js"></script>
+    <script src="~/assets/js/plugins.min.js"></script>
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
     <!-- Google Map js -->
