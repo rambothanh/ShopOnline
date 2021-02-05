@@ -295,7 +295,7 @@
                 <div class="col-lg-4 col-sm-6">
                     <div class="single-product">
                         <div class="product-image">
-                            <a href="shopsingle">
+                            <a href="shopsingle/`+ product.id+`">
                                  <img src="`+ mainProductImage + `" alt="">
                                 @* <img src="https://picsum.photos/384/480" alt=""> *@
 
@@ -319,7 +319,7 @@
                                 <li class="rating-on"><i class="fa fa-star-half-o"></i></li>
                                 <li class="rating-on"><i class="fa fa-star-o"></i></li>
                             </ul>
-                            <h4 class="product-name"><a href="shopsingle">`+ product.name+`</a></h4>
+                            <h4 class="product-name"><a href="shopsingle/`+ product.id +`">`+ product.name+`</a></h4>
                             <div class="price-box">
                                 <span class="current-price">$`+ product.productPrice.currentPrice+`</span>
                                 <span class="old-price">$`+ product.productPrice.oldPrice +`</span>
@@ -335,7 +335,7 @@
                 var divProductList =`
                 <div class="single-product product-list">
                     <div class="product-image">
-                        <a href="shopsingle">
+                        <a href="shopsingle/`+ product.id +`">
                             <img src="`+mainProductImage+`" alt="">
                         </a>
 
@@ -355,7 +355,7 @@
                             <li class="rating-on"><i class="fa fa-star-o"></i></li>
                             <li class="rating-on"><i class="fa fa-star-o"></i></li>
                         </ul>
-                        <h4 class="product-name"><a href="shopsingle">`+ product.name+`</a></h4>
+                        <h4 class="product-name"><a href="shopsingle/`+ product.id +`">`+ product.name+`</a></h4>
                         <div class="price-box">
                             <span class="current-price">$`+ product.productPrice.currentPrice+`</span>
                             <span class="old-price">$`+ product.productPrice.oldPrice+`</span>

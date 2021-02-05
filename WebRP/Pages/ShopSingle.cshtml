@@ -26,10 +26,10 @@
             <div class="col-lg-6 col-md-8">
                 <div class="shop-image">
                     <div class="shop-single-preview-image">
-                        <img class="product-zoom" src="http://localhost:4000/assets/images/product-single/product-1.jpg"
+                        <img class="product-zoom" src=""
                             alt="">
 
-                        <span class="sticker-new label-sale">-34%</span>
+                        <span class="sticker-new label-sale">-0%</span>
                     </div>
                     <div id="gallery_01" class="shop-single-thumb-image shop-thumb-active swiper-container">
                         <div class="swiper-wrapper">
@@ -141,9 +141,9 @@
                     <div class="social-share">
                         <span class="share-title">Share:</span>
                         <ul class="social">
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+                            <li><a href="javascript:void(0);"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="javascript:void(0);"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="javascript:void(0);"><i class="fa fa-pinterest-p"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -359,7 +359,7 @@
                     <div class="swiper-slide">
                         <div class="single-product">
                             <div class="product-image">
-                                <a href="shopsingle">
+                                <a href="javascript:void(0);">
                                     <img src="~/assets/images/product/product-2.jpg" alt="">
                                 </a>
                                 <div class="action-links">
@@ -926,26 +926,26 @@
             //product.productImages.pictureUri
             //div.col-lg-6
             var divImage = title.parent().parent();
-            var divSwiper = divImage.prev().find("div.swiper-wrapper");
-            //<img class="product-zoom" 
-            var numberImage = 0;
+            //div.col-lg-6.col-md-8
+            var divcollg6colmd8 = divImage.prev();
+            //add salePercent
+            divcollg6colmd8.find("span.sticker-new").text("-" + product.productPrice.salePercent + "%");
+            var divSwiper = divcollg6colmd8.find("div.swiper-wrapper");
+             
+             //Add 4 image to div.swiper-wrapper
+            var numberImage = 1;
             product.productImages.forEach(function (productImage) {
                 if (!productImage.isMainPicture) {
                     var linkImage = "http://localhost:4000/".concat(productImage.pictureUri);
-                    divImage.prev().find("img.product-zoom").attr("src", linkImage);
+                    //add a image to <img class="product-zoom"
+                    divcollg6colmd8.find("img.product-zoom").attr("src", linkImage)
+                    //divImage.prev().find("img.product-zoom").attr("src", linkImage);
                     //#Image1 = $("div.row.justify-content-center h3").parent().parent().prev().find("div.swiper-wrapper").children()[0]
-                    //divSwiper.children()[0].removeClass("d-none");
-                    //divSwiper.find("div#Image".concat(+numberImage + 1)).removeClass("d-none")
-                    var divImage = divSwiper.find("div#Image".concat(+numberImage + 1)).children();
+                    //Add a Image to #Image"1,2,3,4"
+                    var divImage = divSwiper.find("div#Image".concat(+numberImage)).children();
                     divImage.attr("data-image", linkImage);
                     divImage.children("img").attr("src", linkImage);
-                    @* var swiperSlide = `<div class="swiper-slide single-product-thumb">
-                            <a href="javascript:void(0);" data-image=`+ linkImage + `>
-                            <img src=`+ linkImage + ` alt="">
-                            </a>
-                            </div>`;
-                            divSwiper.append(swiperSlide); *@
-                        numberImage = +numberImage + 1;
+                    numberImage = +numberImage + 1;
                     console.log(numberImage);
                 }
             });

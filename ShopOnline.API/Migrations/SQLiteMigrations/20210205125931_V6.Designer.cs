@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopOnline.API.Models;
 
 namespace ShopOnline.API.Migrations.SQLiteMigrations
 {
     [DbContext(typeof(ShopOnlineContext))]
-    partial class ShopOnlineContextModelSnapshot : ModelSnapshot
+    [Migration("20210205125931_V6")]
+    partial class V6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -227,25 +227,28 @@
 	/*--
 		Product Zoom Script
 	-----------------------------------*/
+	//Chỉnh lại một chút chỗ này để load sau khi ajax chạy xong
+	$(document).ajaxStop(function () {
+		function productZoom() {
+			$(".product-zoom").elevateZoom({
+				gallery: 'gallery_01',
+				cursor: "crosshair",
+				galleryActiveClass: 'active',
+				easing: true,
+				imageCrossfade: true,
+				zoomType: "inner"
+			});
 
-	function productZoom() {
-		$(".product-zoom").elevateZoom({
-			gallery:'gallery_01',
-			cursor: "crosshair",
-			galleryActiveClass: 'active',
-			easing : true, 
-			imageCrossfade: true,
-			zoomType: "inner"
-		}); 
+			//pass the images to Fancybox
+			$(".product-zoom").bind("click", function (e) {
+				var ez = $('.product-zoom').data('elevateZoom');
+				$.fancybox(ez.getGalleryList());
+				return false;
+			});
+		}
+		productZoom();
+	});
 	
-		//pass the images to Fancybox
-		$(".product-zoom").bind("click", function(e) {  
-		var ez =   $('.product-zoom').data('elevateZoom');	
-			$.fancybox(ez.getGalleryList());
-		return false;
-		});
-	}
-	productZoom();
 	
 
 	/*--

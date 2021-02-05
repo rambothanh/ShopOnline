@@ -78,9 +78,10 @@ namespace ShopOnline.API.Controllers
                 900);
 
             //Create ProductImage
+            //Because export to web. Should use / , don't use \
             ProductImage productImage720x900 = new ProductImage()
             {
-                PictureUri = $"assets\\images\\product\\Single720x900\\{newName}",
+                PictureUri = $"assets/images/product/Single720x900/{newName}",
                 ProductRefId = uploadImage.ProductId,
                 IsMainPicture = false
             };
@@ -101,7 +102,7 @@ namespace ShopOnline.API.Controllers
                 //Create ProductImage
                 ProductImage productImage384x480 = new ProductImage()
                 {
-                    PictureUri = $"assets\\images\\product\\Main384x480\\{newName}",
+                    PictureUri = $"assets/images/product/Main384x480/{newName}",
                     ProductRefId = uploadImage.ProductId,
                     IsMainPicture = true
                 };
@@ -219,7 +220,7 @@ namespace ShopOnline.API.Controllers
             //Create ProductImage
             ProductImage productImage384x480 = new ProductImage()
             {
-                PictureUri = $"assets\\images\\product\\Main384x480\\{newName384x480}",
+                PictureUri = $"assets/images/product/Main384x480/{newName384x480}",
                 ProductRefId = idProduct,
                 IsMainPicture = true
             };
