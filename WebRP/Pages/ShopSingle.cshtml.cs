@@ -12,7 +12,7 @@ namespace WebRP.Pages
         public int Id { get; set; }
         public void OnGet(int id)
         {
-            Id=id;
+            Id = id;
         }
     }
 }
