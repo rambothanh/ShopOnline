@@ -936,7 +936,9 @@
                     //#Image1 = $("div.row.justify-content-center h3").parent().parent().prev().find("div.swiper-wrapper").children()[0]
                     //divSwiper.children()[0].removeClass("d-none");
                     //divSwiper.find("div#Image".concat(+numberImage + 1)).removeClass("d-none")
-                    divSwiper.find("div#Image".concat(+numberImage + 1)).children().attr("data-image", linkImage)
+                    var divImage = divSwiper.find("div#Image".concat(+numberImage + 1)).children();
+                    divImage.attr("data-image", linkImage);
+                    divImage.children("img").attr("src", linkImage);
                     @* var swiperSlide = `<div class="swiper-slide single-product-thumb">
                             <a href="javascript:void(0);" data-image=`+ linkImage + `>
                             <img src=`+ linkImage + ` alt="">
