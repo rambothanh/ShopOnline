@@ -26,8 +26,7 @@
             <div class="col-lg-6 col-md-8">
                 <div class="shop-image">
                     <div class="shop-single-preview-image">
-                        <img class="product-zoom" src=""
-                            alt="">
+                        <img class="product-zoom" src="" alt="">
 
                         <span class="sticker-new label-sale">-0%</span>
                     </div>
@@ -931,8 +930,8 @@
             //add salePercent
             divcollg6colmd8.find("span.sticker-new").text("-" + product.productPrice.salePercent + "%");
             var divSwiper = divcollg6colmd8.find("div.swiper-wrapper");
-             
-             //Add 4 image to div.swiper-wrapper
+
+            //Add 4 image to div.swiper-wrapper
             var numberImage = 1;
             product.productImages.forEach(function (productImage) {
                 if (!productImage.isMainPicture) {
@@ -975,6 +974,101 @@
         }
         //Start call API
         $.ajax(options);
+
+
+        //---------- Add to cart--------------
+        //Check idProduct in Listcart
+        AddCountCart();
+        function containsCart(productId, listCart) {
+            var i;
+            for (i = 0; i < listCart.length; i++) {
+                if (listCart[i].id === productId) {
+                    return listCart[i];
+                }
+            }
+            return null;
+        };
+        //Calculate Item count and add to item-count 
+        function CalculateItem(listCart) {
+            var i;
+            var result = 0;
+            if (listCart === null) return result;
+            for (i = 0; i < listCart.length; i++) {
+                result = Number(result) + Number(listCart[i].quantity);
+            }
+            return result;
+        };
+        //Add item-count
+        function AddCountCart() {
+            var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+            var count = CalculateItem(listCartinLocal);
+            //console.log(count);
+            if (count === 0) {
+                $('span.item-count').addClass("d-none");
+            } else {
+                $('span.item-count').removeClass("d-none");
+                $('span.item-count').text(count);
+            }
+        };
+        // Click add to cart
+        // $("button:contains('Add to cart')").on("click", 
+        $("button:contains('Add to cart')").on("click", function () {
+            var productId = $(this).attr("productId");
+            var productQuantity = $(this).parent().parent().prev();
+            var quantity = productQuantity.find("input").val();
+            //Create a cart, Add to ListCart, Save to LocalStorage
+            function CreateCartAndSave(listCart) {
+                //Get values to create cart
+                var thumbPrice = productQuantity.prev().prev().prev();
+                var price = thumbPrice.children(".current-price").text().replace('$', '')
+                var title = thumbPrice.prev().prev().prev();
+                var collg6colmd8 = title.parent().parent().prev();
+                var total = +price * (+quantity);
+                //Create a cart
+                var cart = {
+                    id: productId,
+                    image: collg6colmd8.find('img').attr("src"),
+                    productName: title.text(),
+                    price: price,
+                    quantity: quantity,
+                    total: total
+
+                };
+                //add cart
+                listCart.push(cart);
+                //save localsorage
+                localStorage.setItem("listCart", JSON.stringify(listCart));
+                AddCountCart();
+            };
+            //Check Browser support for LocalStorge
+            if (typeof (Storage) !== "undefined") {
+                //Check if existed listCart
+                var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+                //if listCart Existed
+                if (listCartinLocal != null) {
+                    //Check producId in listCartinLocal
+                    var cartExistListCart = containsCart(productId, listCartinLocal);
+                    //console.log(cartExistListCart);
+                    if (cartExistListCart != null) {
+                        cartExistListCart.quantity = Number(cartExistListCart.quantity) + Number(quantity);
+                        cartExistListCart.total = (+cartExistListCart.price) * (+cartExistListCart.quantity);
+                        localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+                        AddCountCart();
+                    } else {
+                        CreateCartAndSave(listCartinLocal);
+                    }
+                    //if listCart is not existed 
+                } else {
+                    //Create a new listCart
+                    var listCart = [];
+                    CreateCartAndSave(listCart);
+                }
+            } else {
+                // Sorry! No Web Storage support..
+            }
+        });
+
+
     });
 
 </script>
