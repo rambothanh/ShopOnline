@@ -41,7 +41,7 @@
 </head>
 <body>
     <div class="main-wrapper">
-        
+
         <!--Top Notification Start-->
         <div class="top-notification-bar text-center">
             <div class="container">
@@ -54,7 +54,6 @@
             </div>
         </div>
         <!--Top Notification End-->
-
         <!--Header Section Start-->
         <div class="header-section d-none d-lg-block">
             <div class="main-header">
@@ -182,60 +181,28 @@
                                             <span class="item-count ">3</span>
                                         </a>
 
+                                        @*-------------------------CART CONTENT------------------------*@
                                         <ul class="dropdown-menu ">
+                                            @* --------------------List product in Cart --------------- *@
                                             <li class="product-cart">
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="~/assets/images/cart/cart-1.jpg" alt=""></a>
-                                                        <span class="pro-quantity">1x</span>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h6 class="title"><a href="shop-single.html">Rock Soapwort</a></h6>
-                                                        <div class="cart-price">
-                                                            <span class="sale-price">$70.00</span>
-                                                            <span class="regular-price">$80.00</span>
-                                                        </div>
-                                                    </div>
-                                                    <a href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                                </div>
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="~/assets/images/cart/cart-2.jpg" alt=""></a>
-                                                        <span class="pro-quantity">1x</span>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h6 class="title"><a href="shop-single.html">Rock Soapwort</a></h6>
-                                                        <div class="cart-price">
-                                                            <span class="sale-price">$70.00</span>
-                                                            <span class="regular-price">$80.00</span>
-                                                        </div>
-                                                    </div>
-                                                    <a href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                                </div>
-                                                <div class="single-cart-box">
-                                                    <div class="cart-img">
-                                                        <a href="shop-single.html"><img src="~/assets/images/cart/cart-3.jpg" alt=""></a>
-                                                        <span class="pro-quantity">1x</span>
-                                                    </div>
-                                                    <div class="cart-content">
-                                                        <h6 class="title"><a href="shop-single.html">Rock Soapwort</a></h6>
-                                                        <div class="cart-price">
-                                                            <span class="sale-price">$70.00</span>
-                                                            <span class="regular-price">$80.00</span>
-                                                        </div>
-                                                    </div>
-                                                    <a href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                                </div>
+                                                @* --------A Product in Cart------------ *@
+                                               
                                             </li>
+                                            @* --------------------END List product in Cart --------------- *@
+                                            @* ----Total ----- *@
                                             <li class="product-total">
                                                 <ul class="cart-total">
                                                     <li> Total : <span>$189.00</span></li>
                                                 </ul>
                                             </li>
+                                            @* ----End Total ----- *@
+                                            @* -----Button check out  *@
                                             <li class="product-btn">
                                                 <a href="checkout.html" class="btn btn-dark btn-block">Checkout</a>
                                             </li>
+                                            @* -----End Button check out  *@
                                         </ul>
+                                        @*-------------------------END CART CONTENT------------------------*@
                                     </div>
                                 </div>
                             </div>
@@ -245,8 +212,6 @@
             </div>
         </div>
         <!--Header Section End-->
-
-
         <!--Header Mobile Start-->
         <div class="header-mobile d-lg-none">
             <div class="container">
@@ -290,7 +255,6 @@
             </div>
         </div>
         <!--Header Mobile End-->
-
         <!--Header Mobile Menu Start-->
         <div class="header-mobile-menu d-lg-none">
 
@@ -413,16 +377,16 @@
 
         <div class="overlay"></div>
         <!--Overlay-->
-    
+
         @RenderBody()
     </div> <!--End main-wrapper"-->
-  
-    
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-      @* <!-- JS
+    @* <!-- JS
         ============================================ -->
         <!-- Modernizer JS -->
         <script src="~/assets/js/vendor/modernizr-3.6.0.min.js"></script>
@@ -449,5 +413,11 @@
     <script src="~/assets/js/map-script.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            
+            //For test JS
+        });
+    </script>
 </body>
 </html>
