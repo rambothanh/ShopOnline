@@ -1036,7 +1036,24 @@
                                                     </div>
                                                 </div>
                                                 <a productid=`+ cart.id+` href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                            </div>`;
+                                            </div>
+                                            <script>
+                                                //--------------DELETE PRODUCT IN CART -------------------
+                                                $("div.single-cart-box").children("a.del-icon").on("click", function () {
+                                                    //Get List
+                                                    var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+                                                    //Get Id product
+                                                    var productId = $(this).attr("productid");
+                                                    //remove cart with productId
+                                                    listCartinLocal = listCartinLocal.filter(cart => cart.id !== productId);
+                                                    //save to LocalStorage
+                                                    localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+                                                    //update
+                                                    UpdateProductCart();
+                                                    //reload this script
+                                                    //reload_js("1");
+                                                }); //--------------END DELETE PRODUCT IN CART -------------------
+                                            </script>`;
                     liProductInCart.append(divProductInCart);
 
                 });
@@ -1044,7 +1061,7 @@
                 //Add total value of cart
                 liProductInCart.next().children().children().children().text("$" + calculate.totalValue);
             }
-        };
+        };//End UpdateProductCart 
         //Run update when first load
         UpdateProductCart();
 
@@ -1109,7 +1126,7 @@
                 localStorage.setItem("listCart", JSON.stringify(listCart));
                 UpdateProductCart();
                 //reload this script
-                reload_js("1");
+                //reload_js("1");
             };
             //Check Browser support for LocalStorge
             if (typeof (Storage) !== "undefined") {
@@ -1138,6 +1155,7 @@
             } else {
                 // Sorry! No Web Storage support..
             }
+            location.reload();
         });
         //-------------------END ADD TO CART----------------------
 
@@ -1154,7 +1172,7 @@
             //update
             UpdateProductCart();
             //reload this script
-            reload_js("1");
+            //reload_js("1");
         }); //--------------END DELETE PRODUCT IN CART -------------------
 
        
