@@ -290,7 +290,7 @@
                     }
                 });
 
-                //Create product grid
+                //#region Create product grid
                 var divProductGrid = `
                 <div class="col-lg-4 col-sm-6">
                     <div class="single-product">
@@ -327,11 +327,12 @@
                         </div>
                     </div>
                 </div>`;
-
+                //#endregion Create product grid
                 //Add divProduct grid
                 $("#grid > div").append(divProductGrid);
 
-                //Create product list
+                
+                //#region Create product list
                 var divProductList =`
                 <div class="single-product product-list">
                     <div class="product-image">
@@ -369,11 +370,12 @@
                         </ul>
                     </div>
                 </div>`;
+                //#endregion Create product list
 
                 //Add product list
                 $("div#list").append(divProductList);
 
-                //Create quick view
+                //#region Create quick view
                 var quickView =`
                 <div class="modal fade" id="Modal`+product.id+`">
                     <div class="modal-dialog modal-dialog-centered">
@@ -425,6 +427,7 @@
                         </div>
                     </div>
                 </div>`;
+                //#endregion Create quick view
 
                 //Add quick view
                 $("div.main-wrapper").append(quickView);
