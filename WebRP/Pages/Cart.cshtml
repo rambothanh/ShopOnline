@@ -1,7 +1,6 @@
 @page
 @model WebRP.Pages.ShopSingleModel
 
-
 <!--Page Banner Start-->
 <div class="page-banner" style="background-image: url(assets/images/testimonial-bg.jpg);">
     <div class="container">
@@ -15,7 +14,6 @@
     </div>
 </div>
 <!--Page Banner End-->
-
 <!--Cart Start-->
 <div class="cart-page section-padding-5">
     <div class="container">
@@ -222,7 +220,7 @@
                         </table>
                     </div>
                     <div class="cart-total-btn">
-                        <a href="#" class="btn btn-primary btn-block">Proceed To Checkout</a>
+                        <a href="~/checkout" class="btn btn-primary btn-block">Proceed To Checkout</a>
                     </div>
                 </div>
             </div>
@@ -304,7 +302,7 @@
                             <form action="#">
                                 <div class="quantity d-inline-flex">
                                     <button type="button" class="sub"><i class="ti-minus"></i></button>
-                                    <input max=` + cart.maxQuantity + ` 
+                                    <input max=` + cart.maxQuantity + `
                                     currentPrice=` + cart.currentPrice + `
                                     type="text" value=` + cart.quantity + ` />
                                     <button type="button" class="add"><i class="ti-plus"></i></button>
@@ -328,7 +326,7 @@
             subTotalOnCartPage.text("$" + calculate.totalValue);
 
         }
-    };//End UpdateProductCart 
+    };//End UpdateProductCart
     //Run update when first load
     UpdateProductCart();
     //-------- Function DELETE PRODUCT IN CART--------
@@ -342,18 +340,19 @@
         //update
         UpdateProductCart();
         //reload this page
-        location.reload();
+        //location.reload();
     };//-------- END Function DELETE PRODUCT IN CART--------
 
     //--------------DELETE PRODUCT IN CART -------------------
-    $("div.single-cart-box").children("a.del-icon").on("click", function () {
+    $(document).on('click', 'div.single-cart-box a.del-icon', function () {
         //Get Id product
         var productId = $(this).attr("productid");
         //remove cart with productId
         DeleteProductInCart(productId);
     }); //--------------END DELETE PRODUCT IN CART -------------------
     //--------------DELETE PRODUCT IN Page -------------------
-    $("i.ti-close").on("click", function () {
+    //$("i.ti-close").on("click", function () {
+    $(document).on('click', 'i.ti-close', function () {
         //Get Id product
         var productId = $(this).attr("productid");
         //remove cart with productId
@@ -398,12 +397,12 @@
         var tableBody = $("div.cart-table tbody tr");
         //Get list cart in Localstoreage
         var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
- 
+
         tableBody.each(function (index, tr) {
             var productid = $(tr).attr("productid");
             var quantityNew = +$(tr).find("input").val();
             var maxQuantity = +$(tr).find("input").attr("max");
-            
+
             for (i = 0; i < listCartinLocal.length; i++) {
                 if (listCartinLocal[i].id === productid) {
                     if (quantityNew >= maxQuantity) listCartinLocal[i].quantity = maxQuantity;
@@ -413,14 +412,13 @@
             }
 
         });
-        
+
         localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
         UpdateProductCart();
-        //Reload page to js known new content
-        location.reload(); 
+       
     });//--------- END UPDATE CART--------
 
-    //Calculate Item count and total Price and add to item-count 
+    //Calculate Item count and total Price and add to item-count
     function CalculateItem(listCart) {
         var i;
         var result = {
@@ -511,7 +509,7 @@
                 } else {
                     CreateCartAndSave(listCartinLocal);
                 }
-                //if listCart is not existed 
+                //if listCart is not existed
             } else {
                 //Create a new listCart
                 var listCart = [];
