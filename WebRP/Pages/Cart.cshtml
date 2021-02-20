@@ -1,0 +1,526 @@
+@page
+@model WebRP.Pages.ShopSingleModel
+
+
+<!--Page Banner Start-->
+<div class="page-banner" style="background-image: url(assets/images/testimonial-bg.jpg);">
+    <div class="container">
+        <div class="page-banner-content text-center">
+            <h2 class="title">Your Shopping Cart</h2>
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Your Shopping Cart</li>
+            </ol>
+        </div>
+    </div>
+</div>
+<!--Page Banner End-->
+
+<!--Cart Start-->
+<div class="cart-page section-padding-5">
+    <div class="container">
+        <div class="cart-table table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="image">Image</th>
+                        <th class="product">Product</th>
+                        <th class="price">Price</th>
+                        <th class="quantity">Quantity</th>
+                        <th class="total">Total</th>
+                        <th class="remove">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @* Add product in Cart here *@
+
+                </tbody>
+            </table>
+        </div>
+        @* Action *@
+        <div class="cart-btn">
+            <div class="cart-btn-left">
+                <a href="ShopGrid3" class="btn btn-primary">Continue Shopping</a>
+            </div>
+            <div class="cart-btn-right">
+                <a class="btn clearCart">Clear Cart</a>
+                <a class="btn updateCart">Update Cart</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="cart-shipping">
+                    <div class="cart-title">
+                        <h4 class="title">Calculate Shipping</h4>
+                        <p>Estimate your shipping fee *</p>
+                    </div>
+                    <div class="cart-form mt-25">
+                        <p>Calculate shipping</p>
+                        <form action="javascript:void(0);">
+                            <div class="single-select2">
+                                <div class="form-select2">
+                                    <select class="select2">
+                                        <option value="0">Select a country…</option>
+                                        <option value="1">Bangladesh</option>
+                                        <option value="2">Canada</option>
+                                        <option value="3">Colombia</option>
+                                        <option value="4">Indonesia</option>
+                                        <option value="5">Italy</option>
+                                        <option value="6">Pakistan</option>
+                                        <option value="7">Turkey</option>
+                                        <option value="8">Vietnam</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="single-select2">
+                                <div class="form-select2">
+                                    <select class="select2">
+                                        <option value="">Select an option…</option>
+                                        <option value="BAG">Bagerhat</option>
+                                        <option value="BAN">Bandarban</option>
+                                        <option value="BAR">Barguna</option>
+                                        <option value="BARI">Barisal</option>
+                                        <option value="BHO">Bhola</option>
+                                        <option value="BOG">Bogra</option>
+                                        <option value="BRA">Brahmanbaria</option>
+                                        <option value="CHA">Chandpur</option>
+                                        <option value="CHI">Chittagong</option>
+                                        <option value="CHU">Chuadanga</option>
+                                        <option value="COM">Comilla</option>
+                                        <option value="COX">Cox's Bazar</option>
+                                        <option value="DHA">Dhaka</option>
+                                        <option value="DIN">Dinajpur</option>
+                                        <option value="FAR">Faridpur </option>
+                                        <option value="FEN">Feni</option>
+                                        <option value="GAI">Gaibandha</option>
+                                        <option value="GAZI">Gazipur</option>
+                                        <option value="GOP">Gopalganj</option>
+                                        <option value="HAB">Habiganj</option>
+                                        <option value="JAM">Jamalpur</option>
+                                        <option value="JES">Jessore</option>
+                                        <option value="JHA">Jhalokati</option>
+                                        <option value="JHE">Jhenaidah</option>
+                                        <option value="JOY">Joypurhat</option>
+                                        <option value="KHA">Khagrachhari</option>
+                                        <option value="KHU">Khulna</option>
+                                        <option value="KIS">Kishoreganj</option>
+                                        <option value="KUR">Kurigram</option>
+                                        <option value="KUS">Kushtia</option>
+                                        <option value="LAK">Lakshmipur</option>
+                                        <option value="LAL">Lalmonirhat</option>
+                                        <option value="MAD">Madaripur</option>
+                                        <option value="MAG">Magura</option>
+                                        <option value="MAN">Manikganj </option>
+                                        <option value="MEH">Meherpur</option>
+                                        <option value="MOU">Moulvibazar</option>
+                                        <option value="MUN">Munshiganj</option>
+                                        <option value="MYM">Mymensingh</option>
+                                        <option value="NAO">Naogaon</option>
+                                        <option value="NAR">Narail</option>
+                                        <option value="NARG">Narayanganj</option>
+                                        <option value="NARD">Narsingdi</option>
+                                        <option value="NAT">Natore</option>
+                                        <option value="NAW">Nawabganj</option>
+                                        <option value="NET">Netrakona</option>
+                                        <option value="NIL">Nilphamari</option>
+                                        <option value="NOA">Noakhali</option>
+                                        <option value="PAB">Pabna</option>
+                                        <option value="PAN">Panchagarh</option>
+                                        <option value="PAT">Patuakhali</option>
+                                        <option value="PIR">Pirojpur</option>
+                                        <option value="RAJB">Rajbari</option>
+                                        <option value="RAJ">Rajshahi</option>
+                                        <option value="RAN">Rangamati</option>
+                                        <option value="RANP">Rangpur</option>
+                                        <option value="SAT">Satkhira</option>
+                                        <option value="SHA">Shariatpur</option>
+                                        <option value="SHE">Sherpur</option>
+                                        <option value="SIR">Sirajganj</option>
+                                        <option value="SUN">Sunamganj</option>
+                                        <option value="SYL">Sylhet</option>
+                                        <option value="TAN">Tangail</option>
+                                        <option value="THA">Thakurgaon</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="single-form">
+                                <input type="text" placeholder="Postcode/ziip">
+                            </div>
+                            <div class="cart-form-btn">
+                                <button class="btn btn-primary">Update totals</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart-coupon">
+                    <div class="cart-title">
+                        <h4 class="title">Coupon Code</h4>
+                        <p>Enter your coupon code if you have one.</p>
+                    </div>
+                    <div class="cart-form mt-25">
+                        <form action="javascript:void(0);">
+                            <div class="single-form">
+                                <input type="text" placeholder="Enter your coupon code..">
+                            </div>
+                            <div class="cart-form-btn">
+                                <button href="javascript:void(0);" class="btn btn-primary">Apply Coupon</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart-totals">
+                    <div class="cart-title">
+                        <h4 class="title">Cart totals</h4>
+                    </div>
+                    <div class="cart-total-table mt-25">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p class="value">Subtotal</p>
+                                    </td>
+                                    <td>
+                                        <p class="price">£600.00</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p class="value">Shipping</p>
+                                    </td>
+                                    <td>
+                                        <ul class="shipping-list">
+                                            <li class="cus-radio">
+                                                <input type="radio" name="shipping" id="radio1" checked="">
+                                                <label for="radio1"><span></span> Flat Rate</label>
+                                            </li>
+                                            <li class="cus-radio">
+                                                <input type="radio" name="shipping" id="radio2">
+                                                <label for="radio2"><span></span> Free Shipping</label>
+                                            </li>
+                                            <li class="cus-radio">
+                                                <input type="radio" name="shipping" id="radio3">
+                                                <label for="radio3"><span></span> Local Pickup</label>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p class="value">Total</p>
+                                    </td>
+                                    <td>
+                                        <p class="price">£600.00</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="cart-total-btn">
+                        <a href="#" class="btn btn-primary btn-block">Proceed To Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Cart End-->
+
+<script>
+    //------------------ ADD TO CART --------------------
+    /*--
+    |    Get Product and add to CART CONTENT
+    -----------------------------------*/
+    function UpdateProductCart() {
+        //Get List
+        var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+        //li.product-cart
+        var liProductInCart = $("li.product-cart");
+        //table body in Cart page
+        var tbodyProductInCartPage = $("div.cart-table tbody");
+        //total value
+        var totalValue = liProductInCart.next().children().children().children();
+        //subtotal
+        var subTotalOnCartPage = $("p.price");
+        //Tính toán
+        var calculate = CalculateItem(listCartinLocal);
+        if (calculate.totalQuanlity === 0) {
+            $('span.item-count').addClass("d-none");
+            liProductInCart.text("");
+            tbodyProductInCartPage.text("");
+            totalValue.text("");
+            subTotalOnCartPage.text("$0");
+        } else {
+            //Add number total product
+            $('span.item-count').removeClass("d-none");
+            $('span.item-count').text(calculate.totalQuanlity);
+            //Clear li.product-cart
+            liProductInCart.text("");
+            //Clear table body
+            tbodyProductInCartPage.text("");
+            //Add new li.product-cart
+            listCartinLocal.forEach(function (cart) {
+                //cart:
+                //////id: "1"
+                //////image: "...."
+                //////currentPrice: ...,
+                //////oldPrice: ...,
+                //////productName: "Iphone 7 Plus"
+                //////quantity: 4
+                //////total: 1952
+                var divProductInCart = `<div class="single-cart-box">
+                                                <div class="cart-img">
+                                                    <a href="shopsingle/`+ cart.id + `"><img src=` + window.location.origin + `/` + cart.image + ` alt=""></a>
+                                                    <span class="pro-quantity">` + cart.quantity + `x</span>
+                                                </div>
+                                                <div class="cart-content">
+                                                    <h6 class="title"><a href="shopsingle/`+ cart.id + `">` + cart.productName + `</a></h6>
+                                                    <div class="cart-price">
+                                                        <span class="sale-price">$` + cart.currentPrice + `</span>
+                                                        <span class="regular-price">` + cart.oldPrice + `</span>
+                                                    </div>
+                                                </div>
+                                                <a productid=`+ cart.id + ` href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
+                                            </div>`;
+                liProductInCart.append(divProductInCart);
+                var trProductInCartPage = `
+                    <tr productid=` + cart.id + ` >
+                        <td class="image">
+                            <img src=` + window.location.origin + `/` + cart.image + ` alt="">
+                        </td>
+                        <td class="product">
+                            <a href="shopsingle/`+ cart.id + `">` + cart.productName + `</a>
+                            @* <span>white</span> *@
+                        </td>
+                        <td class="price">
+                            <span class="amount">$` + cart.currentPrice + `</span>
+                        </td>
+                        <td class="quantity">
+                            <form action="#">
+                                <div class="quantity d-inline-flex">
+                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
+                                    <input max=` + cart.maxQuantity + ` 
+                                    currentPrice=` + cart.currentPrice + `
+                                    type="text" value=` + cart.quantity + ` />
+                                    <button type="button" class="add"><i class="ti-plus"></i></button>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="total">
+                            <span class="total-amount">$` + cart.total + `</span>
+                        </td>
+                        <td class="remove">
+                            <a><i productid=` + cart.id + ` class="ti-close"></i></a>
+                        </td>
+                    </tr>`;
+
+                tbodyProductInCartPage.append(trProductInCartPage);
+
+            });
+            //Add total value of cart
+            totalValue.text("$" + calculate.totalValue);
+            //Add SubToTal in Cart page
+            subTotalOnCartPage.text("$" + calculate.totalValue);
+
+        }
+    };//End UpdateProductCart 
+    //Run update when first load
+    UpdateProductCart();
+    //-------- Function DELETE PRODUCT IN CART--------
+    function DeleteProductInCart(id) {
+        //Get List
+        var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+        //remove cart with productId
+        listCartinLocal = listCartinLocal.filter(cart => cart.id !== id);
+        //save to LocalStorage
+        localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+        //update
+        UpdateProductCart();
+        //reload this page
+        location.reload();
+    };//-------- END Function DELETE PRODUCT IN CART--------
+
+    //--------------DELETE PRODUCT IN CART -------------------
+    $("div.single-cart-box").children("a.del-icon").on("click", function () {
+        //Get Id product
+        var productId = $(this).attr("productid");
+        //remove cart with productId
+        DeleteProductInCart(productId);
+    }); //--------------END DELETE PRODUCT IN CART -------------------
+    //--------------DELETE PRODUCT IN Page -------------------
+    $("i.ti-close").on("click", function () {
+        //Get Id product
+        var productId = $(this).attr("productid");
+        //remove cart with productId
+        DeleteProductInCart(productId);
+    }); //--------------END DELETE PRODUCT IN Page -------------------
+
+    //----Add more product -----
+    //$("i.ti-plus").on("click", function () {
+    $(document).on('click', '.add', function () {
+        var maxQuantity = +$(this).prev().attr("max");
+        var currentQuantity = +$(this).prev().val();
+        if (currentQuantity < maxQuantity) {
+            //update total
+            var currentPrice = +$(this).prev().attr("currentprice");
+            var totalNew = currentPrice * (currentQuantity + 1);
+            $(this).parent().parent().parent().next().children().text("$" + totalNew);
+        }
+    });//----End Add more product -----
+    //-----------Sub a Product -------------
+    $(document).on('click', '.sub', function () {
+        var maxQuantity = +$(this).parent().prev().attr("maxquantity");
+        var currentQuantity = +$(this).next().val();
+        if (currentQuantity > 1) {
+            var currentPrice = +$(this).next().attr("currentprice");
+            var totalNew = currentPrice * (currentQuantity - 1);
+            $(this).parent().parent().parent().next().children().text("$" + totalNew);
+        }
+    });//----End Sub a product -----
+
+    //--------------CLEAR CART--------
+    $(document).on('click', 'a.clearCart', function () {
+        //Create a new listCart
+        var listCart = [];
+        localStorage.setItem("listCart", JSON.stringify(listCart));
+        UpdateProductCart();
+
+    });//--------- END CLEAR CART--------
+
+    //--------------UPDATE CART--------
+    $(document).on('click', 'a.updateCart', function () {
+        //Get list tr in tbody
+        var tableBody = $("div.cart-table tbody tr");
+        //Get list cart in Localstoreage
+        var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+ 
+        tableBody.each(function (index, tr) {
+            var productid = $(tr).attr("productid");
+            var quantityNew = +$(tr).find("input").val();
+            var maxQuantity = +$(tr).find("input").attr("max");
+            
+            for (i = 0; i < listCartinLocal.length; i++) {
+                if (listCartinLocal[i].id === productid) {
+                    if (quantityNew >= maxQuantity) listCartinLocal[i].quantity = maxQuantity;
+                    else listCartinLocal[i].quantity = quantityNew;
+                    listCartinLocal[i].total = (+listCartinLocal[i].quantity) * (+listCartinLocal[i].currentPrice);
+                }
+            }
+
+        });
+        
+        localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+        UpdateProductCart();
+        //Reload page to js known new content
+        location.reload(); 
+    });//--------- END UPDATE CART--------
+
+    //Calculate Item count and total Price and add to item-count 
+    function CalculateItem(listCart) {
+        var i;
+        var result = {
+            totalQuanlity: 0,
+            totalValue: 0
+        };
+        if (listCart === null) return result;
+        for (i = 0; i < listCart.length; i++) {
+            result.totalQuanlity = Number(result.totalQuanlity) + Number(listCart[i].quantity);
+            result.totalValue = Number(result.totalValue) + Number(listCart[i].total);
+        }
+        return result;
+    };
+    //Check idProduct in Listcart
+    function containsCart(productId, listCart) {
+        var i;
+        for (i = 0; i < listCart.length; i++) {
+            if (listCart[i].id === productId) {
+                return listCart[i];
+            }
+        }
+        return null;
+    };
+
+
+    //--------------------Click add to cart On List View and On Grid view--------------------
+    //Thẻ a, có attr là productName
+    //$("a[productName]").on("click", function () {
+    // chỉnh lại thành bên dưới để tác dụng với nội dung sa khi ajax
+    $(document).on('click', '[productName]', function () {
+        var maxQuantity = $(this).attr("maxQuantity");
+        //if sold out, do nothing
+        if (maxQuantity === "0") return;
+        var productId = $(this).attr("productId");
+        var productName = $(this).attr("productName");
+        var currentPrice = $(this).attr("currentPrice");
+        var oldPrice = $(this).attr("oldPrice");
+        var image = $(this).attr("image");
+        var quantity = 1;
+        //if is Button at quickview
+        if ($(this).attr("quickview") === "true") {
+            quantity = $(this).parent().prev().find("input").val();
+        }
+
+        AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
+    });//--------------------END Click add tocart--------------------
+
+    //Create function add to cart when click
+    function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
+        //Create a cart, Add to ListCart, Save to LocalStorage
+        function CreateCartAndSave(listCart) {
+            //Create a cart
+            var cart = {
+                id: productId,
+                image: image,
+                productName: productName,
+                currentPrice: currentPrice,
+                oldPrice: oldPrice,
+                quantity: quantity, //click chỗ này mặc định add vào cart 1
+                total: currentPrice
+            };
+            //add cart
+            listCart.push(cart);
+            //save localsorage
+            localStorage.setItem("listCart", JSON.stringify(listCart));
+            UpdateProductCart();
+        };
+        //Check Browser support for LocalStorge
+        if (typeof (Storage) !== "undefined") {
+            //Check if existed listCart
+            var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+            //if listCart Existed
+            if (listCartinLocal != null) {
+                //Check producId in listCartinLocal
+                var cartExistListCart = containsCart(productId, listCartinLocal);
+                //console.log(cartExistListCart);
+                if (cartExistListCart != null) {
+                    //If quantity in Cart = maxQuantity
+                    if (cartExistListCart.quantity == maxQuantity) return;
+                    var totalQuantity = Number(cartExistListCart.quantity) + Number(quantity);
+                    //Check if quantity in Cart >= quantity in database
+                    if (totalQuantity >= maxQuantity) cartExistListCart.quantity = maxQuantity;
+                    else cartExistListCart.quantity = totalQuantity;
+
+                    cartExistListCart.total = (+cartExistListCart.currentPrice) * (+cartExistListCart.quantity);
+                    localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+                    UpdateProductCart();
+                } else {
+                    CreateCartAndSave(listCartinLocal);
+                }
+                //if listCart is not existed 
+            } else {
+                //Create a new listCart
+                var listCart = [];
+                CreateCartAndSave(listCart);
+            }
+        } else {
+            // Sorry! No Web Storage support..
+        }
+        //Reload page to js known new content
+        location.reload();
+    };//Endfunction add to cart when click
+</script>

@@ -593,11 +593,11 @@
             quantity = $(this).parent().prev().find("input").val();
         }
         
-        AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
+        AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity,maxQuantity);
     });//--------------------END Click add tocart--------------------
     
     //Create function add to cart when click
-    function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
+    function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity,maxQuantity) {
         //Create a cart, Add to ListCart, Save to LocalStorage
         function CreateCartAndSave(listCart) {
                     //Create a cart
@@ -608,7 +608,9 @@
                     currentPrice: currentPrice,
                     oldPrice: oldPrice,
                     quantity: quantity, //click chỗ này mặc định add vào cart 1
-                    total: currentPrice
+                    total: currentPrice,
+                    maxQuantity: maxQuantity
+
                 };
                 //add cart
                 listCart.push(cart);
