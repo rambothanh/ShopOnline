@@ -1,6 +1,8 @@
 @page
 @model WebRP.Pages.ShopSingleModel
-
+@{
+    ViewData["Title"] = "Cart";
+}
 <!--Page Banner Start-->
 <div class="page-banner" style="background-image: url(assets/images/testimonial-bg.jpg);">
     <div class="container">
@@ -415,7 +417,7 @@
 
         localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
         UpdateProductCart();
-       
+
     });//--------- END UPDATE CART--------
 
     //Calculate Item count and total Price and add to item-count
