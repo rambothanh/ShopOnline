@@ -930,11 +930,15 @@
             //product.quantity
             var quantity = shortDescription.next().next();
             quantity.find("input").attr("max", product.quantity);
-            
+            if (product.quantity === 0) {
+                quantity.find("input").attr("value", 0);
+            }
+
             //class: product-action d-flex flex-wrap
             var productAction = quantity.next();
             //Add ProductId to button add to cart
             productAction.find("button").attr("productId", product.id);
+            productAction.find("button").attr("maxQuantity", product.quantity);
 
             //product.productImages.pictureUri
             //div.col-lg-6
@@ -959,7 +963,7 @@
                     divImage.attr("data-image", linkImage);
                     divImage.children("img").attr("src", linkImage);
                     numberImage = +numberImage + 1;
-                    
+
                 }
             });
 
@@ -991,7 +995,7 @@
         //-------------------END AJAX------------------------
 
 
-        
+
         /*--
             Get Product and add to CART CONTENT
         -----------------------------------*/
@@ -1013,7 +1017,7 @@
                 $('span.item-count').removeClass("d-none");
                 $('span.item-count').text(calculate.totalQuanlity);
 
-                
+
                 //Clear li.product-cart
                 liProductInCart.text("");
 
@@ -1039,7 +1043,7 @@
                                                         <span class="regular-price">` + cart.oldPrice + `</span>
                                                     </div>
                                                 </div>
-                                                <a productid=`+ cart.id+` href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
+                                                <a productid=`+ cart.id + ` href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
                                             </div>`;
                     liProductInCart.append(divProductInCart);
 
@@ -1080,10 +1084,13 @@
             }
             return null;
         };
-        
+
         // Click add to cart
         // $("button:contains('Add to cart')").on("click", 
         $("button:contains('Add to cart')").on("click", function () {
+            var maxQuantity = $(this).attr("maxQuantity");
+            //if sold out, do nothing
+            if (maxQuantity === "0") return;
             var productId = $(this).attr("productId");
             var productQuantity = $(this).parent().parent().prev();
             var quantity = productQuantity.find("input").val();
