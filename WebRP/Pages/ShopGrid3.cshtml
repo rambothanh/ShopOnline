@@ -376,7 +376,13 @@
                         <p>`+ product.shortDescription + `</p>
 
                         <ul class="action-links">
-                            <li><a href="javascript:void(0);" class="add-cart" data-tooltip="tooltip" data-placement="top" title="Add to cart"> Add to cart </a></li>
+                            <li><a productId=`+ product.id + ` 
+                                    productName=`+ product.name + ` 
+                                    currentPrice=`+ product.productPrice.currentPrice + ` 
+                                    oldPrice=`+ product.productPrice.oldPrice + ` 
+                                    maxQuantity=`+ product.quantity + `
+                                    image=`+ mainProductImage + `
+                                    class="add-cart" data-tooltip="tooltip" data-placement="top" title="Add to cart"> Add to cart </a></li>
                             <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist" class="wishlist"><i class="icon-heart"></i></a></li>
                             <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="top" title="Compare" class="compare"><i class="icon-sliders"></i></a></li>
                         </ul>
@@ -429,7 +435,14 @@
                                                     </div>
                                                 </form>
                                                 <div class="addcart-btn">
-                                                    <button class="btn btn-primary">Add to cart</button>
+                                                    <button productId=`+ product.id + ` 
+                                                            productName=`+ product.name + ` 
+                                                            currentPrice=`+ product.productPrice.currentPrice + ` 
+                                                            oldPrice=`+ product.productPrice.oldPrice + ` 
+                                                            maxQuantity=`+ product.quantity + `
+                                                            image=`+ mainProductImage + `
+                                                            quickView=true
+                                                            class="btn btn-primary">Add to cart</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -498,7 +511,7 @@
                 //////total: 1952
                 var divProductInCart = `<div class="single-cart-box">
                                                 <div class="cart-img">
-                                                    <a href="shopsingle/`+ cart.id + `"><img src=` + cart.image + ` alt=""></a>
+                                                    <a href="shopsingle/`+ cart.id + `"><img src=` + window.location.origin + `/` + cart.image + ` alt=""></a>
                                                     <span class="pro-quantity">` + cart.quantity + `x</span>
                                                 </div>
                                                 <div class="cart-content">
@@ -561,11 +574,11 @@
     };
 
 
-    //--------------------Click add tocart--------------------
+    //--------------------Click add tocart On List View and On Grid view--------------------
     //Thẻ a, có attr là productName
     //$("a[productName]").on("click", function () {
     // chỉnh lại thành bên dưới để tác dụng với nội dung sa khi ajax
-    $(document).on('click', 'a[productName]', function () {
+    $(document).on('click', '[productName]', function () {
         var maxQuantity = $(this).attr("maxQuantity");
         //if sold out, do nothing
         if (maxQuantity === "0") return;
@@ -573,54 +586,69 @@
         var productName = $(this).attr("productName");
         var currentPrice = $(this).attr("currentPrice");
         var oldPrice = $(this).attr("oldPrice");
-
         var image = $(this).attr("image");
+        var quantity = 1;
+        //if is Button at quickview
+        if($(this).attr("quickview")==="true") {
+            quantity = $(this).parent().prev().find("input").val();
+        }
+        
+        AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
+    });//--------------------END Click add tocart--------------------
+    
+    //Create function add to cart when click
+    function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
         //Create a cart, Add to ListCart, Save to LocalStorage
         function CreateCartAndSave(listCart) {
-            //Create a cart
+                    //Create a cart
             var cart = {
-                id: productId,
-                image: image,
-                productName: productName,
-                currentPrice: currentPrice,
-                oldPrice: oldPrice,
-                quantity: 1, //click chỗ này mặc định add vào cart 1
-                total: currentPrice
-            };
-            //add cart
-            listCart.push(cart);
-            //save localsorage
-            localStorage.setItem("listCart", JSON.stringify(listCart));
-            UpdateProductCart();
-        };
-        //Check Browser support for LocalStorge
-        if (typeof (Storage) !== "undefined") {
-            //Check if existed listCart
-            var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
-            //if listCart Existed
-            if (listCartinLocal != null) {
-                //Check producId in listCartinLocal
-                var cartExistListCart = containsCart(productId, listCartinLocal);
-                //console.log(cartExistListCart);
-                if (cartExistListCart != null) {
-                    cartExistListCart.quantity = Number(cartExistListCart.quantity) + 1;
-                    cartExistListCart.total = (+cartExistListCart.currentPrice) * (+cartExistListCart.quantity);
-                    localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+                    id: productId,
+                    image: image,
+                    productName: productName,
+                    currentPrice: currentPrice,
+                    oldPrice: oldPrice,
+                    quantity: quantity, //click chỗ này mặc định add vào cart 1
+                    total: currentPrice
+                };
+                //add cart
+                listCart.push(cart);
+                    //save localsorage
+                    localStorage.setItem("listCart", JSON.stringify(listCart));
                     UpdateProductCart();
+        };
+            //Check Browser support for LocalStorge
+            if (typeof (Storage) !== "undefined") {
+                //Check if existed listCart
+                var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+                //if listCart Existed
+                if (listCartinLocal != null) {
+                    //Check producId in listCartinLocal
+                    var cartExistListCart = containsCart(productId, listCartinLocal);
+                    //console.log(cartExistListCart);
+                    if (cartExistListCart != null) {
+                        //If quantity in Cart = maxQuantity
+                        if(cartExistListCart.quantity==maxQuantity) return;
+                        var totalQuantity = Number(cartExistListCart.quantity) + Number(quantity);
+                        //Check if quantity in Cart >= quantity in database
+                        if (totalQuantity >= maxQuantity) cartExistListCart.quantity = maxQuantity;
+                        else cartExistListCart.quantity = totalQuantity;
+
+                        cartExistListCart.total = (+cartExistListCart.currentPrice) * (+cartExistListCart.quantity);
+                        localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+                        UpdateProductCart();
+                    } else {
+                        CreateCartAndSave(listCartinLocal);
+                    }
+                    //if listCart is not existed 
                 } else {
-                    CreateCartAndSave(listCartinLocal);
+                    //Create a new listCart
+                    var listCart = [];
+                    CreateCartAndSave(listCart);
                 }
-                //if listCart is not existed 
             } else {
-                //Create a new listCart
-                var listCart = [];
-                CreateCartAndSave(listCart);
+                // Sorry! No Web Storage support..
             }
-        } else {
-            // Sorry! No Web Storage support..
-        }
-        //Reload page to js known new content
-        location.reload();
-    });
-    //--------------------END Click add tocart--------------------
+            //Reload page to js known new content
+            location.reload();
+    };//Endfunction add to cart when click
 </script>

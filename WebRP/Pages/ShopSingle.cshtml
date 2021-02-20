@@ -953,7 +953,8 @@
             var numberImage = 1;
             product.productImages.forEach(function (productImage) {
                 if (!productImage.isMainPicture) {
-                    var linkImage = "http://localhost:4000/".concat(productImage.pictureUri);
+                    var root = window.location.origin + "/";
+                    var linkImage = root.concat(productImage.pictureUri);
                     //add a image to <img class="product-zoom"
                     divcollg6colmd8.find("img.product-zoom").attr("src", linkImage)
                     //divImage.prev().find("img.product-zoom").attr("src", linkImage);
@@ -964,6 +965,9 @@
                     divImage.children("img").attr("src", linkImage);
                     numberImage = +numberImage + 1;
 
+                } else {
+                    //add image to button
+                    productAction.find("button").attr("image", productImage.pictureUri);
                 }
             });
 
@@ -1033,7 +1037,7 @@
                     //////total: 1952
                     var divProductInCart = `<div class="single-cart-box">
                                                 <div class="cart-img">
-                                                    <a href="shopsingle/`+ cart.id + `"><img src=` + cart.image + ` alt=""></a>
+                                                    <a href="shopsingle/`+ cart.id + `"><img src=` + window.location.origin + `/` + cart.image + ` alt=""></a>
                                                     <span class="pro-quantity">` + cart.quantity + `x</span>
                                                 </div>
                                                 <div class="cart-content">
@@ -1092,6 +1096,7 @@
             //if sold out, do nothing
             if (maxQuantity === "0") return;
             var productId = $(this).attr("productId");
+            var image = $(this).attr("image");
             var productQuantity = $(this).parent().parent().prev();
             var quantity = productQuantity.find("input").val();
             //Create a cart, Add to ListCart, Save to LocalStorage
@@ -1101,12 +1106,13 @@
                 var currentPrice = thumbPrice.children(".current-price").text().replace('$', '')
                 var oldPrice = thumbPrice.children(".old-price").text().replace('$', '')
                 var title = thumbPrice.prev().prev().prev();
-                var collg6colmd8 = title.parent().parent().prev();
+                //var collg6colmd8 = title.parent().parent().prev();
+
                 var total = +currentPrice * (+quantity);
                 //Create a cart
                 var cart = {
                     id: productId,
-                    image: collg6colmd8.find('img').attr("src"),
+                    image: image,
                     productName: title.text(),
                     currentPrice: currentPrice,
                     oldPrice: oldPrice,
@@ -1131,8 +1137,14 @@
                     //Check producId in listCartinLocal
                     var cartExistListCart = containsCart(productId, listCartinLocal);
                     //console.log(cartExistListCart);
+                    //If producId is Existed --> add quantity
                     if (cartExistListCart != null) {
-                        cartExistListCart.quantity = Number(cartExistListCart.quantity) + Number(quantity);
+                        //If quantity in Cart = maxQuantity
+                        if(cartExistListCart.quantity==maxQuantity) return;
+                        var totalQuantity = Number(cartExistListCart.quantity) + Number(quantity);
+                        //Check if quantity in Cart >= quantity in database
+                        if (totalQuantity >= maxQuantity) cartExistListCart.quantity = maxQuantity;
+                        else cartExistListCart.quantity = totalQuantity;
                         cartExistListCart.total = (+cartExistListCart.currentPrice) * (+cartExistListCart.quantity);
                         localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
                         UpdateProductCart();
