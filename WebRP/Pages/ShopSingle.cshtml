@@ -831,6 +831,12 @@
 </div>
 <!--Quick View Tags End-->
 <script id="1">
+    //Get domain name with UpperSase first letter
+    let domainName = window.location.hostname;
+    let con = domainName[0].toUpperCase();
+    domainName = domainName.replace(domainName[0], con);
+    //------------------End get domain name
+
     $(document).ready(function () {
 
         //function reload_js(id) {
@@ -855,7 +861,9 @@
             //Handle this
             //product.name;
             var title = $("div.row.justify-content-center h3");
-            title.text(product.name);
+            title.text(product.name); //add to title
+            $("div.page-banner-content h2.title").text(product.name);//add to panner
+            $("title").text(product.name + " | " + domainName);//add to head
             //Add Price: div.thumb-price
             var price = title.next().next().next();
             //product.productPrice.currentPrice

@@ -4,36 +4,30 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Shop Online</title>
+    <title>@ViewData["Title"] | Shop Online</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
-    @*
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
 
-        <!-- CSS
-        ============================================ -->
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon.png">
 
-        <!-- Icon Font CSS -->
-        <link rel="stylesheet" href="assets/css/vendor/plazaicon.css">
-        <link rel="stylesheet" href="assets/css/vendor/themify-icons.css">
-        <link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">
-
-        <!-- Plugins CSS -->
-        <link rel="stylesheet" href="assets/css/plugins/animate.css">
-        <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
-        <link rel="stylesheet" href="assets/css/plugins/select2.min.css">
-
-        <!-- Helper CSS -->
-        <link rel="stylesheet" href="assets/css/helper.css">
-
-        <!-- Main Style CSS -->
-        <link rel="stylesheet" href="assets/css/style.css"> *@
-
-
+    <!-- CSS
+    ============================================ -->
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">-->
+    <!-- Icon Font CSS -->
+    <!--<link rel="stylesheet" href="assets/css/vendor/plazaicon.css">
+    <link rel="stylesheet" href="assets/css/vendor/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">-->
+    <!-- Plugins CSS -->
+    <!--<link rel="stylesheet" href="assets/css/plugins/animate.css">
+    <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
+    <link rel="stylesheet" href="assets/css/plugins/select2.min.css">-->
+    <!-- Helper CSS -->
+    <!--<link rel="stylesheet" href="assets/css/helper.css">-->
+    <!-- Main Style CSS -->
+    <!--<link rel="stylesheet" href="assets/css/style.css">-->
     @* <!--====== Use the minified version files listed below for better performance and remove the files listed above
         ======--> *@
     @* Không thêm dấu ~ sẽ bị lỗi khi dùng routing *@
@@ -422,34 +416,7 @@
 
         @RenderBody()
 
-        <!--Brand Start-->
-        <div class="brand-area">
-            <div class="container">
-                <div class="brand-active swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="single-brand swiper-slide">
-                            <img src="~/assets/images/brand/brand-1.jpg" alt="">
-                        </div>
-                        <div class="single-brand swiper-slide">
-                            <img src="~/assets/images/brand/brand-2.jpg" alt="">
-                        </div>
-                        <div class="single-brand swiper-slide">
-                            <img src="~/assets/images/brand/brand-3.jpg" alt="">
-                        </div>
-                        <div class="single-brand swiper-slide">
-                            <img src="~/assets/images/brand/brand-4.jpg" alt="">
-                        </div>
-                        <div class="single-brand swiper-slide">
-                            <img src="~/assets/images/brand/brand-5.jpg" alt="">
-                        </div>
-                        <div class="single-brand swiper-slide">
-                            <img src="~/assets/images/brand/brand-6.jpg" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Brand End-->
+       
         <!--Footer Section Start-->
         <div class="footer-area">
             <div class="container">
@@ -605,8 +572,14 @@
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         $(document).ready(function () {
-
-            //For test JS
+            //Get domain name with UpperSase first letter
+            let domainName = window.location.hostname;
+            let con = domainName[0].toUpperCase();
+            domainName = domainName.replace(domainName[0], con);
+            let currentTitle = $("title").text();
+            $("title").text(currentTitle.replace("Shop Online", domainName));
+            //------------------End get domain name---------
+            
         });
     </script>
 </body>
