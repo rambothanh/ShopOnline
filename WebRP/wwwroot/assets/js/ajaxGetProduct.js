@@ -1,8 +1,9 @@
-﻿if (typeof idProduct_shopSingle_global !== "undefined") console.log("Dang la shopSingle");
-else console.log("Khong phai shopShingle")
-let root = window.location.origin + "/";
+﻿// if (typeof idProduct_shopSingle_global !== "undefined") console.log("Dang la shopSingle");
+// else console.log("Khong phai shopShingle")
+
+
 $(document).ready(function () {
-    //-------------- AJAX ---------------------
+
     // if (!sessionStorage.hasOwnProperty("token")) {
     //    window.location.href = "Chuyển qua trang đăng nhập";
     //} 
@@ -17,6 +18,7 @@ $(document).ready(function () {
     options.success = function (data) {
         //Add to New Product, Quick View (index page )and Get Array <div class="single-product">
         let arrDivSingleProduct = [];
+        let root = window.location.origin + "/";
         data.forEach(function (product) {
             //Check quantity of product
             if (product.quantity === 0) {
@@ -336,7 +338,7 @@ if (typeof idProduct_shopSingle_global !== "undefined") {
             var numberImage = 1;
             product.productImages.forEach(function (productImage) {
                 if (!productImage.isMainPicture) {
-                    var root = window.location.origin + "/";
+                    let root = window.location.origin + "/";
                     var linkImage = root.concat(productImage.pictureUri);
                     //add a image to <img class="product-zoom"
                     divcollg6colmd8.find("img.product-zoom").attr("src", linkImage)
