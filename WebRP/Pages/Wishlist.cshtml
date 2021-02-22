@@ -1,0 +1,133 @@
+@page
+@{
+    ViewData["Title"] = "Check Out";
+}
+<!--Page Banner Start-->
+<div class="page-banner" style="background-image: url(assets/images/testimonial-bg.jpg);">
+    <div class="container">
+        <div class="page-banner-content text-center">
+            <h2 class="title">Wishlist</h2>
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+            </ol>
+        </div>
+    </div>
+</div>
+<!--Page Banner End-->
+
+<!--Wishlist Start-->
+<div class="cart-page section-padding-5">
+    <div class="container">
+        <div class="cart-table table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="image">Image</th>
+                        <th class="product">Product</th>
+                        <th class="price">Price</th>
+                        <th class="quantity">Quantity</th>
+                        <th class="total">Total</th>
+                        <th class="remove">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="image">
+                            <img src="assets/images/cart/cart-1.jpg" alt="">
+                        </td>
+                        <td class="product">
+                            <a href="shop-single.html">Rock Soapwort</a>
+                        </td>
+                        <td class="price">
+                            <span class="amount">$50.00</span>
+                        </td>
+                        <td class="quantity">
+                            <form action="#">
+                                <div class="quantity d-inline-flex">
+                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
+                                    <input type="text" value="1" />
+                                    <button type="button" class="add"><i class="ti-plus"></i></button>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="total">
+                            <span class="total-amount">$50.00</span>
+                        </td>
+                        <td class="remove">
+                            <a href="#"><i class="ti-close"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="image">
+                            <img src="assets/images/cart/cart-2.jpg" alt="">
+                        </td>
+                        <td class="product">
+                            <a href="shop-single.html">Sweet Alyssum</a>
+                        </td>
+                        <td class="price">
+                            <span class="amount">$50.00</span>
+                        </td>
+                        <td class="quantity">
+                            <form action="#">
+                                <div class="quantity d-inline-flex">
+                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
+                                    <input type="text" value="1" />
+                                    <button type="button" class="add"><i class="ti-plus"></i></button>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="total">
+                            <span class="total-amount">$50.00</span>
+                        </td>
+                        <td class="remove">
+                            <a href="#"><i class="ti-close"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="image">
+                            <img src="assets/images/cart/cart-3.jpg" alt="">
+                        </td>
+                        <td class="product">
+                            <a href="shop-single.html">Wild Roses</a>
+                            <span>white</span>
+                        </td>
+                        <td class="price">
+                            <span class="amount">$50.00</span>
+                        </td>
+                        <td class="quantity">
+                            <form action="#">
+                                <div class="quantity d-inline-flex">
+                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
+                                    <input type="text" value="1" />
+                                    <button type="button" class="add"><i class="ti-plus"></i></button>
+                                </div>
+                            </form>
+                        </td>
+                        <td class="total">
+                            <span class="total-amount">$50.00</span>
+                        </td>
+                        <td class="remove">
+                            <a href="#"><i class="ti-close"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--Wishlist End-->
+<script src="~/assets/js/cart.js"></script>
+
+<script>
+    if (confirm('Product has add to Your Wishlist. Go to Wishlist page?')) {
+        // Go to Wishlist page
+        console.log('Go to Wishlist page');
+    } else {
+        // Continue shopping
+        console.log('Continue shopping');
+    }
+</script>
+@{
+
+}

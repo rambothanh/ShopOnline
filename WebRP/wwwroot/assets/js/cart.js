@@ -1,5 +1,4 @@
-﻿
-/*--
+﻿/*--
     |    Get Product and add to CART CONTENT
     -----------------------------------*/
 function UpdateProductCart() {

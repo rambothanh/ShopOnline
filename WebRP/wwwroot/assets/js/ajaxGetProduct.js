@@ -189,7 +189,7 @@ $(document).ready(function () {
             //#endregion Create product list view
         });
         let arrLen = arrDivSingleProduct.length;
-        //#region Add to New Products (index page) and Relate Products (on ShopSingle)
+        //#region Add to New Products (index page) and Related Products (on ShopSingle)
         let newProducts = $("div.new-product-area div.swiper-wrapper");
         if (newProducts.length > 0) {
             for (let i = 0; i < arrLen; i++) {
@@ -205,9 +205,8 @@ $(document).ready(function () {
         //#endregion Add to New Product (index page)
         //#region Add to Featured (index page)
         //Chỉ lấy 10 sản phẩm đầu để demo
-
         if ($("#tab1 div.swiper-wrapper").length > 0) {
-            for (let i = 0; i < 10 / 2 - 1; i++) {
+            for (let i = 0; i < 10 / 2; i++) {
                 //#region Create <div class="swiper-slide">
                 let divswiperSlide = document.createElement("div");
                 let divswiperSlideReverse = document.createElement("div");
