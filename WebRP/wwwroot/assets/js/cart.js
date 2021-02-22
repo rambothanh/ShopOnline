@@ -1,4 +1,5 @@
-﻿/*--
+﻿
+/*--
     |    Get Product and add to CART CONTENT
     -----------------------------------*/
 function UpdateProductCart() {
@@ -31,11 +32,11 @@ function UpdateProductCart() {
             //////total: 1952
             var divProductInCart = `<div class="single-cart-box">
                                                 <div class="cart-img">
-                                                    <a href="shopsingle/`+ cart.id + `"><img src=` + window.location.origin + `/` + cart.image + ` alt=""></a>
+                                                    <a href="`+ root + `shopsingle/` + cart.id + `"><img src=` + root + cart.image + ` alt=""></a>
                                                     <span class="pro-quantity">` + cart.quantity + `x</span>
                                                 </div>
                                                 <div class="cart-content">
-                                                    <h6 class="title"><a href="shopsingle/`+ cart.id + `">` + cart.productName + `</a></h6>
+                                                    <h6 class="title"><a href="`+ root + `shopsingle/` + cart.id + `">` + cart.productName + `</a></h6>
                                                     <div class="cart-price">
                                                         <span class="sale-price">$` + cart.currentPrice + `</span>
                                                         <span class="regular-price">` + cart.oldPrice + `</span>
@@ -109,6 +110,81 @@ $(document).on('click', '[productName]', function () {
 
     AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity, maxQuantity);
 });//--------------------END Click add tocart--------------------
+// $("button:contains('Add to cart')").on("click", function () {
+//     var maxQuantity = $(this).attr("maxQuantity");
+//     //if sold out, do nothing
+//     if (maxQuantity === "0") return;
+//     var productId = $(this).attr("productId");
+//     var image = $(this).attr("image");
+//     var productQuantity = $(this).parent().parent().prev();
+//     var quantity = productQuantity.find("input").val();
+//     //Create a cart, Add to ListCart, Save to LocalStorage
+//     function CreateCartAndSave(listCart) {
+//         //Get values to create cart
+//         var thumbPrice = productQuantity.prev().prev().prev();
+//         var currentPrice = thumbPrice.children(".current-price").text().replace('$', '')
+//         var oldPrice = thumbPrice.children(".old-price").text().replace('$', '')
+//         var title = thumbPrice.prev().prev().prev();
+//         //var collg6colmd8 = title.parent().parent().prev();
+
+//         var total = +currentPrice * (+quantity);
+//         //Create a cart
+//         var cart = {
+//             id: productId,
+//             image: image,
+//             productName: title.text(),
+//             currentPrice: currentPrice,
+//             oldPrice: oldPrice,
+//             quantity: quantity,
+//             total: total
+
+//         };
+//         //add cart
+//         listCart.push(cart);
+//         //save localsorage
+//         localStorage.setItem("listCart", JSON.stringify(listCart));
+//         UpdateProductCart();
+//         //reload this script
+//         //reload_js("1");
+//     };
+//     //Check Browser support for LocalStorge
+//     if (typeof (Storage) !== "undefined") {
+//         //Check if existed listCart
+//         var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+//         //if listCart Existed
+//         if (listCartinLocal != null) {
+//             //Check producId in listCartinLocal
+//             var cartExistListCart = containsCart(productId, listCartinLocal);
+//             //console.log(cartExistListCart);
+//             //If producId is Existed --> add quantity
+//             if (cartExistListCart != null) {
+//                 //If quantity in Cart = maxQuantity
+//                 if (cartExistListCart.quantity == maxQuantity) return;
+//                 var totalQuantity = Number(cartExistListCart.quantity) + Number(quantity);
+//                 //Check if quantity in Cart >= quantity in database
+//                 if (totalQuantity >= maxQuantity) cartExistListCart.quantity = maxQuantity;
+//                 else cartExistListCart.quantity = totalQuantity;
+//                 cartExistListCart.total = (+cartExistListCart.currentPrice) * (+cartExistListCart.quantity);
+//                 localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+//                 UpdateProductCart();
+//             } else {
+//                 CreateCartAndSave(listCartinLocal);
+
+//             }
+//             //if listCart is not existed
+//         } else {
+//             //Create a new listCart
+//             var listCart = [];
+//             CreateCartAndSave(listCart);
+//         }
+//     } else {
+//         // Sorry! No Web Storage support..
+//     }
+//     //Reload page to js known new content
+//     //location.reload();
+// });//End Click add to cart single page
+
+
 
 //Create function add to cart when click
 function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity, maxQuantity) {
