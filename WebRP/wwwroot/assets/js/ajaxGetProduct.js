@@ -217,7 +217,7 @@ $(document).ready(function () {
                 //Mỗi swiper-slide là 2 SingleProduct
                 divswiperSlide.innerHTML = arrDivSingleProduct[i] + arrDivSingleProduct[10 - 1 - i];
                 divswiperSlideReverse.innerHTML = arrDivSingleProduct[10 - 1 - i] + arrDivSingleProduct[i];
-                divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1)] + arrDivSingleProduct[2 * (i + 1) - 1];
+                divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1)-1] + arrDivSingleProduct[2 * (i + 1) - 2];
                 //#endregion
                 //Add New in Featured (index page)
                 $("#tab1 div.swiper-wrapper").prepend(divswiperSlide);
