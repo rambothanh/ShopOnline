@@ -234,10 +234,7 @@
 <script src="~/assets/js/cart.js"></script>
 @* Các đoạn script bên dưới có sử dụng một số function của cart.js *@
 <script>
-    //------------------ ADD TO CART --------------------
-    /*--
-    |    Get Product and add to CART CONTENT
-    -----------------------------------*/
+    //Định nghĩa lại UpdateProductCart
     function UpdateProductCart() {
         //Get List
         var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
