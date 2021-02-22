@@ -12,7 +12,8 @@
     //}; 
     options.dataType = "json";
     options.success = function (data) {
-
+        //Add to New Product, Quick View (index page )and Get Array <div class="single-product">
+        let arrDivSingleProduct = [];
         data.forEach(function (product) {
             //Check quantity of product
             if (product.quantity === 0) {
@@ -133,20 +134,51 @@
                         </div>
                     </div>
                 </div>`;
-                //#endregion Create quick view
+            //#endregion Create quick view
 
             //Add to New Product on Index page
             $("div.new-product-area div.swiper-wrapper").append(divswiperSlide);
             //Add quickView
             $("div.main-wrapper").append(quickView);
+
+            //Add to listDivSingleProduct
+            arrDivSingleProduct.push(divSingleProduct);
         });
+
+        //#region Add to Featured (index page)
+        //Chỉ lấy 10 sản phẩm đầu để demo
+        arrLen = 10 / 2;
+        for (i = 0; i < arrLen - 1; i++) {
+
+            //#region Create <div class="swiper-slide">
+            let divswiperSlide = document.createElement("div");
+            let divswiperSlideReverse = document.createElement("div");
+            let divswiperSlideBestSeller = document.createElement("div");
+            divswiperSlide.className = "swiper-slide";
+            divswiperSlideReverse.className = "swiper-slide";
+            divswiperSlideBestSeller.className = "swiper-slide";
+            //Mỗi swiper-slide là 2 SingleProduct
+            divswiperSlide.innerHTML = arrDivSingleProduct[i] + arrDivSingleProduct[10 - 1 - i];
+            divswiperSlideReverse.innerHTML = arrDivSingleProduct[10 - 1 - i] + arrDivSingleProduct[i];
+            divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1)] + arrDivSingleProduct[2 * (i + 1) - 1];
+            //#endregion
+            //Add New in Featured (index page)
+            $("#tab1 div.swiper-wrapper").prepend(divswiperSlide);
+            //Add Featured in Featured (index page)
+            $("#tab2 div.swiper-wrapper").prepend(divswiperSlideReverse);
+            //Add Featured in Featured (index page)
+            $("#tab3 div.swiper-wrapper").prepend(divswiperSlideBestSeller);
+        }
+        //#endregion Add to Featured (index page)
+        //#region Error
         //Error message change to ""
         //$("h3.message").html("");
 
         //if (sessionStorage.hasOwnProperty("message")) {
         //     $("h3.message").html(sessionStorage.getItem("message"));
         //     sessionStorage.removeItem("message");
-        // } 
+        // }
+        //#endregion Error 
     };
     options.error = function (xhr) {
         //if (xhr.status == 401) {
