@@ -31,12 +31,11 @@ namespace ShopOnline.API.Controllers
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             return await _context.Products
-                                    .Include(x=>x.ProductPrice)
+                                    .Include(x => x.ProductPrice)
                                     .Include(x => x.ProductBrand)
                                     .Include(x => x.ProductType)
-                                    .Include(x=> x.ProductImages)
+                                    .Include(x => x.ProductImages)
                                     .AsSplitQuery()
-                                    .OrderByDescending(x => x.Id)
                                     .ToListAsync();
         }
 
@@ -44,12 +43,12 @@ namespace ShopOnline.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.Include(x=>x.ProductPrice)
+            var product = await _context.Products.Include(x => x.ProductPrice)
                                     .Include(x => x.ProductBrand)
                                     .Include(x => x.ProductType)
-                                    .Include(x=> x.ProductImages)
+                                    .Include(x => x.ProductImages)
                                     .AsSplitQuery()
-                                    .Where(x=>x.Id == id)
+                                    .Where(x => x.Id == id)
                                     .FirstOrDefaultAsync();
 
             if (product == null)
@@ -61,7 +60,7 @@ namespace ShopOnline.API.Controllers
         }
 
         // PUT: api/Products/5
-        
+
         [HttpPut("{id}")]
         public IActionResult PutProduct(int id, Product product)
         {
