@@ -65,8 +65,6 @@ $(document).on('click', 'div.single-cart-box a.del-icon', function () {
     localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
     //update
     UpdateProductCart();
-    //reload this page
-    //location.reload();
 }); //--------------END DELETE PRODUCT IN CART -------------------
 //Calculate Item count and total Price and add to item-count 
 function CalculateItem(listCart) {
@@ -113,6 +111,7 @@ $(document).on('click', '[productName]', function () {
         list: []
     };
     AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
+    UpdateProductCart();
 });//--------------------END Click add tocart--------------------
 
 //#endregion ------------- Cart -----------------
@@ -263,4 +262,82 @@ function AddProductToLocal(itemLocal, productId, image, productName, currentPric
         alert("Sorry! No Web Storage support");
     }
 };//End function add a Product to list in LocalStoreAge
+
+//Function DELETE PRODUCT IN Local
+function DeleteProductInLocal(productId, nameItemList) {
+    //Get List
+    var listProductInLocal = JSON.parse(localStorage.getItem(nameItemList));
+    console.log(listProductInLocal);
+    console.log(productId);
+    //remove cart with productId
+    listProductInLocal = listProductInLocal.filter(p => p.id !== productId);
+    console.log(listProductInLocal);
+    //save to LocalStorage
+    localStorage.setItem(nameItemList, JSON.stringify(listProductInLocal));
+};//END Function DELETE PRODUCT IN Local
+
+//Update Wishlist page and Cart page
+function Updatelist(nameItemList) {
+    //Get List
+    var listInLocal = JSON.parse(localStorage.getItem(nameItemList));
+
+    //table body in page
+    var tbodyProductInPage = $("div.cart-table tbody");
+
+    // Total value in Cart page
+    let subTotalOnCartPage = $('p.price');
+    //calculate
+    var calculate = CalculateItem(listInLocal);
+    if (calculate.totalQuanlity === 0) {
+        tbodyProductInPage.text("");
+        subTotalOnCartPage.text("$0.00");
+    } else {
+        //Clear table body
+        tbodyProductInPage.text("");
+        //Add Total value in Cart page
+        subTotalOnCartPage.text("$" + calculate.totalValue);
+        listInLocal.forEach(function (product) {
+            //product:
+            //////id: "1"
+            //////image: "...."
+            //////currentPrice: ...,
+            //////oldPrice: ...,
+            //////productName: "Iphone 7 Plus"
+            //////quantity: 4
+            //////total: 1952
+            let trProductInPage = `
+                <tr productid=` + product.id + ` >
+                    <td class="image">
+                        <img src=` + window.location.origin + `/` + product.image + ` alt="">
+                    </td>
+                    <td class="product">
+                        <a href="shopsingle/`+ product.id + `">` + product.productName + `</a>
+                        <!-- <span>white</span>-->
+                    </td>
+                    <td class="price">
+                        <span class="amount">$` + product.currentPrice + `</span>
+                    </td>
+                    <td class="quantity">
+                        <form action="#">
+                            <div class="quantity d-inline-flex">
+                                <button type="button" class="sub"><i class="ti-minus"></i></button>
+                                <input max=` + product.maxQuantity + `
+                                currentPrice=` + product.currentPrice + `
+                                type="text" value=` + product.quantity + ` />
+                                <button type="button" class="add"><i class="ti-plus"></i></button>
+                            </div>
+                        </form>
+                    </td>
+                    <td class="total">
+                        <span class="total-amount">$` + product.total + `</span>
+                    </td>
+                    <td class="remove">
+                        <a><i productid=` + product.id + ` class="ti-close"></i></a>
+                    </td>
+                </tr>`;
+
+            tbodyProductInPage.append(trProductInPage);
+        });
+    }
+};//Update Wishlist page and Cart page
 //#endregion ----- Function

@@ -32,95 +32,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="image">
-                            <img src="assets/images/cart/cart-1.jpg" alt="">
-                        </td>
-                        <td class="product">
-                            <a href="shop-single.html">Rock Soapwort</a>
-                        </td>
-                        <td class="price">
-                            <span class="amount">$50.00</span>
-                        </td>
-                        <td class="quantity">
-                            <form action="#">
-                                <div class="quantity d-inline-flex">
-                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
-                                    <input type="text" value="1" />
-                                    <button type="button" class="add"><i class="ti-plus"></i></button>
-                                </div>
-                            </form>
-                        </td>
-                        <td class="total">
-                            <span class="total-amount">$50.00</span>
-                        </td>
-                        <td class="remove">
-                            <a href="#"><i class="ti-close"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="image">
-                            <img src="assets/images/cart/cart-2.jpg" alt="">
-                        </td>
-                        <td class="product">
-                            <a href="shop-single.html">Sweet Alyssum</a>
-                        </td>
-                        <td class="price">
-                            <span class="amount">$50.00</span>
-                        </td>
-                        <td class="quantity">
-                            <form action="#">
-                                <div class="quantity d-inline-flex">
-                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
-                                    <input type="text" value="1" />
-                                    <button type="button" class="add"><i class="ti-plus"></i></button>
-                                </div>
-                            </form>
-                        </td>
-                        <td class="total">
-                            <span class="total-amount">$50.00</span>
-                        </td>
-                        <td class="remove">
-                            <a href="#"><i class="ti-close"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="image">
-                            <img src="assets/images/cart/cart-3.jpg" alt="">
-                        </td>
-                        <td class="product">
-                            <a href="shop-single.html">Wild Roses</a>
-                            <span>white</span>
-                        </td>
-                        <td class="price">
-                            <span class="amount">$50.00</span>
-                        </td>
-                        <td class="quantity">
-                            <form action="#">
-                                <div class="quantity d-inline-flex">
-                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
-                                    <input type="text" value="1" />
-                                    <button type="button" class="add"><i class="ti-plus"></i></button>
-                                </div>
-                            </form>
-                        </td>
-                        <td class="total">
-                            <span class="total-amount">$50.00</span>
-                        </td>
-                        <td class="remove">
-                            <a href="#"><i class="ti-close"></i></a>
-                        </td>
-                    </tr>
+                    @* Add tr Wishlist here *@
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 <!--Wishlist End-->
+
 <script src="~/assets/js/cart.js"></script>
 
 <script>
-    
+
+    //Run update when first load
+    Updatelist("wishlists");
+    //Click X to delete Product in wishlist page
+    $(document).on('click', 'i.ti-close', function () {
+        //Get Id product
+        var productId = $(this).attr("productid");
+        console.log(productId);
+        // do something
+        DeleteProductInLocal(productId, "wishlists");
+        //update
+        Updatelist("wishlists");
+    }); //End Click X to delete Product in wishlist page
+
 </script>
 @{
 

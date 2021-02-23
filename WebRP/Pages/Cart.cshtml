@@ -234,122 +234,17 @@
 <script src="~/assets/js/cart.js"></script>
 @* Các đoạn script bên dưới có sử dụng một số function của cart.js *@
 <script>
-    //Định nghĩa lại UpdateProductCart
-    function UpdateProductCart() {
-        //Get List
-        var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
-        //li.product-cart
-        var liProductInCart = $("li.product-cart");
-        //table body in Cart page
-        var tbodyProductInCartPage = $("div.cart-table tbody");
-        //total value
-        var totalValue = liProductInCart.next().children().children().children();
-        //subtotal
-        var subTotalOnCartPage = $("p.price");
-        //Tính toán
-        var calculate = CalculateItem(listCartinLocal);
-        if (calculate.totalQuanlity === 0) {
-            $('span.item-count').addClass("d-none");
-            liProductInCart.text("");
-            tbodyProductInCartPage.text("");
-            totalValue.text("");
-            subTotalOnCartPage.text("$0");
-        } else {
-            //Add number total product
-            $('span.item-count').removeClass("d-none");
-            $('span.item-count').text(calculate.totalQuanlity);
-            //Clear li.product-cart
-            liProductInCart.text("");
-            //Clear table body
-            tbodyProductInCartPage.text("");
-            //Add new li.product-cart
-            listCartinLocal.forEach(function (cart) {
-                //cart:
-                //////id: "1"
-                //////image: "...."
-                //////currentPrice: ...,
-                //////oldPrice: ...,
-                //////productName: "Iphone 7 Plus"
-                //////quantity: 4
-                //////total: 1952
-                var divProductInCart = `<div class="single-cart-box">
-                                                <div class="cart-img">
-                                                    <a href="shopsingle/`+ cart.id + `"><img src=` + window.location.origin + `/` + cart.image + ` alt=""></a>
-                                                    <span class="pro-quantity">` + cart.quantity + `x</span>
-                                                </div>
-                                                <div class="cart-content">
-                                                    <h6 class="title"><a href="shopsingle/`+ cart.id + `">` + cart.productName + `</a></h6>
-                                                    <div class="cart-price">
-                                                        <span class="sale-price">$` + cart.currentPrice + `</span>
-                                                        <span class="regular-price">` + cart.oldPrice + `</span>
-                                                    </div>
-                                                </div>
-                                                <a productid=`+ cart.id + ` href="javascript:void(0);" class="del-icon"><i class="fa fa-trash"></i></a>
-                                            </div>`;
-                liProductInCart.append(divProductInCart);
-                var trProductInCartPage = `
-                    <tr productid=` + cart.id + ` >
-                        <td class="image">
-                            <img src=` + window.location.origin + `/` + cart.image + ` alt="">
-                        </td>
-                        <td class="product">
-                            <a href="shopsingle/`+ cart.id + `">` + cart.productName + `</a>
-                            @* <span>white</span> *@
-                        </td>
-                        <td class="price">
-                            <span class="amount">$` + cart.currentPrice + `</span>
-                        </td>
-                        <td class="quantity">
-                            <form action="#">
-                                <div class="quantity d-inline-flex">
-                                    <button type="button" class="sub"><i class="ti-minus"></i></button>
-                                    <input max=` + cart.maxQuantity + `
-                                    currentPrice=` + cart.currentPrice + `
-                                    type="text" value=` + cart.quantity + ` />
-                                    <button type="button" class="add"><i class="ti-plus"></i></button>
-                                </div>
-                            </form>
-                        </td>
-                        <td class="total">
-                            <span class="total-amount">$` + cart.total + `</span>
-                        </td>
-                        <td class="remove">
-                            <a><i productid=` + cart.id + ` class="ti-close"></i></a>
-                        </td>
-                    </tr>`;
-
-                tbodyProductInCartPage.append(trProductInCartPage);
-
-            });
-            //Add total value of cart
-            totalValue.text("$" + calculate.totalValue);
-            //Add SubToTal in Cart page
-            subTotalOnCartPage.text("$" + calculate.totalValue);
-
-        }
-    };//End UpdateProductCart
     //Run update when first load
-    UpdateProductCart();
-    //-------- Function DELETE PRODUCT IN CART--------
-    function DeleteProductInCart(id) {
-        //Get List
-        var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
-        //remove cart with productId
-        listCartinLocal = listCartinLocal.filter(cart => cart.id !== id);
-        //save to LocalStorage
-        localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
-        //update
-        UpdateProductCart();
-        //reload this page
-        //location.reload();
-    };//-------- END Function DELETE PRODUCT IN CART--------
+    Updatelist("listCart");
     //--------------DELETE PRODUCT IN Page -------------------
     //$("i.ti-close").on("click", function () {
     $(document).on('click', 'i.ti-close', function () {
         //Get Id product
         var productId = $(this).attr("productid");
         //remove cart with productId
-        DeleteProductInCart(productId);
+        DeleteProductInLocal(productId, "listCart");
+        Updatelist("listCart");
+        UpdateProductCart();
     }); //--------------END DELETE PRODUCT IN Page -------------------
     //----Add more product -----
     //$("i.ti-plus").on("click", function () {
@@ -379,6 +274,7 @@
         //Create a new listCart
         var listCart = [];
         localStorage.setItem("listCart", JSON.stringify(listCart));
+        Updatelist("listCart");
         UpdateProductCart();
 
     });//--------- END CLEAR CART--------
@@ -406,6 +302,7 @@
         });
 
         localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+        Updatelist("listCart");
         UpdateProductCart();
 
     });//--------- END UPDATE CART--------
