@@ -1,4 +1,5 @@
-﻿/*--
+﻿//#region -------- Cart 
+/*--
     |    Get Product and add to CART CONTENT
     -----------------------------------*/
 function UpdateProductCart() {
@@ -114,7 +115,9 @@ $(document).on('click', '[productName]', function () {
     AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
 });//--------------------END Click add tocart--------------------
 
-//#region Chờ xóa
+//#endregion ------------- Cart -----------------
+
+//#region -------- Chờ xóa
 // //Không còn sử dụng function này nữa, để vài bữa nữa xóa
 // function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
 //     //Create a cart, Add to ListCart, Save to LocalStorage
@@ -172,7 +175,7 @@ $(document).on('click', '[productName]', function () {
 // };//Endfunction add to cart when click
 //#endregion chờ xóa
 
-//#region ------------------Wishlist -------------------
+//#region -------- Wishlist 
 $(document).on('click', "[data-original-title='Add to Wishlist']", function () {
     //if being wishlist of list view (grid3 page)
     let aAddToCart = $(this).parent().prev();
@@ -208,6 +211,7 @@ $(document).on('click', "[data-original-title='Add to Wishlist']", function () {
 });
 //#endregion ------------------Wishlist -------------------
 
+//#region -------- Function 
 //function add a Product to list in LocalStoreAge
 function AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
     //Function use when Create a product, Add to ListCart, Save to LocalStorage
@@ -259,3 +263,4 @@ function AddProductToLocal(itemLocal, productId, image, productName, currentPric
         alert("Sorry! No Web Storage support");
     }
 };//End function add a Product to list in LocalStoreAge
+//#endregion ----- Function
