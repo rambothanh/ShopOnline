@@ -1,6 +1,6 @@
 @page
 @{
-    ViewData["Title"] = "Check Out";
+    ViewData["Title"] = "Wishlist";
 }
 <!--Page Banner Start-->
 <div class="page-banner" style="background-image: url(assets/images/testimonial-bg.jpg);">
@@ -50,7 +50,6 @@
     $(document).on('click', 'i.ti-close', function () {
         //Get Id product
         var productId = $(this).attr("productid");
-        console.log(productId);
         // do something
         DeleteProductInLocal(productId, "wishlists");
         //update

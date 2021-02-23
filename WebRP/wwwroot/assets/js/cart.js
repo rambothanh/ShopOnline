@@ -116,7 +116,7 @@ $(document).on('click', '[productName]', function () {
 
 //#endregion ------------- Cart -----------------
 
-//#region -------- Chờ xóa
+//#region -------- waiting for delete
 // //Không còn sử dụng function này nữa, để vài bữa nữa xóa
 // function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
 //     //Create a cart, Add to ListCart, Save to LocalStorage
@@ -175,17 +175,19 @@ $(document).on('click', '[productName]', function () {
 //#endregion chờ xóa
 
 //#region -------- Wishlist 
-$(document).on('click', "[data-original-title='Add to Wishlist']", function () {
-    //if being wishlist of list view (grid3 page)
+$(document).on('click', "[data-original-title='Add to Wishlist'], div.action a.wishlist", function () {
+
+    //Go to Add to Cart button to get info
     let aAddToCart = $(this).parent().prev();
+    //if being wishlist of list view (grid3 page) and Single page
     if ($(this).hasClass("wishlist")) {
-        //Get info of product on a Add to Cart
+
         aAddToCart = aAddToCart.children();
 
     } else {
         aAddToCart = aAddToCart.prev().children();
     }
-
+    //Get info of product on a Add to Cart
     let maxQuantity = aAddToCart.attr("maxQuantity");
     let productId = aAddToCart.attr("productId");
     let productName = aAddToCart.attr("productName");
@@ -209,6 +211,46 @@ $(document).on('click', "[data-original-title='Add to Wishlist']", function () {
     }
 });
 //#endregion ------------------Wishlist -------------------
+
+//#region -------- Compare 
+$(document).on('click', "[data-original-title='Compare']", function () {
+
+    //Go to Add to Cart button to get info
+    let aAddToCart = $(this).parent().prev();
+    //if being compare of list view (grid3 page)
+    if ($(this).hasClass("compare")) {
+
+        aAddToCart = aAddToCart.prev().children();
+        //if being compare of Single product
+    } else {
+        aAddToCart = aAddToCart.children();
+    }
+    //Get info of product on a Add to Cart
+    let maxQuantity = aAddToCart.attr("maxQuantity");
+    let productId = aAddToCart.attr("productId");
+    let productName = aAddToCart.attr("productName");
+    let currentPrice = aAddToCart.attr("currentPrice");
+    let oldPrice = aAddToCart.attr("oldPrice");
+    let image = aAddToCart.attr("image");
+    let quantity = 1;
+    let itemLocal = {
+        name: "compares",
+        list: []
+    }
+    AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
+    // confirm go to Wishlist page
+    if (confirm('Product has add to your compare. Go to Compare page?')) {
+        // Go to Wishlist page
+        let root = window.location.origin;
+        window.location.href = root + "/compare";
+    } else {
+        // Do nothing
+        // console.log('Continue shopping');
+    }
+});
+//#endregion ----- Compare
+
+
 
 //#region -------- Function 
 //function add a Product to list in LocalStoreAge
@@ -340,4 +382,78 @@ function Updatelist(nameItemList) {
         });
     }
 };//Update Wishlist page and Cart page
+
+function UpdateCompare(nameItemList) {
+    //Get List
+    let listInLocal = JSON.parse(localStorage.getItem(nameItemList));
+    //table body in page
+    let tbodyProductInPage = $("div.compare-table tbody");
+    let trCompareList = {
+        product: "<tr><th>Product</th>",
+        price: "<tr><th>Price</th>",
+        color: "<tr><th>Color</th>",
+        stock: "<tr><th>Stock</th>",
+        addToCart: "<tr><th>Add to cart</th>",
+        delete: "<tr><th>Delete</th>",
+        rating: "<tr><th>Rating</th>",
+    };
+    //calculate
+    var calculate = CalculateItem(listInLocal);
+    if (calculate.totalQuanlity === 0) {
+        tbodyProductInPage.text("");
+    } else {
+        //Clear table body
+        tbodyProductInPage.text("");
+        listInLocal.forEach(function (product) {
+            //product:
+            //////id: "1"
+            //////image: "...."
+            //////currentPrice: ...,
+            //////oldPrice: ...,
+            //////productName: "Iphone 7 Plus"
+            //////quantity: 4
+            //////total: 1952
+            trCompareList.product += `
+                <td>
+                    <div class="product-image-title">
+                        <a class="product-image" href=` + window.location.origin + `/shopsingle/` + product.id + `><img
+                                src=` + window.location.origin + `/` + product.image + ` alt="product"></a>
+                        <a class="category">Update later</a>
+                        <h5 class="title"><a href=` + window.location.origin + `/shopsingle/` + product.id + `>` + product.productName + `</a></h5>
+                    </div>
+                </td>`;
+            trCompareList.price += `<td>$` + product.currentPrice + `</td>`;
+            trCompareList.color += `<td>Update later</td>`;
+            trCompareList.stock += `<td>Update later</td>`; //Will fixed later
+            trCompareList.addToCart += `
+                <td><a productId=`+ product.id + ` 
+                productName=`+ product.productName + ` 
+                currentPrice=`+ product.currentPrice + ` 
+                oldPrice=`+ product.oldPrice + ` 
+                maxQuantity=`+ product.quantity + ` 
+                image=`+ product.image + `
+                class="btn btn-primary">Add to Cart</a></td>`;
+            trCompareList.delete += `<td><a productId=` + product.id + ` class="delete"><i class="fa fa-trash"></i></a></td>`; //Will fixed later
+            trCompareList.rating += ` 
+                <td>
+                    <ul class="rating">
+                        <li class="rating-on"><i class="fa fa-star"></i></li>
+                        <li class="rating-on"><i class="fa fa-star"></i></li>
+                        <li class="rating-on"><i class="fa fa-star"></i></li>
+                        <li class="rating-on"><i class="fa fa-star"></i></li>
+                        <li class=""><i class="fa fa-star"></i></li>
+                    </ul>
+                </td>`; //Will fixed later
+        });
+        console.log(trCompareList.product);
+        tbodyProductInPage.append(trCompareList.product + "</tr>");
+        tbodyProductInPage.append(trCompareList.price + "</tr>");
+        tbodyProductInPage.append(trCompareList.color + "</tr>");
+        tbodyProductInPage.append(trCompareList.stock + "</tr>");
+        tbodyProductInPage.append(trCompareList.addToCart + "</tr>");
+        tbodyProductInPage.append(trCompareList.delete + "</tr>");
+        tbodyProductInPage.append(trCompareList.rating + "</tr>");
+    }
+
+};
 //#endregion ----- Function
