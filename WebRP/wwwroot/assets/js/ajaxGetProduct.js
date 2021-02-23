@@ -39,7 +39,7 @@ $(document).ready(function () {
                     <div class="single-product">
                         <div class="product-image">
                             <a href="`+ root + `shopsingle/` + product.id + `">
-                                 <img src="`+ root + mainProductImage + `" alt="">
+                                <img src="`+ root + mainProductImage + `" alt="">
                             </a>
                             `+ stickerNew + `
                             <div class="action-links">
@@ -51,9 +51,9 @@ $(document).ready(function () {
                                     maxQuantity=`+ product.quantity + `
                                     image=`+ mainProductImage + ` 
                                     data-tooltip="tooltip" data-placement="left" title="Add to cart"><i class="icon-shopping-bag"></i></a></li>
-                                    <li><a href="compare.html" data-tooltip="tooltip" data-placement="left" title="Compare"><i class="icon-sliders"></i></a></li>
-                                    <li><a href="wishlist.html" data-tooltip="tooltip" data-placement="left" title="Add to Wishlist"><i class="icon-heart"></i></a></li>
-                                    <li><a href="javascript:void(0);" data-tooltip="tooltip" data-placement="left" title="Quick View" data-toggle="modal" data-target="#Modal`+ product.id + `"><i class="icon-eye"></i></a></li>
+                                    <li><a data-tooltip="tooltip" data-placement="left" title="Compare"><i class="icon-sliders"></i></a></li>
+                                    <li><a data-tooltip="tooltip" data-placement="left" title="Add to Wishlist"><i class="icon-heart"></i></a></li>
+                                    <li><a data-tooltip="tooltip" data-placement="left" title="Quick View" data-toggle="modal" data-target="#Modal`+ product.id + `"><i class="icon-eye"></i></a></li>
                                 </ul>
                             </div>
 
@@ -217,7 +217,11 @@ $(document).ready(function () {
                 //Mỗi swiper-slide là 2 SingleProduct
                 divswiperSlide.innerHTML = arrDivSingleProduct[i] + arrDivSingleProduct[10 - 1 - i];
                 divswiperSlideReverse.innerHTML = arrDivSingleProduct[10 - 1 - i] + arrDivSingleProduct[i];
+<<<<<<< HEAD
                 divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1)-1] + arrDivSingleProduct[2 * (i + 1) - 2];
+=======
+                divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1) - 1] + arrDivSingleProduct[2 * (i + 1) - 2];
+>>>>>>> fd4ef09e17393dd45c25b833262bbf31b982311a
                 //#endregion
                 //Add New in Featured (index page)
                 $("#tab1 div.swiper-wrapper").prepend(divswiperSlide);
