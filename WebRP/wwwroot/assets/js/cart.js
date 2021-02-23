@@ -92,7 +92,7 @@ function containsCart(productId, listCart) {
     return null;
 };
 
-//--------------------Click add to cart On List View, On Grid view, ... --------------------
+//--------------------Click add to cart On List View, On Grid view, on Quick View... --------------------
 $(document).on('click', '[productName]', function () {
     var maxQuantity = $(this).attr("maxQuantity");
     //if sold out, do nothing
@@ -107,65 +107,155 @@ $(document).on('click', '[productName]', function () {
     if ($(this).attr("quickview") === "true") {
         quantity = $(this).parent().prev().find("input").val();
     }
-
-    AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity, maxQuantity);
+    let itemLocal = {
+        name: "listCart",
+        list: []
+    };
+    AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
 });//--------------------END Click add tocart--------------------
 
-//Create function add to cart when click
-function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity, maxQuantity) {
-    //Create a cart, Add to ListCart, Save to LocalStorage
-    function CreateCartAndSave(listCart) {
-        //Create a cart
-        var cart = {
+//#region Chờ xóa
+// //Không còn sử dụng function này nữa, để vài bữa nữa xóa
+// function AddToCartWhenClick(productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
+//     //Create a cart, Add to ListCart, Save to LocalStorage
+//     function CreateCartAndSave(listCart) {
+//         //Create a cart
+//         var cart = {
+//             id: productId,
+//             image: image,
+//             productName: productName,
+//             currentPrice: currentPrice,
+//             oldPrice: oldPrice,
+//             quantity: quantity, //click chỗ này mặc định add vào cart 1
+//             total: currentPrice,
+//             maxQuantity: maxQuantity
+
+//         };
+//         //add cart
+//         listCart.push(cart);
+//         //save localsorage
+//         localStorage.setItem("listCart", JSON.stringify(listCart));
+//         UpdateProductCart();
+//     };
+//     //Check Browser support for LocalStorge
+//     if (typeof (Storage) !== "undefined") {
+//         //Check if existed listCart
+//         var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
+//         //if listCart Existed
+//         if (listCartinLocal != null) {
+//             //Check producId in listCartinLocal
+//             var cartExistListCart = containsCart(productId, listCartinLocal);
+//             //console.log(cartExistListCart);
+//             if (cartExistListCart != null) {
+//                 //If quantity in Cart = maxQuantity
+//                 if (cartExistListCart.quantity == maxQuantity) return;
+//                 var totalQuantity = Number(cartExistListCart.quantity) + Number(quantity);
+//                 //Check if quantity in Cart >= quantity in database
+//                 if (totalQuantity >= maxQuantity) cartExistListCart.quantity = maxQuantity;
+//                 else cartExistListCart.quantity = totalQuantity;
+
+//                 cartExistListCart.total = (+cartExistListCart.currentPrice) * (+cartExistListCart.quantity);
+//                 localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
+//                 UpdateProductCart();
+//             } else {
+//                 CreateCartAndSave(listCartinLocal);
+//             }
+//             //if listCart is not existed 
+//         } else {
+//             //Create a new listCart
+//             var listCart = [];
+//             CreateCartAndSave(listCart);
+//         }
+//     } else {
+//         alert("Sorry! No Web Storage support");
+//     }
+// };//Endfunction add to cart when click
+//#endregion chờ xóa
+
+//#region ------------------Wishlist -------------------
+$(document).on('click', "[data-original-title='Add to Wishlist']", function () {
+    //if being wishlist of list view (grid3 page)
+    let aAddToCart = $(this).parent().prev();
+    if ($(this).hasClass("wishlist")) {
+        //Get info of product on a Add to Cart
+        aAddToCart = aAddToCart.children();
+
+    } else {
+        aAddToCart = aAddToCart.prev().children();
+    }
+
+    let maxQuantity = aAddToCart.attr("maxQuantity");
+    let productId = aAddToCart.attr("productId");
+    let productName = aAddToCart.attr("productName");
+    let currentPrice = aAddToCart.attr("currentPrice");
+    let oldPrice = aAddToCart.attr("oldPrice");
+    let image = aAddToCart.attr("image");
+    let quantity = 1;
+    let itemLocal = {
+        name: "wishlists",
+        list: []
+    }
+    AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
+    // confirm go to Wishlist page
+    if (confirm('Product has add to your Wishlist. Go to Wishlist page?')) {
+        // Go to Wishlist page
+        let root = window.location.origin;
+        window.location.href = root + "/Wishlist";
+    } else {
+        // Do nothing
+        // console.log('Continue shopping');
+    }
+});
+//#endregion ------------------Wishlist -------------------
+
+//function add a Product to list in LocalStoreAge
+function AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity) {
+    //Function use when Create a product, Add to ListCart, Save to LocalStorage
+    function CreateproductAndSave(itemLocal) {
+        //Create a product
+        let product = {
             id: productId,
             image: image,
             productName: productName,
             currentPrice: currentPrice,
             oldPrice: oldPrice,
-            quantity: quantity, //click chỗ này mặc định add vào cart 1
+            quantity: quantity,
             total: currentPrice,
             maxQuantity: maxQuantity
-
         };
-        //add cart
-        listCart.push(cart);
+        //add product
+        itemLocal.list.push(product);
         //save localsorage
-        localStorage.setItem("listCart", JSON.stringify(listCart));
-        UpdateProductCart();
+        localStorage.setItem(itemLocal.name, JSON.stringify(itemLocal.list));
     };
     //Check Browser support for LocalStorge
     if (typeof (Storage) !== "undefined") {
-        //Check if existed listCart
-        var listCartinLocal = JSON.parse(localStorage.getItem('listCart'));
-        //if listCart Existed
-        if (listCartinLocal != null) {
-            //Check producId in listCartinLocal
-            var cartExistListCart = containsCart(productId, listCartinLocal);
-            //console.log(cartExistListCart);
-            if (cartExistListCart != null) {
-                //If quantity in Cart = maxQuantity
-                if (cartExistListCart.quantity == maxQuantity) return;
-                var totalQuantity = Number(cartExistListCart.quantity) + Number(quantity);
-                //Check if quantity in Cart >= quantity in database
-                if (totalQuantity >= maxQuantity) cartExistListCart.quantity = maxQuantity;
-                else cartExistListCart.quantity = totalQuantity;
+        //Check if existed itemLocal
+        let productinLocal = JSON.parse(localStorage.getItem(itemLocal.name));
+        //if itemLocal Existed
+        if (productinLocal != null) {
+            //Check producId in productinLocal
+            let productExist = containsCart(productId, productinLocal);
+            if (productExist != null) {
+                //If quantity in product = maxQuantity
+                if (productExist.quantity == maxQuantity) return;
+                let totalQuantity = Number(productExist.quantity) + Number(quantity);
+                //Check if quantity in product >= quantity in database
+                if (totalQuantity >= maxQuantity) productExist.quantity = maxQuantity;
+                else productExist.quantity = totalQuantity;
 
-                cartExistListCart.total = (+cartExistListCart.currentPrice) * (+cartExistListCart.quantity);
-                localStorage.setItem("listCart", JSON.stringify(listCartinLocal));
-                UpdateProductCart();
+                productExist.total = (+productExist.currentPrice) * (+productExist.quantity);
+                localStorage.setItem(itemLocal.name, JSON.stringify(productinLocal));
+                //If productId is not existed in itemLocal.list
             } else {
-                CreateCartAndSave(listCartinLocal);
+                itemLocal.list = productinLocal;
+                CreateproductAndSave(itemLocal);
             }
-            //if listCart is not existed 
+            //if itemLocal.list is not existed in local
         } else {
-            //Create a new listCart
-            var listCart = [];
-            CreateCartAndSave(listCart);
+            CreateproductAndSave(itemLocal);
         }
     } else {
-        // Sorry! No Web Storage support..
+        alert("Sorry! No Web Storage support");
     }
-    //Reload page to js known new content
-    //location.reload();
-};//Endfunction add to cart when click
-
+};//End function add a Product to list in LocalStoreAge
