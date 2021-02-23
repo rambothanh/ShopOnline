@@ -1,14 +1,13 @@
-﻿// if (typeof idProduct_shopSingle_global !== "undefined") console.log("Dang la shopSingle");
-// else console.log("Khong phai shopShingle")
+﻿let baseAPI = "http://localhost:5000/api/";
 
-
+//#region -------- AJAX get many product
 $(document).ready(function () {
 
     // if (!sessionStorage.hasOwnProperty("token")) {
     //    window.location.href = "Chuyển qua trang đăng nhập";
     //} 
     var options = {};
-    options.url = "http://localhost:5000/api/Products";
+    options.url = baseAPI + "Products";
     options.type = "GET";
     //options.beforeSend = function (xhr) {
     //    xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
@@ -217,11 +216,7 @@ $(document).ready(function () {
                 //Mỗi swiper-slide là 2 SingleProduct
                 divswiperSlide.innerHTML = arrDivSingleProduct[i] + arrDivSingleProduct[10 - 1 - i];
                 divswiperSlideReverse.innerHTML = arrDivSingleProduct[10 - 1 - i] + arrDivSingleProduct[i];
-<<<<<<< HEAD
-                divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1)-1] + arrDivSingleProduct[2 * (i + 1) - 2];
-=======
                 divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1) - 1] + arrDivSingleProduct[2 * (i + 1) - 2];
->>>>>>> fd4ef09e17393dd45c25b833262bbf31b982311a
                 //#endregion
                 //Add New in Featured (index page)
                 $("#tab1 div.swiper-wrapper").prepend(divswiperSlide);
@@ -267,9 +262,9 @@ $(document).ready(function () {
     }
     //Start call API
     $.ajax(options);
-});//-------------- END AJAX ---------------------
-
-//#region ------------- AJAX for Single Page ---------------
+});
+//#endregion ----- AJAX get many product
+//#region -------- AJAX for Single Page (one Product by ID) ---------------
 // if being shopSingle:
 if (typeof idProduct_shopSingle_global !== "undefined") {
     //Get domain name with UpperCase first letter
@@ -283,7 +278,7 @@ if (typeof idProduct_shopSingle_global !== "undefined") {
         //     window.location.href = "Chuyển qua trang đăng nhập";
         // } 
         var options = {};
-        options.url = "http://localhost:5000/api/Products/" + idProduct_shopSingle_global;
+        options.url = baseAPI + "Products/" + idProduct_shopSingle_global;
         options.type = "GET";
         //    options.beforeSend = function (xhr) {
         //         xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
