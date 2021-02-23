@@ -201,7 +201,7 @@ $(document).on('click', "[data-original-title='Add to Wishlist'], div.action a.w
     }
     AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
     // confirm go to Wishlist page
-    if (confirm('Product has add to your Wishlist. Go to Wishlist page?')) {
+    if (confirm('Product has added to your Wishlist. Click "OK" to to to Wishlist page, "Cancel" to continue shopping?')) {
         // Go to Wishlist page
         let root = window.location.origin;
         window.location.href = root + "/Wishlist";
@@ -239,7 +239,7 @@ $(document).on('click', "[data-original-title='Compare']", function () {
     }
     AddProductToLocal(itemLocal, productId, image, productName, currentPrice, oldPrice, quantity, maxQuantity);
     // confirm go to Wishlist page
-    if (confirm('Product has add to your compare. Go to Compare page?')) {
+    if (confirm('Product has added to your compare. Click "OK" to to to Compare page, "Cancel" to Continue shopping?')) {
         // Go to Wishlist page
         let root = window.location.origin;
         window.location.href = root + "/compare";
@@ -249,8 +249,6 @@ $(document).on('click', "[data-original-title='Compare']", function () {
     }
 });
 //#endregion ----- Compare
-
-
 
 //#region -------- Function 
 //function add a Product to list in LocalStoreAge
@@ -400,7 +398,12 @@ function UpdateCompare(nameItemList) {
     //calculate
     var calculate = CalculateItem(listInLocal);
     if (calculate.totalQuanlity === 0) {
-        tbodyProductInPage.text("");
+        tbodyProductInPage.html(`
+        <p class="info-header">
+            <i class="fa fa-exclamation-circle"></i>
+            There are no products to compare!
+            <a href=` + window.location.origin + `/ShopGrid3` + ` >Continue shopping!</a>
+        </p>`);
     } else {
         //Clear table body
         tbodyProductInPage.text("");
