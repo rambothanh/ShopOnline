@@ -1,6 +1,7 @@
 ﻿@page "/edit/{producId:int?}"
 @inject HttpClient Http
 @using System.IO
+@inject Microsoft.Extensions.Configuration.IConfiguration config
 
 
 <h1>Edit Product</h1>
@@ -107,7 +108,7 @@ else
                         @foreach (var productImage in productImages)
                         { 
                             if(!productImage.IsMainPicture){
-                                <img src="http://localhost:4000/@productImage.PictureUri"
+                                <img src="@(config["BaseWebRP"]+productImage.PictureUri)"
                                                 class="mr-2 img-fluid"
                                                 alt="Product Image"
                                                 style="max-width: 8%">
@@ -118,7 +119,7 @@ else
                 }
                 @* <div>
                     <p style="margin:0px">Current Product Image:</p>
-                    <img src="http://localhost:4000/@productModel.PictureUri" class="img-fluid"
+                    <img src="@(config["BaseWebRP"]+productImage.PictureUri)" class="img-fluid"
                          alt="Product Image"
                          style="max-width: 20%">
                 </div> *@

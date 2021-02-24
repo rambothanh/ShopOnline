@@ -18,8 +18,15 @@ namespace ShopOnline.Admin
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://shopapi.sofsog.com/api/") });
+            // builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:6888/api/") });
+            //await builder.Build().RunAsync();
+            //Get value from appsettings.json
+            var url = builder.Configuration.GetValue<string>("BaseAPI");
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(url) });
             await builder.Build().RunAsync();
+
         }
+
+
     }
 }

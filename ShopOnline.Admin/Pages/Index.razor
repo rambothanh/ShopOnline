@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @using System.IO
 @inject NavigationManager NavigationManager
-
+@inject Microsoft.Extensions.Configuration.IConfiguration config
 
 <h1>Add a Product</h1>
 
@@ -91,12 +91,12 @@
                         @foreach (var productImage in productImages)
                         { 
                             if(!productImage.IsMainPicture){
-                                <img src="http://localhost:4000/@productImage.PictureUri"
+                                <img src="@(config["BaseWebRP"] + productImage.PictureUri)"
                                                 class="mr-2 img-fluid"
                                                 alt="Product Image"
                                                 style="max-width: 8%">
                             }
-                           
+
                         }
                     </div>
             }
