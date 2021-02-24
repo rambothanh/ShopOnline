@@ -6,7 +6,7 @@
 
 
 <!--Page Banner Start-->
-<div class="page-banner" style="background-image: url(http://localhost:4000/assets/images/testimonial-bg.jpg);">
+<div class="page-banner">
     <div class="container">
         <div class="page-banner-content text-center">
             <h2 class="title">Shop Single</h2>
@@ -35,26 +35,26 @@
                         <div class="swiper-wrapper">
                             <div id="Image1" class="swiper-slide single-product-thumb">
                                 <a class="active" href="javascript:void(0);"
-                                    data-image="http://localhost:4000/assets/images/product-single/product-1.jpg">
-                                    <img src="http://localhost:4000/assets/images/product-single/product-1.jpg" alt="">
+                                    data-image="">
+                                    <img src="" alt="">
                                 </a>
                             </div>
                             <div id="Image2" class=" swiper-slide single-product-thumb">
                                 <a href="javascript:void(0);"
-                                    data-image="http://localhost:4000/assets/images/product-single/product-2.jpg">
-                                    <img src="http://localhost:4000/assets/images/product-single/product-2.jpg" alt="">
+                                    data-image="">
+                                    <img src="" alt="">
                                 </a>
                             </div>
                             <div id="Image3" class="swiper-slide single-product-thumb">
                                 <a href="javascript:void(0);"
-                                    data-image="http://localhost:4000/assets/images/product-single/product-3.jpg">
-                                    <img src="http://localhost:4000/assets/images/product-single/product-3.jpg" alt="">
+                                    data-image="">
+                                    <img src="" alt="">
                                 </a>
                             </div>
                             <div id="Image4" class="swiper-slide single-product-thumb">
                                 <a href="javascript:void(0);"
-                                    data-image="http://localhost:4000/assets/images/product-single/product-4.jpg">
-                                    <img src="http://localhost:4000/assets/images/product-single/product-4.jpg" alt="">
+                                    data-image="">
+                                    <img src="" alt="">
                                 </a>
                             </div>
                         </div>
@@ -346,6 +346,12 @@
 <script>
     //Get idProduct for ajaxGetProduct.js use
     var idProduct_shopSingle_global = @Model.Id; 
+    
+    let domainName = window.location.origin + "/";
+    //Add background for banner
+    $("div.page-banner").css("background-image", "url(" + domainName + "assets/images/testimonial-bg.jpg)");
+    // data-image="http://localhost:4000/assets/images/product-single/product-1.jpg">
+    //<img src="http://localhost:4000/assets/images/product-single/product-1.jpg" alt="">
 </script>
 <script src="~/assets/js/ajaxGetProduct.js"></script>
 <script src="~/assets/js/cart.js"></script>
