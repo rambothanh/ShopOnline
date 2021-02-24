@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -34,6 +37,9 @@
     <link rel="stylesheet" href="~/assets/css/plugins-min/plugins.min.css">
     <link rel="stylesheet" href="~/assets/css/style.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        const baseAPI = @Json.Serialize(@Configuration.GetSection("ApiUrls").GetSection("baseAPI").Value);
+    </script>
 </head>
 
 <body>

@@ -1,6 +1,4 @@
-﻿let baseAPI = "http://localhost:5000/api/";
-
-//#region -------- AJAX get many product
+﻿//#region -------- AJAX get many product
 $(document).ready(function () {
 
     // if (!sessionStorage.hasOwnProperty("token")) {
