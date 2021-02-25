@@ -93,6 +93,7 @@ namespace ShopOnline.API.Services.ImageService
                 templateG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 templateG.Clear(Color.White);
                 templateG.DrawImage(pickedImage, new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight), new System.Drawing.Rectangle(0, 0, pickedImage.Width, pickedImage.Height), System.Drawing.GraphicsUnit.Pixel);
+                Console.WriteLine(Path.Combine(newFileLocation, newFileName));
                 templateImage.Save(Path.Combine(newFileLocation, newFileName), System.Drawing.Imaging.ImageFormat.Jpeg);
 
 
