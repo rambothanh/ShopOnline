@@ -49,19 +49,20 @@ namespace ShopOnline.API.Controllers
         [HttpPost]
         public async Task Post(UploadImage uploadImage)
         {
-            //var rootPath =  @"F:\Document of Thanh\DotNetCore\ShopOnline";
+            //rootPath =  ~\\assets\\images\\product\\ ;
             var rootPath = GetRootDirectoryOfWebRP();
 
             // Đường dẫn lưu ảnh tạm trước khi crop
-            var pathTemp = $"{rootPath}\\assets\\images\\product\\Temp";
+            var pathTemp = Path.Combine(rootPath, "Temp");
             //Path save MainImage
-            var pathMain384x480 = $"{rootPath}\\assets\\images\\product\\Main384x480";
+            var pathMain384x480 = Path.Combine(rootPath, "Main384x480");
             //Folder Single720x900
-            var pathSingle720x900 = $"{rootPath}\\assets\\images\\product\\Single720x900";
+            var pathSingle720x900 = Path.Combine(rootPath, "Single720x900");
             //Change file name
             string newName = RenameFile(uploadImage.FileName, $"{uploadImage.ProductId.ToString()}-{Guid.NewGuid()}");// fileName: Id-Guid
             // Creates or overwrites a file in the specified path.
-            var fs = System.IO.File.Create($"{pathTemp}\\{newName}");
+            var fs = System.IO.File.Create(Path.Combine(pathTemp, newName));
+            //var fs = System.IO.File.Create($"{pathTemp}\\{newName}");
 
             // Write content byte[] type into file image has just create. 
             fs.Write(uploadImage.FileContent, 0, uploadImage.FileContent.Length);
@@ -182,7 +183,8 @@ namespace ShopOnline.API.Controllers
             }
             productImages = productImages.OrderByDescending(x => x.Id).ToList();
             var rootPath = GetRootDirectoryOfWebRP();
-            var pathMain384x480 = $"{rootPath}\\assets\\images\\product\\Main384x480";
+            var pathMain384x480 = Path.Combine(rootPath, "Main384x480");
+            //var pathMain384x480 = $"{rootPath}\\assets\\images\\product\\Main384x480";
             //Check each productImage if its is mainImage
             var countMainImage = 0;
             foreach (var productImage in productImages)
@@ -206,7 +208,8 @@ namespace ShopOnline.API.Controllers
             //--------------Create MainImage by Newest Id ProductImage----------
             productImages = productImages.OrderByDescending(x => x.Id).ToList();
             string fileNameAdd = Path.GetFileName(productImages.ElementAt(0).PictureUri);
-            var pathSingle720x900 = $"{rootPath}\\assets\\images\\product\\Single720x900";
+            var pathSingle720x900 = Path.Combine(rootPath, "Single720x900");
+            //var pathSingle720x900 = $"{rootPath}\\assets\\images\\product\\Single720x900";
 
             string newName384x480 = RenameFile(fileNameAdd, $"{idProduct.ToString()}-{Guid.NewGuid()}"); // fileName: Id-Guid, 
             _uploadImageService.ResizeImageAndRatio(
@@ -235,9 +238,11 @@ namespace ShopOnline.API.Controllers
         {
             var rootPath = GetRootDirectoryOfWebRP();
             //Path save MainImage
-            var pathMain384x480 = rootPath + @"\assets\images\product\Main384x480";
+            var pathMain384x480 = Path.Combine(rootPath, "Main384x480");
+            //var pathMain384x480 = rootPath + @"\assets\images\product\Main384x480";
             //Folder Single720x900
-            var pathSingle720x900 = rootPath + @"\assets\images\product\Single720x900";
+            var pathSingle720x900 = Path.Combine(rootPath, "Single720x900");
+            //var pathSingle720x900 = rootPath + @"\assets\images\product\Single720x900";
 
             //Get pictureUri like: assets/images/product/130-c75f797d-dd4a-4da3-b89d-6971b52b83fe.jpg
             var productImage = await _context.ProductImages.FindAsync(idProductImage);
@@ -286,6 +291,7 @@ namespace ShopOnline.API.Controllers
 
         //Get Directory: ...ShopOnline\
         //Config this function when Deploy Unbuntu
+        //Get Folder "product" contain image of Product
         private string GetRootDirectoryOfWebRP()
         {
             #region root in Development Window
@@ -301,11 +307,24 @@ namespace ShopOnline.API.Controllers
             #region root in Production Unbuntu
             //~ShopOnline/ShopOnline.API/bin/Debug/net5.0/publish/ShopOnline.API.dll
             var rootDir = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            var shopOnlinePath = Path.Combine(rootDir, @"..\..\..\..\..\.."); // parent 6 level
-            //ShopOnline/WebRP/bin/Debug/net5.0/publish/wwwroot/
-            return shopOnlinePath + @"\WebRP\bin\Debug\net5.0\publish\wwwroot\";
+            rootDir = Path.Combine(rootDir, "..");
+            rootDir = Path.Combine(rootDir, "..");
+            rootDir = Path.Combine(rootDir, "..");
+            rootDir = Path.Combine(rootDir, "..");
+            rootDir = Path.Combine(rootDir, "..");
+            rootDir = Path.Combine(rootDir, ".."); // parent 6 level
+            //ShopOnline/WebRP/bin/Debug/net5.0/publish/wwwroot/assets/images/product\
+            rootDir = Path.Combine(rootDir, "WebRP");
+            rootDir = Path.Combine(rootDir, "bin");
+            rootDir = Path.Combine(rootDir, "Debug");
+            rootDir = Path.Combine(rootDir, "net5.0");
+            rootDir = Path.Combine(rootDir, "publish");
+            rootDir = Path.Combine(rootDir, "wwwroot");
+            rootDir = Path.Combine(rootDir, "assets");
+            rootDir = Path.Combine(rootDir, "images");
+            rootDir = Path.Combine(rootDir, "product");
+            return rootDir;
             #endregion 
-
         }
 
     }//end class UploadImageController
