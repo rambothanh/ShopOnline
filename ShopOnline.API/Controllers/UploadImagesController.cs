@@ -305,14 +305,18 @@ namespace ShopOnline.API.Controllers
             #endregion
 
             #region root in Production Unbuntu
-            //~ShopOnline/ShopOnline.API/bin/Debug/net5.0/publish/ShopOnline.API.dll
-            var rootDir = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+            // Link như vầy không có tác dụng với Linux:
+            // Vì có file dll bên trong, nhưng window thì được,
+            // Làm xảy ra lỗi tìm mấy ngày
+            // ~/publish/ShopOnline.API.dll/.. <-- Không có tác dụng lùi vào Parent folder trên Linux
+            //rootDir là ~ShopOnline/ShopOnline.API/bin/Debug/net5.0/publish
+            var rootDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             rootDir = Path.Combine(rootDir, "..");
             rootDir = Path.Combine(rootDir, "..");
             rootDir = Path.Combine(rootDir, "..");
             rootDir = Path.Combine(rootDir, "..");
-            rootDir = Path.Combine(rootDir, "..");
-            rootDir = Path.Combine(rootDir, ".."); // parent 6 level
+            rootDir = Path.Combine(rootDir, ".."); // parent 5 level
             //ShopOnline/WebRP/bin/Debug/net5.0/publish/wwwroot/assets/images/product\
             rootDir = Path.Combine(rootDir, "WebRP");
             rootDir = Path.Combine(rootDir, "bin");

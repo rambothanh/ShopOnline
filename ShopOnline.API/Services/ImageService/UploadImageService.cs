@@ -94,6 +94,10 @@ namespace ShopOnline.API.Services.ImageService
                 templateG.Clear(Color.White);
                 templateG.DrawImage(pickedImage, new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight), new System.Drawing.Rectangle(0, 0, pickedImage.Width, pickedImage.Height), System.Drawing.GraphicsUnit.Pixel);
                 Console.WriteLine(Path.Combine(newFileLocation, newFileName));
+                // Link như vầy không có tác dụng với Linux:
+                // Vì có file dll bên trong, nhưng window thì được,
+                // Làm xảy ra lỗi tìm mấy ngày --> Chỉnh lại ở Controller
+                // /var/www/shop.sofsog.com/html/ShopOnline/ShopOnline.API/bin/Debug/net5.0/publish/ShopOnline.API.dll/../../../../../../WebRP/bin/Debug/
                 templateImage.Save(Path.Combine(newFileLocation, newFileName), System.Drawing.Imaging.ImageFormat.Jpeg);
 
 
