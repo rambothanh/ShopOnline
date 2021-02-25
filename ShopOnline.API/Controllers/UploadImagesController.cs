@@ -199,14 +199,14 @@ namespace ShopOnline.API.Controllers
                 {
                     //Delete Image in folder server with oldest Id
                     await DeleteImage(productImage.Id);
-                    //Remove from database
+                    //Remove Image on database
                     _context.ProductImages.Remove(productImage);
                 }
             }
 
             if (countMainImage == 1) return;
             //--------------Create MainImage by Newest Id ProductImage----------
-            productImages = productImages.OrderByDescending(x => x.Id).ToList();
+            //productImages = productImages.OrderByDescending(x => x.Id).ToList();
             string fileNameAdd = Path.GetFileName(productImages.ElementAt(0).PictureUri);
             var pathSingle720x900 = Path.Combine(rootPath, "Single720x900");
             //var pathSingle720x900 = $"{rootPath}\\assets\\images\\product\\Single720x900";
@@ -229,7 +229,7 @@ namespace ShopOnline.API.Controllers
             };
             //Create new product on database
             _productService.CreateProductPictureUri(productImage384x480);
-            //Check and delete imaga Product
+            //Check and delete image Product
             await CheckAndDeleteOneImage(idProduct);
         }
 
