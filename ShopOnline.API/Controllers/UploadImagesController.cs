@@ -295,13 +295,31 @@ namespace ShopOnline.API.Controllers
         private string GetRootDirectoryOfWebRP()
         {
             #region root in Development Window
-            // //root Path
-            // //var rootPathTest = $"{_env.WebRootPath}" ---> wwwroot;
-            // ///Get: ///D:/Soft/Project/My Git Project/ShopOnline/ShopOnline.API/bin/Debug/net5.0/ShopOnline.API.dll
-            // var rootDir = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            // //Get: D:\Soft\Project\My Git Project\ShopOnline\ShopOnline.API\bin\Debug\net5.0
-            // //var parent = Directory.GetParent(applicationPath); <--Một cách lấy parent
-            // return Path.Combine(rootDir, @"..\..\..\..\.."); // parent 5 level
+
+            // // Link như vầy không có tác dụng với Linux:
+            // // Vì có file dll bên trong, nhưng window thì được,
+            // // Làm xảy ra lỗi tìm mấy ngày
+            // // ~/publish/ShopOnline.API.dll/.. <-- Không có tác dụng lùi vào Parent folder trên Linux
+            // //rootDir là ~ShopOnline/ShopOnline.API/bin/Debug/net5.0/publish
+            // var rootDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            // rootDir = Path.Combine(rootDir, "..");
+            // rootDir = Path.Combine(rootDir, "..");
+            // rootDir = Path.Combine(rootDir, "..");
+            // rootDir = Path.Combine(rootDir, "..");
+            // rootDir = Path.Combine(rootDir, ".."); // parent 5 level
+            // // Trên linux, Folder file tĩnh khui publish nằm ở /ShopOnline/WebRP/wwwroot
+            // // Không phải như ở Window, nằm ở: /ShopOnline/WebRP/bin/Debug/net5.0/publish/wwwroot
+            // //ShopOnline/WebRP/bin/Debug/net5.0/publish/wwwroot/assets/images/product\
+            // rootDir = Path.Combine(rootDir, "WebRP");
+            // rootDir = Path.Combine(rootDir, "bin");
+            // rootDir = Path.Combine(rootDir, "Debug");
+            // rootDir = Path.Combine(rootDir, "net5.0");
+            // rootDir = Path.Combine(rootDir, "publish");
+            // rootDir = Path.Combine(rootDir, "wwwroot");
+            // rootDir = Path.Combine(rootDir, "assets");
+            // rootDir = Path.Combine(rootDir, "images");
+            // rootDir = Path.Combine(rootDir, "product");
+
             #endregion
 
             #region root in Production Unbuntu
@@ -317,12 +335,10 @@ namespace ShopOnline.API.Controllers
             rootDir = Path.Combine(rootDir, "..");
             rootDir = Path.Combine(rootDir, "..");
             rootDir = Path.Combine(rootDir, ".."); // parent 5 level
+            // Trên linux, Folder file tĩnh khui publish nằm ở /ShopOnline/WebRP/wwwroot
+            // Không phải như ở Window, nằm ở: /ShopOnline/WebRP/bin/Debug/net5.0/publish/wwwroot
             //ShopOnline/WebRP/bin/Debug/net5.0/publish/wwwroot/assets/images/product\
             rootDir = Path.Combine(rootDir, "WebRP");
-            rootDir = Path.Combine(rootDir, "bin");
-            rootDir = Path.Combine(rootDir, "Debug");
-            rootDir = Path.Combine(rootDir, "net5.0");
-            rootDir = Path.Combine(rootDir, "publish");
             rootDir = Path.Combine(rootDir, "wwwroot");
             rootDir = Path.Combine(rootDir, "assets");
             rootDir = Path.Combine(rootDir, "images");
