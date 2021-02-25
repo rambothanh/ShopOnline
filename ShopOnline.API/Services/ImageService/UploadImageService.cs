@@ -11,7 +11,7 @@ namespace ShopOnline.API.Services.ImageService
         public void ResizeImageAndRatio(string origFileLocation, string newFileLocation, string origFileName, string newFileName, int newWidth, int newHeight)
         {
 
-            Image initImage = Image.FromFile(origFileLocation + "\\" + origFileName);
+            Image initImage = Image.FromFile(Path.Combine(origFileLocation, origFileName));
             int templateWidth = newWidth;
             int templateHeight = newHeight;
             double templateRate = double.Parse(templateWidth.ToString()) / templateHeight;
@@ -30,7 +30,7 @@ namespace ShopOnline.API.Services.ImageService
                     new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight),
                     new System.Drawing.Rectangle(0, 0, initImage.Width, initImage.Height),
                     System.Drawing.GraphicsUnit.Pixel);
-                templateImage.Save(newFileLocation + "\\" + newFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                templateImage.Save(Path.Combine(newFileLocation, newFileName), System.Drawing.Imaging.ImageFormat.Jpeg);
             }
             //Tỷ lệ ảnh nguồn và đich có sự chênh lệch
             else
@@ -93,7 +93,7 @@ namespace ShopOnline.API.Services.ImageService
                 templateG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 templateG.Clear(Color.White);
                 templateG.DrawImage(pickedImage, new System.Drawing.Rectangle(0, 0, templateWidth, templateHeight), new System.Drawing.Rectangle(0, 0, pickedImage.Width, pickedImage.Height), System.Drawing.GraphicsUnit.Pixel);
-                templateImage.Save(newFileLocation + "\\" + newFileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                templateImage.Save(Path.Combine(newFileLocation, newFileName), System.Drawing.Imaging.ImageFormat.Jpeg);
 
 
                 templateG.Dispose();
