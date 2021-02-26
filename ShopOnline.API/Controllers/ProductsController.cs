@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities.Products;
+using Models.Infrastructure;
 using ShopOnline.API.Models;
 using ShopOnline.API.Models.Helpers;
 using ShopOnline.API.Services.ProductService;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace ShopOnline.API.Controllers
@@ -28,15 +31,20 @@ namespace ShopOnline.API.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public ActionResult<IEnumerable<Product>> GetProducts([FromQuery] ProductParameters productParameters)
         {
-            return await _context.Products
-                                    .Include(x => x.ProductPrice)
-                                    .Include(x => x.ProductBrand)
-                                    .Include(x => x.ProductType)
-                                    .Include(x => x.ProductImages)
-                                    .AsSplitQuery()
-                                    .ToListAsync();
+            var products = _productService.GetProducts(productParameters);
+            var metadata = new
+            {
+                products.TotalCount,
+                products.PageSize,
+                products.CurrentPage,
+                products.TotalPages,
+                products.HasNext,
+                products.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+            return Ok(products);
         }
 
         // GET: api/Products/5

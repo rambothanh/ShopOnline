@@ -2,6 +2,8 @@ using ShopOnline.API.Models;
 using ShopOnline.API.Models.Helpers;
 using Models.Entities.Products;
 using Microsoft.EntityFrameworkCore;
+using Models.Infrastructure;
+using System.Linq;
 
 namespace ShopOnline.API.Services.ProductService
 {
@@ -14,15 +16,21 @@ namespace ShopOnline.API.Services.ProductService
             _context = context;
         }
 
-        
-        public void CreateProductPictureUri(ProductImage paraProductImage){
+        public PagedList<Product> GetProducts(ProductParameters productParameters)
+        {
+            return PagedList<Product>.ToPagedList(FindAllProducts().OrderBy(p => p.Id),
+                productParameters.PageNumber,
+                productParameters.PageSize);
+        }
+        public void CreateProductPictureUri(ProductImage paraProductImage)
+        {
             _context.ProductImages.Add(paraProductImage);
             _context.SaveChanges();
         }
 
         public void UpdateProductPictureUri(int idProductImage, ProductImage paraProductImage)
         {
-            if(idProductImage != paraProductImage.Id)
+            if (idProductImage != paraProductImage.Id)
                 throw new AppException("Bad Request");
 
             //Lấy productImage ra
@@ -30,7 +38,7 @@ namespace ShopOnline.API.Services.ProductService
 
             if (productImage == null)
                 throw new AppException("Image not found");
-            
+
             // update productImage properties if provided
             if (!string.IsNullOrWhiteSpace(paraProductImage.PictureUri))
                 productImage.PictureUri = paraProductImage.PictureUri;
@@ -39,7 +47,8 @@ namespace ShopOnline.API.Services.ProductService
             _context.SaveChanges();
         }
 
-        public  void UpdateProduct(int idProduct, Product productPara ){
+        public void UpdateProduct(int idProduct, Product productPara)
+        {
             if (idProduct != productPara.Id)
             {
                 throw new AppException("Wrong id Product");
@@ -52,9 +61,9 @@ namespace ShopOnline.API.Services.ProductService
             // update product properties if provided
             if (!string.IsNullOrWhiteSpace(productPara.Name))
                 product.Name = productPara.Name;
-            if (productPara.ProductBrandRefId!= 0)
+            if (productPara.ProductBrandRefId != 0)
                 product.ProductBrandRefId = productPara.ProductBrandRefId;
-            if (productPara.ProductTypeRefId!= 0)
+            if (productPara.ProductTypeRefId != 0)
                 product.ProductTypeRefId = productPara.ProductTypeRefId;
             if (!string.IsNullOrWhiteSpace(productPara.Description))
                 product.Description = productPara.Description;
@@ -62,7 +71,7 @@ namespace ShopOnline.API.Services.ProductService
                 product.ShortDescription = productPara.ShortDescription;
             // if (!string.IsNullOrWhiteSpace(productPara.PictureUri))
             //     product.PictureUri = productPara.PictureUri;
-            if (productPara.Quantity!= 0)
+            if (productPara.Quantity != 0)
                 product.Quantity = productPara.Quantity;
             // if (productPara.ProductPrice.CurrentPrice!= 0)
             //     product.ProductPrice.CurrentPrice = productPara.ProductPrice.CurrentPrice;
@@ -71,6 +80,14 @@ namespace ShopOnline.API.Services.ProductService
 
             _context.Entry(product).State = EntityState.Modified;
             _context.SaveChanges();
+        }
+        public IQueryable<Product> FindAllProducts()
+        {
+            return _context.Products.Include(x => x.ProductPrice)
+                                    .Include(x => x.ProductBrand)
+                                    .Include(x => x.ProductType)
+                                    .Include(x => x.ProductImages)
+                                    .AsSplitQuery();
         }
     }
 }
