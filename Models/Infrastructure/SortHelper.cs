@@ -1,6 +1,8 @@
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+//using System.Linq.Dynamic;
 
 namespace Models.Infrastructure
 {
@@ -30,10 +32,11 @@ namespace Models.Infrastructure
 
                 if (objectProperty == null)
                     continue;
-
-                var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
+                //Order By Format: Property, Property2 ASC, Property2 DESC"
+                var sortingOrder = param.EndsWith(" desc") ? "DESC" : "ASC";
 
                 orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
+                
             }
 
             var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');

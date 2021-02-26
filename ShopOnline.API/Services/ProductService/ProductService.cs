@@ -10,17 +10,20 @@ namespace ShopOnline.API.Services.ProductService
     public class ProductService : IProductService
     {
         private ShopOnlineContext _context;
+        private ISortHelper<Product> _sortHelper;
 
-        public ProductService(ShopOnlineContext context)
+        public ProductService(ShopOnlineContext context, ISortHelper<Product> sortHelper)
         {
             _context = context;
+            _sortHelper = sortHelper;
         }
 
         public PagedList<Product> GetProducts(ProductParameters productParameters)
         {
             var products = FindAllProducts();
             SearchByName(ref products, productParameters.ProductName);
-            return PagedList<Product>.ToPagedList(products.OrderBy(p => p.Id),
+            products = _sortHelper.ApplySort(products, productParameters.OrderBy);
+            return PagedList<Product>.ToPagedList(products,
                 productParameters.PageNumber,
                 productParameters.PageSize);
         }

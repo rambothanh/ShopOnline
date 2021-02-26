@@ -19,7 +19,8 @@ using ShopOnline.API.Models.Helpers;
 using ShopOnline.API.Services.UserService;
 using ShopOnline.API.Services.ImageService;
 using ShopOnline.API.Services.ProductService;
-
+using Models.Infrastructure;
+using Models.Entities.Products;
 
 namespace ShopOnline.API
 {
@@ -94,6 +95,7 @@ namespace ShopOnline.API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUploadImageService, UploadImageService>();
+            services.AddScoped<ISortHelper<Product>, SortHelper<Product>>();
 
             //configure các đối tượng được gõ trong file AppSettings.json/AppSettings
             var appSettingsSection = _configuration.GetSection("AppSettings");

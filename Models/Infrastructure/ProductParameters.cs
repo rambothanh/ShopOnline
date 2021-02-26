@@ -5,7 +5,7 @@ namespace Models.Infrastructure
         public string ProductName { get; set; }
         public ProductParameters()
         {
-            OrderBy = "name";
+            OrderBy = "Name";
 
         }
     }
