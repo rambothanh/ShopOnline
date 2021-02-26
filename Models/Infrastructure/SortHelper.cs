@@ -33,15 +33,15 @@ namespace Models.Infrastructure
                 if (objectProperty == null)
                     continue;
                 //Order By Format: Property, Property2 ASC, Property2 DESC"
-                var sortingOrder = param.EndsWith(" desc") ? "DESC" : "ASC";
+                var sortingOrder = param.ToLower().EndsWith(" desc") ? "DESC" : "ASC";
 
                 orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
                 
             }
 
             var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
-            //EX. OrderBy("Property1 descending,Property2 ascending");
-            // owners.OrderBy(x => x.Name).ThenByDescending(o => o.DateOfBirth);
+            //EX. OrderBy("Property1 ASC,Property2 DESC");
+            // entities.OrderBy(x => x.Name).ThenByDescending(o => o.DateOfBirth);
             return entities.OrderBy(orderQuery);
         }
 
