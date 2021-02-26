@@ -18,7 +18,9 @@ namespace ShopOnline.API.Services.ProductService
 
         public PagedList<Product> GetProducts(ProductParameters productParameters)
         {
-            return PagedList<Product>.ToPagedList(FindAllProducts().OrderBy(p => p.Id),
+            var products = FindAllProducts();
+            SearchByName(ref products, productParameters.ProductName);
+            return PagedList<Product>.ToPagedList(products.OrderBy(p => p.Id),
                 productParameters.PageNumber,
                 productParameters.PageSize);
         }
@@ -87,7 +89,15 @@ namespace ShopOnline.API.Services.ProductService
                                     .Include(x => x.ProductBrand)
                                     .Include(x => x.ProductType)
                                     .Include(x => x.ProductImages)
-                                    .AsSplitQuery();
+                                    .AsSplitQuery()
+                                    .AsNoTracking();
+        }
+        private void SearchByName(ref IQueryable<Product> products, string productName = null)
+        {
+            if (string.IsNullOrWhiteSpace(productName))
+                return;
+
+            products = products.Where(p => p.Name.ToLower().Contains(productName.Trim().ToLower()));
         }
     }
 }
