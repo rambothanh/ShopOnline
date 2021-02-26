@@ -34,6 +34,7 @@ namespace ShopOnline.API.Controllers
         public ActionResult<IEnumerable<Product>> GetProducts([FromQuery] ProductParameters productParameters)
         {
             var products = _productService.GetProducts(productParameters);
+            products.OrderBy("Id descending");
             var metadata = new
             {
                 products.TotalCount,

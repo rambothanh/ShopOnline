@@ -17,5 +17,9 @@ namespace Models.Infrastructure
                 _pageSize = (value > maxPageSize) ? maxPageSize : value;
             }
         }
+        public string OrderBy { get; set; }
+        //public string OrderByDescending { get; set; }
+
+
     }
 }
