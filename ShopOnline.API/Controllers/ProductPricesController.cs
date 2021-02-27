@@ -25,7 +25,7 @@ namespace ShopOnline.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductPrice>>> GetProductPrices()
         {
-            return await _context.ProductPrices.ToListAsync();
+            return await _context.ProductPrices.OrderBy(p=>p.Id).ToListAsync();
         }
 
         // GET: api/ProductPrices/5

@@ -39,6 +39,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         const baseAPI = @Json.Serialize(@Configuration.GetSection("ApiUrls").GetSection("baseAPI").Value);
+        function isEmpty(value) {
+            return (
+                // null or undefined
+                (value == null) ||
+
+                // has length and it's zero
+                (value.hasOwnProperty('length') && value.length === 0) ||
+
+                // is an Object and has no keys
+                (value.constructor === Object && Object.keys(value).length === 0)
+            )
+        }
     </script>
 </head>
 

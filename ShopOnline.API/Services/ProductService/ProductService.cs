@@ -23,6 +23,9 @@ namespace ShopOnline.API.Services.ProductService
             var products = FindAllProducts();
             SearchByName(ref products, productParameters.ProductName);
             products = _sortHelper.ApplySort(products, productParameters.OrderBy);
+            //SQLite không sắp xếp được Decimal
+            //products = products.OrderBy(p => p.ProductPrice.CurrentPrice);
+            
             return PagedList<Product>.ToPagedList(products,
                 productParameters.PageNumber,
                 productParameters.PageSize);

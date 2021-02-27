@@ -33,6 +33,7 @@ namespace ShopOnline.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetProducts([FromQuery] ProductParameters productParameters)
         {
+
             var products = _productService.GetProducts(productParameters);
             //products.OrderBy("Id descending");
             var metadata = new
@@ -47,6 +48,7 @@ namespace ShopOnline.API.Controllers
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
             //Cho phép Client read X-Pagination in Headers
             Response.Headers.Add("Access-Control-Expose-Headers", "X-Pagination");
+            
             return Ok(products);
         }
 

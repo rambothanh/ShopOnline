@@ -2,7 +2,7 @@
 //#region -------- Config
 let pageSize = 6;
 let totalShowPage = 5;
-let defaultOrderby = "id desc";
+let defaultOrderby = "ProductPrice";
 //#endregion ----- Config
 //#region -------- AJAX get many product function 
 function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
@@ -326,25 +326,40 @@ $(document).ready(function () {
 
 });
 //#endregion ----- Run Ajax first load
-//#region -------- Click Page 
+//#region -------- Click Page and search
+//Click page number
 $(document).on('click', 'li[page]', function () {
     let clickPage = $(this).attr("page");
     if (clickPage == pagination_ShopGrid3_Global.CurrentPage) return;
     ajaxGetManyProduct("", clickPage, pageSize, defaultOrderby);
 });
+//Click next page
 $(document).on('click', 'li.page-item.next', function () {
     if (pagination_ShopGrid3_Global.HasNext) {
 
         ajaxGetManyProduct("", pagination_ShopGrid3_Global.CurrentPage + 1, pageSize, defaultOrderby);
     }
 });
+//Click Prev page
 $(document).on('click', 'li.page-item.prev', function () {
     if (pagination_ShopGrid3_Global.HasPrevious) {
 
         ajaxGetManyProduct("", pagination_ShopGrid3_Global.CurrentPage - 1, pageSize, defaultOrderby);
     }
 });
-//#endregion ----- Click Page
+//Search
+$(document).on('click', 'button:has(i.icon-search)', function () {
+    var searchDesktop = $($(this).prev()[0]).val();
+    var searchMobile = $($(this).prev()[0]).val();
+
+    if (!isEmpty(searchDesktop)) {
+        ajaxGetManyProduct(searchDesktop, 1, pageSize, "Name");
+    } else if (!isEmpty(searchMobile)) {
+        ajaxGetManyProduct(searchMobile, 1, pageSize, "Name");
+    }
+});
+
+//#endregion ----- Click Page and search
 //#region -------- AJAX for Single Page (one Product by ID)
 //if being shopSingle:
 if (typeof idProduct_shopSingle_global !== "undefined") {
