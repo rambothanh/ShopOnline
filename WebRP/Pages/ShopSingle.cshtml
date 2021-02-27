@@ -11,8 +11,8 @@
         <div class="page-banner-content text-center">
             <h2 class="title">Shop Single</h2>
             <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="shop-grid-left-sidebar.html">Shop</a></li>
+                <li class="breadcrumb-item"><a href="~/index">Home</a></li>
+                <li class="breadcrumb-item"><a href="~/ShopGrid3">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Shop Single</li>
             </ol>
         </div>
@@ -34,26 +34,22 @@
                     <div id="gallery_01" class="shop-single-thumb-image shop-thumb-active swiper-container">
                         <div class="swiper-wrapper">
                             <div id="Image1" class="swiper-slide single-product-thumb">
-                                <a class="active" href="javascript:void(0);"
-                                    data-image="">
+                                <a class="active" href="javascript:void(0);" data-image="">
                                     <img src="" alt="">
                                 </a>
                             </div>
                             <div id="Image2" class=" swiper-slide single-product-thumb">
-                                <a href="javascript:void(0);"
-                                    data-image="">
+                                <a href="javascript:void(0);" data-image="">
                                     <img src="" alt="">
                                 </a>
                             </div>
                             <div id="Image3" class="swiper-slide single-product-thumb">
-                                <a href="javascript:void(0);"
-                                    data-image="">
+                                <a href="javascript:void(0);" data-image="">
                                     <img src="" alt="">
                                 </a>
                             </div>
                             <div id="Image4" class="swiper-slide single-product-thumb">
-                                <a href="javascript:void(0);"
-                                    data-image="">
+                                <a href="javascript:void(0);" data-image="">
                                     <img src="" alt="">
                                 </a>
                             </div>
@@ -345,8 +341,8 @@
 
 <script>
     //Get idProduct for ajaxGetProduct.js use
-    var idProduct_shopSingle_global = @Model.Id; 
-    
+    var idProduct_shopSingle_global = @Model.Id;
+
     let domainName = window.location.origin + "/";
     //Add background for banner
     $("div.page-banner").css("background-image", "url(" + domainName + "assets/images/testimonial-bg.jpg)");

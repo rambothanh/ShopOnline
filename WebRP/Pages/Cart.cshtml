@@ -9,7 +9,7 @@
         <div class="page-banner-content text-center">
             <h2 class="title">Your Shopping Cart</h2>
             <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="~/index">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Your Shopping Cart</li>
             </ol>
         </div>
@@ -234,6 +234,12 @@
 <script src="~/assets/js/cart.js"></script>
 @* Các đoạn script bên dưới có sử dụng một số function của cart.js *@
 <script>
+    //Redirect to EmptyCart when cart empty
+    let listInLocal = JSON.parse(localStorage.getItem("listCart"));
+    //Check null or empty or undefined
+    if (isEmpty(listInLocal)) {
+        window.location.href = window.location.origin + "/EmptyCart";
+    }
     //Run update when first load
     Updatelist("listCart");
     //--------------DELETE PRODUCT IN Page -------------------

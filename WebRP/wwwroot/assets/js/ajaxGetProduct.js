@@ -290,6 +290,8 @@ if (typeof idProduct_shopSingle_global !== "undefined") {
             title.text(product.name); //add to title
             //Change title to Product name
             $("div.page-banner-content h2.title").text(product.name);//add to panner
+            //<li class="breadcrumb-item active" aria-current="page">Shop Single</li>
+            $("div.page-banner-content li.breadcrumb-item.active").text(product.name);//add to panner
             $("title").text(product.name + " | " + domainName);//add to head
             //Add Price: div.thumb-price
             var price = title.next().next().next();
