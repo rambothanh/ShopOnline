@@ -34,9 +34,9 @@ namespace Models.Infrastructure
                     continue;
                 //Order By Format: Property, Property2 ASC, Property2 DESC"
                 var sortingOrder = param.ToLower().EndsWith(" desc") ? "DESC" : "ASC";
-
+                //Console.WriteLine(sortingOrder);
                 orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
-                
+
             }
 
             var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');

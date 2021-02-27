@@ -1,21 +1,74 @@
-﻿//#region -------- AJAX get many product
-$(document).ready(function () {
+﻿let pagination_ShopGrid3_Global = {};
+//#region -------- Config
+let pageSize = 6;
+let totalShowPage = 5;
+let defaultOrderby = "id desc";
+//#endregion ----- Config
+//#region -------- AJAX get many product function 
+function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
 
-    // if (!sessionStorage.hasOwnProperty("token")) {
-    //    window.location.href = "Chuyển qua trang đăng nhập";
-    //} 
-    var options = {};
-    options.url = baseAPI + "Products";
+    let options = {};
+    let qProductName = "";
+    let qPageNumber = "";
+    let qPageSize = "";
+    let qOrderBy = "";
+
+    if (!isEmpty(ProductName)) qProductName = 'ProductName=' + ProductName;
+    if (!isEmpty(PageNumber)) qPageNumber = 'PageNumber=' + PageNumber;
+    if (!isEmpty(PageSize)) qPageSize = 'PageSize=' + PageSize;
+    if (!isEmpty(OrderBy)) qOrderBy = 'OrderBy=' + OrderBy;
+    //EX. /Products?ProductName=a&PageNumber=1&PageSize=5&OrderBy=id
+    options.url = baseAPI
+        + "Products?"
+        + qProductName + "&"
+        + qPageNumber + "&"
+        + qPageSize + "&"
+        + qOrderBy;
+
     options.type = "GET";
     //options.beforeSend = function (xhr) {
     //    xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
     //    $("h3.message").html("Wait...");
     //}; 
     options.dataType = "json";
-    options.success = function (data) {
-        //Add to New Product, Quick View (index page )and Get Array <div class="single-product">
+    options.success = function (data, status, xhr) {
+        //#region -------- Pagination
+        //Get Pagination
+        //X-Pagination: {"TotalCount":10,"PageSize":1,"CurrentPage":5,"TotalPages":10,"HasNext":true,"HasPrevious":true}
+        let pagination = JSON.parse(xhr.getResponseHeader("X-Pagination"));
+        pagination_ShopGrid3_Global = pagination;
+        totalShowPage = totalShowPage <= pagination.TotalPages ? totalShowPage : pagination.TotalPages;
+        let totalLeftPage = Math.round(totalShowPage / 2 - 1); //=2
+        let totalRightPage = totalShowPage - totalLeftPage - 1;
+        let firstPage = 1; // Ex. 
+        //Nếu CurrentPage nhỏ hơn số lượng page bên trái thì firstPage =1;
+        //Xét trường hợp lớn hơn 
+        if (pagination.CurrentPage > totalLeftPage) {
+            //Trường hợp CurrentPage lớn hơn (pagination.TotalPages - totalRightPage)
+            //Thì firstPage = TotalPages - totalShowPage - 1
+            if (pagination.CurrentPage >= (pagination.TotalPages - totalRightPage)) {
+                firstPage = pagination.TotalPages - totalShowPage + 1
+            } else {
+                firstPage = pagination.CurrentPage - totalLeftPage;
+            }
+        }
+        let list_li_page = `<li class="page-item prev"><a class="page-link prev">Prev</a></li>`;
+        for (let i = firstPage; i <= firstPage + totalShowPage - 1; ++i) {
+            let activeClass = i === pagination.CurrentPage ? " active" : "";
+            list_li_page += `<li page ="` + i + `" class="page-item"><a class="page-link` + activeClass + `">` + i + `</a></li>`;
+        }
+        list_li_page += `<li class="page-item next"><a class="page-link next"">Next</a></li>`;
+        $("div.page-pagination ul.pagination").text("");
+        $("div.page-pagination ul.pagination").append(list_li_page);
+        //#endregion ----- Pagination
+
+        // Add to New Product, Quick View (index page )and Get Array <div class="single-product">
         let arrDivSingleProduct = [];
         let root = window.location.origin + "/";
+        //quick View
+        //$("div.main-wrapper").text("");
+        //list View
+        $("div#list").text("");
         data.forEach(function (product) {
             //Check quantity of product
             if (product.quantity === 0) {
@@ -23,6 +76,7 @@ $(document).ready(function () {
             } else {
                 var stickerNew = `<span class="sticker-new label-sale">-` + product.productPrice.salePercent + `%</span>`;
             }
+
             //MainProductImage 
             var mainProductImage = "";
             product.productImages.forEach(function (productImage) {
@@ -31,6 +85,7 @@ $(document).ready(function () {
                     //break; JAVASCRIPT can't break forEach
                 }
             });
+
             //#region Create div class="single-product
             let divSingleProduct = `
                     <div class="single-product">
@@ -69,7 +124,7 @@ $(document).ready(function () {
                                 <span class="old-price">$`+ product.productPrice.oldPrice + `</span>
                             </div>
                         </div>
-                  </div>`;
+                </div>`;
             //#endregion
             //#region Create <div class="modal fade" id="Modal`+ product.id + `">
             var quickView = `
@@ -132,7 +187,7 @@ $(document).ready(function () {
                 </div>`;
             //#endregion Create quick view
             //Add quickView  (index page and Grid 3 page)
-            $("div.main-wrapper").prepend(quickView);
+            $("div.main-wrapper").append(quickView);
             //Add to listDivSingleProduct
             arrDivSingleProduct.push(divSingleProduct);
             //#region Create and Add product list view (Grid 3 page)
@@ -180,31 +235,32 @@ $(document).ready(function () {
                         </ul>
                     </div>
                 </div>`;
-                $("div#list").prepend(divProductList);
+                $("div#list").append(divProductList);
             }
 
             //#endregion Create product list view
         });
+
         let arrLen = arrDivSingleProduct.length;
         //#region Add to New Products (index page) and Related Products (on ShopSingle)
         let newProducts = $("div.new-product-area div.swiper-wrapper");
         if (newProducts.length > 0) {
             for (let i = 0; i < arrLen; i++) {
-                //#region Create <div class="swiper-slide">
+                //Create <div class="swiper-slide">
                 let divswiperSlide = document.createElement("div");
                 divswiperSlide.className = "swiper-slide";
                 divswiperSlide.innerHTML = arrDivSingleProduct[i];
-                //#endregion
+
                 //Add to New Product on Index page
-                newProducts.prepend(divswiperSlide);
+                newProducts.append(divswiperSlide);
             }
         }
-        //#endregion Add to New Product (index page)
+        //#endregion Add to New Products (index page) and Related Products (on ShopSingle)
         //#region Add to Featured (index page)
         //Chỉ lấy 10 sản phẩm đầu để demo
         if ($("#tab1 div.swiper-wrapper").length > 0) {
             for (let i = 0; i < 10 / 2; i++) {
-                //#region Create <div class="swiper-slide">
+                // Create <div class="swiper-slide">
                 let divswiperSlide = document.createElement("div");
                 let divswiperSlideReverse = document.createElement("div");
                 let divswiperSlideBestSeller = document.createElement("div");
@@ -215,7 +271,7 @@ $(document).ready(function () {
                 divswiperSlide.innerHTML = arrDivSingleProduct[i] + arrDivSingleProduct[10 - 1 - i];
                 divswiperSlideReverse.innerHTML = arrDivSingleProduct[10 - 1 - i] + arrDivSingleProduct[i];
                 divswiperSlideBestSeller.innerHTML = arrDivSingleProduct[2 * (i + 1) - 1] + arrDivSingleProduct[2 * (i + 1) - 2];
-                //#endregion
+
                 //Add New in Featured (index page)
                 $("#tab1 div.swiper-wrapper").prepend(divswiperSlide);
                 //Add Featured in Featured (index page)
@@ -225,11 +281,11 @@ $(document).ready(function () {
             }
         }
         //#endregion Add to Featured (index page)
-        //#region Add Gird view and List View (Grid 3 page)
+        //#region Add Gird  (Grid 3 page)
         let grid3 = $("#grid > div");
         //If being Grid3 page
         if (grid3.length > 0) {
-
+            grid3.text("");
             for (let i = 0; i < arrLen; i++) {
 
                 //Create <div class="col-lg-4 col-sm-6">
@@ -237,7 +293,7 @@ $(document).ready(function () {
                 divcollg4colsm6.className = "col-lg-4 col-sm-6";
                 divcollg4colsm6.innerHTML = arrDivSingleProduct[i];
                 //add to ("#grid > div") in Grid 3 page
-                grid3.prepend(divcollg4colsm6);
+                grid3.append(divcollg4colsm6);
             }
         }
         //#endregion Add Gird view and List View (Grid 3 page)
@@ -250,6 +306,7 @@ $(document).ready(function () {
         //     sessionStorage.removeItem("message");
         // }
         //#endregion Error 
+
     };
     options.error = function (xhr) {
         //if (xhr.status == 401) {
@@ -260,10 +317,36 @@ $(document).ready(function () {
     }
     //Start call API
     $.ajax(options);
+};
+//#endregion ----- Function AJAX get many product
+//#region -------- Run Ajax first load
+$(document).ready(function () {
+    //Get Product and add to gird and list and quick view
+    ajaxGetManyProduct("", 1, pageSize, defaultOrderby);
+
 });
-//#endregion ----- AJAX get many product
-//#region -------- AJAX for Single Page (one Product by ID) ---------------
-// if being shopSingle:
+//#endregion ----- Run Ajax first load
+//#region -------- Click Page 
+$(document).on('click', 'li[page]', function () {
+    let clickPage = $(this).attr("page");
+    if (clickPage == pagination_ShopGrid3_Global.CurrentPage) return;
+    ajaxGetManyProduct("", clickPage, pageSize, defaultOrderby);
+});
+$(document).on('click', 'li.page-item.next', function () {
+    if (pagination_ShopGrid3_Global.HasNext) {
+
+        ajaxGetManyProduct("", pagination_ShopGrid3_Global.CurrentPage + 1, pageSize, defaultOrderby);
+    }
+});
+$(document).on('click', 'li.page-item.prev', function () {
+    if (pagination_ShopGrid3_Global.HasPrevious) {
+
+        ajaxGetManyProduct("", pagination_ShopGrid3_Global.CurrentPage - 1, pageSize, defaultOrderby);
+    }
+});
+//#endregion ----- Click Page
+//#region -------- AJAX for Single Page (one Product by ID)
+//if being shopSingle:
 if (typeof idProduct_shopSingle_global !== "undefined") {
     //Get domain name with UpperCase first letter
     let domainName = window.location.hostname;
@@ -284,6 +367,7 @@ if (typeof idProduct_shopSingle_global !== "undefined") {
         //     }; 
         options.dataType = "json";
         options.success = function (product) {
+
             //Handle this
             //product.name;
             var title = $("div.row.justify-content-center h3");
@@ -383,4 +467,4 @@ if (typeof idProduct_shopSingle_global !== "undefined") {
     //console.log(model);
     //console.log(shopSingleModel_global.Id);
 }
-//#endregion ------------- AJAX for Single Page ---------------
+//#endregion ----- AJAX for Single Page (one Product by ID)
