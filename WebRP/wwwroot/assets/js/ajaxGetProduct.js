@@ -2,7 +2,7 @@
 //#region -------- Config
 let pageSize = 6;
 let totalShowPage = 5;
-let defaultOrderby = "ProductPrice";
+let defaultOrderby = "Id desc";
 //#endregion ----- Config
 //#region -------- AJAX get many product function 
 function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
@@ -36,39 +36,59 @@ function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
         //Get Pagination
         //X-Pagination: {"TotalCount":10,"PageSize":1,"CurrentPage":5,"TotalPages":10,"HasNext":true,"HasPrevious":true}
         let pagination = JSON.parse(xhr.getResponseHeader("X-Pagination"));
+        //Cho vào biến global để sử dụng bên ngoài
         pagination_ShopGrid3_Global = pagination;
+        //Nếu số lượng Page trong database nhỏ hơn totalShowPage thì số nhỏ 
         totalShowPage = totalShowPage <= pagination.TotalPages ? totalShowPage : pagination.TotalPages;
-        let totalLeftPage = Math.round(totalShowPage / 2 - 1); //=2
+        //Bên trái của page hiện tại luôn luôn có totalLeftPage page 
+        let totalLeftPage = Math.round(totalShowPage / 2 - 1); //EX.=2
+        //Bên phải của page hiện tại luôn luôn có totalRightPage page
         let totalRightPage = totalShowPage - totalLeftPage - 1;
-        let firstPage = 1; // Ex. 
+        //Tính toán để hiển thị page đầu tiên
         //Nếu CurrentPage nhỏ hơn số lượng page bên trái thì firstPage =1;
+        let firstPage = 1; // Ex. 
+        
         //Xét trường hợp lớn hơn 
         if (pagination.CurrentPage > totalLeftPage) {
             //Trường hợp CurrentPage lớn hơn (pagination.TotalPages - totalRightPage)
-            //Thì firstPage = TotalPages - totalShowPage - 1
+            //Thì firstPage = TotalPages - totalShowPage - 1 (tức cố định firstPage từ vị trí này)
             if (pagination.CurrentPage >= (pagination.TotalPages - totalRightPage)) {
                 firstPage = pagination.TotalPages - totalShowPage + 1
+                //Trường hợp bình thường cứ lấy page hiện tại trừ số page muốn hiện thị ở bên trái của nó
             } else {
+                
                 firstPage = pagination.CurrentPage - totalLeftPage;
             }
         }
+
+        //Create html list_li_page
         let list_li_page = `<li class="page-item prev"><a class="page-link prev">Prev</a></li>`;
         for (let i = firstPage; i <= firstPage + totalShowPage - 1; ++i) {
             let activeClass = i === pagination.CurrentPage ? " active" : "";
             list_li_page += `<li page ="` + i + `" class="page-item"><a class="page-link` + activeClass + `">` + i + `</a></li>`;
         }
         list_li_page += `<li class="page-item next"><a class="page-link next"">Next</a></li>`;
+        
+        //add Page
         $("div.page-pagination ul.pagination").text("");
         $("div.page-pagination ul.pagination").append(list_li_page);
+
+        //Show Page info
+        let toNumber = (pagination.CurrentPage * PageSize);
+        let fromNumber = toNumber - PageSize + 1;
+        toNumber = toNumber >= pagination.TotalCount ? pagination.TotalCount : toNumber;
+        $("div.top-bar-page-amount p").text("Showing " + fromNumber + " - " + toNumber +" of " + pagination.TotalCount+" result");
+
         //#endregion ----- Pagination
 
         // Add to New Product, Quick View (index page )and Get Array <div class="single-product">
         let arrDivSingleProduct = [];
+        //let arrDivModalQuickView = [];
         let root = window.location.origin + "/";
-        //quick View
-        //$("div.main-wrapper").text("");
-        //list View
+        //clear list View
         $("div#list").text("");
+        //clear modal
+        $("div.main-wrapper div#modal").text("");
         data.forEach(function (product) {
             //Check quantity of product
             if (product.quantity === 0) {
@@ -187,7 +207,7 @@ function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
                 </div>`;
             //#endregion Create quick view
             //Add quickView  (index page and Grid 3 page)
-            $("div.main-wrapper").append(quickView);
+            $("div.main-wrapper div#modal").append(quickView);
             //Add to listDivSingleProduct
             arrDivSingleProduct.push(divSingleProduct);
             //#region Create and Add product list view (Grid 3 page)
@@ -321,9 +341,12 @@ function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
 //#endregion ----- Function AJAX get many product
 //#region -------- Run Ajax first load
 $(document).ready(function () {
+    
+    //Nếu là index page thì pageSize =10
+    if ($("#tab1 div.swiper-wrapper").length > 0) pageSize = 10;
     //Get Product and add to gird and list and quick view
     ajaxGetManyProduct("", 1, pageSize, defaultOrderby);
-
+    
 });
 //#endregion ----- Run Ajax first load
 //#region -------- Click Page and search
@@ -349,14 +372,33 @@ $(document).on('click', 'li.page-item.prev', function () {
 });
 //Search
 $(document).on('click', 'button:has(i.icon-search)', function () {
+    
+    //if not ShopGrid3
+    if ($("div.page-banner-content.text-center h2.title:contains('Products')").length <= 0) {
+        if (confirm("Go to Products Page to Search")) {
+            // Go to shopgrid3 page
+            window.location.href = window.location.origin + "/shopgrid3";
+            return;
+        } else {
+            return;
+        }
+        
+    }
     var searchDesktop = $($(this).prev()[0]).val();
-    var searchMobile = $($(this).prev()[0]).val();
-
+    var searchMobile = $($(this).prev()[1]).val();
+    
     if (!isEmpty(searchDesktop)) {
         ajaxGetManyProduct(searchDesktop, 1, pageSize, "Name");
+        
     } else if (!isEmpty(searchMobile)) {
         ajaxGetManyProduct(searchMobile, 1, pageSize, "Name");
     }
+});
+
+//Order
+$(document).on('change', 'select.sorter', function (evt, params) {
+    //alert($(this).val());
+    ajaxGetManyProduct("", 1, pageSize, $(this).val());
 });
 
 //#endregion ----- Click Page and search

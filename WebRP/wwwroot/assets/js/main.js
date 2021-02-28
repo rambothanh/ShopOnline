@@ -2,7 +2,21 @@
     "use strict";
 
 
-    
+    //Search
+    $(document).on('click', 'button:has(i.icon-search)', function () {
+
+        //if not ShopGrid3
+        if ($("div.page-banner-content.text-center h2.title:contains('Products')").length <= 0) {
+            if (confirm("Go to Products Page to Search")) {
+                // Go to shopgrid3 page
+                window.location.href = window.location.origin + "/shopgrid3";
+                return;
+            } else {
+                return;
+            }
+        }
+
+    });
 
     /*--
         Header Search
