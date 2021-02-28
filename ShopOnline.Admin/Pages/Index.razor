@@ -233,7 +233,7 @@
             foreach (var file in selectedFiles)
             {
 
-                Stream stream = file.OpenReadStream();
+                Stream stream = file.OpenReadStream(5120000); //Tối đa khoảng 5Mb
                 MemoryStream ms = new MemoryStream();
                 await stream.CopyToAsync(ms);
                 stream.Close();
