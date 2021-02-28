@@ -256,46 +256,46 @@ else
     @* End choosed image *@
 
     @* OnSubmit upload image *@
-    private async void OnSubmitUploadImage()
+private async void OnSubmitUploadImage()
+{
+    // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
+    // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
+    if (selectedFiles != null)
     {
-        // Bấm upload image 1 lần, bấm tiếp lần nữa bị lỗi
-        // Chưa tìm ra chỗ lỗi, xử lý bằng cách disable
-        if (selectedFiles != null)
+        submitingUploadImage = true;
+
+        // Handle file upload and upload file
+        foreach (var file in selectedFiles)
         {
-            submitingUploadImage = true;
-                        
-            // Handle file upload and upload file
-            foreach (var file in selectedFiles)
-            {
 
-                Stream stream = file.OpenReadStream();
-                MemoryStream ms = new MemoryStream();
-                await stream.CopyToAsync(ms);
-                stream.Close();
-                //Create uploadImage
-                Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
-                uploadImage.ProductId = producId;
-                uploadImage.FileName = file.Name;
-                uploadImage.FileContent = ms.ToArray();
-                ms.Close();
+            Stream stream = file.OpenReadStream(5120000); //Tối đa khoảng 5Mb
+            MemoryStream ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            stream.Close();
+            //Create uploadImage
+            Models.Entities.Products.UploadImage uploadImage = new Models.Entities.Products.UploadImage();
+            uploadImage.ProductId = producId;
+            uploadImage.FileName = file.Name;
+            uploadImage.FileContent = ms.ToArray();
+            ms.Close();
 
-                await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
-                    ("UploadImage", uploadImage);
+            await Http.PostAsJsonAsync<Models.Entities.Products.UploadImage>
+                ("UploadImage", uploadImage);
 
-            }
-
-
-            messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
-            //Get Image to show
-            productImages = await Http.GetFromJsonAsync<List<ProductImage>>($"UploadImage/{producId}");
-            
-            //Vô hiệu hoá nút Upload
-            disableUploadImage = true;
-            //Tắt hiệu ứng loading
-            submitingUploadImage = false;
-            this.StateHasChanged();
         }
+
+
+        messageImage = $"<span class='badge badge-pill badge-success'>{selectedFiles.Count} image(s)</span> uploaded";
+        //Get Image to show
+        productImages = await Http.GetFromJsonAsync<List<ProductImage>>($"UploadImage/{producId}");
+
+        //Vô hiệu hoá nút Upload
+        disableUploadImage = true;
+        //Tắt hiệu ứng loading
+        submitingUploadImage = false;
+        this.StateHasChanged();
     }
+}
     @* End OnSubmit upload image *@
 
     @* Delete Product*@
