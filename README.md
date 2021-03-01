@@ -10,6 +10,9 @@ Use AJAX to call the ShopOnline.API project to get product information to displa
 Ongoing other features
 ## Technology
 C#, .Net 5, APIs, Plazor WebAssembly, Razor page, AJAX, Jquery, bootstrap, HTML, CSS, … Deploy lên VPS Unbuntu 18.04
-## Demo:
-https://vnexpress.sofsog.com/
+## Link Demo:
+#### Client: 
+https://shop.sofsog.com/   
+#### Admin: 
+https://shop.sofsog.com/admin 
 (Note: For Demo purposes, database will automatically reset every hour at 18th minute)
