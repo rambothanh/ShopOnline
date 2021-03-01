@@ -16,3 +16,7 @@ https://shop.sofsog.com/
 #### Admin: 
 https://shop.sofsog.com/admin 
 (Note: For Demo purposes, database will automatically reset every hour at 18th minute)
+#### API:
+https://shopapi.sofsog.com/swagger/index.html
+
+
