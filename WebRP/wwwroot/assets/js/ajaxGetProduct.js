@@ -47,16 +47,16 @@ function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
         //Tính toán để hiển thị page đầu tiên
         //Nếu CurrentPage nhỏ hơn số lượng page bên trái thì firstPage =1;
         let firstPage = 1; // Ex. 
-        
+
         //Xét trường hợp lớn hơn 
         if (pagination.CurrentPage > totalLeftPage) {
             //Trường hợp CurrentPage lớn hơn (pagination.TotalPages - totalRightPage)
             //Thì firstPage = TotalPages - totalShowPage - 1 (tức cố định firstPage từ vị trí này)
             if (pagination.CurrentPage >= (pagination.TotalPages - totalRightPage)) {
-                firstPage = pagination.TotalPages - totalShowPage + 1
+                firstPage = pagination.TotalPages - totalShowPage + 1;
                 //Trường hợp bình thường cứ lấy page hiện tại trừ số page muốn hiện thị ở bên trái của nó
             } else {
-                
+
                 firstPage = pagination.CurrentPage - totalLeftPage;
             }
         }
@@ -68,7 +68,7 @@ function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
             list_li_page += `<li page ="` + i + `" class="page-item"><a class="page-link` + activeClass + `">` + i + `</a></li>`;
         }
         list_li_page += `<li class="page-item next"><a class="page-link next"">Next</a></li>`;
-        
+
         //add Page
         $("div.page-pagination ul.pagination").text("");
         $("div.page-pagination ul.pagination").append(list_li_page);
@@ -77,7 +77,7 @@ function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
         let toNumber = (pagination.CurrentPage * PageSize);
         let fromNumber = toNumber - PageSize + 1;
         toNumber = toNumber >= pagination.TotalCount ? pagination.TotalCount : toNumber;
-        $("div.top-bar-page-amount p").text("Showing " + fromNumber + " - " + toNumber +" of " + pagination.TotalCount+" result");
+        $("div.top-bar-page-amount p").text("Showing " + fromNumber + " - " + toNumber + " of " + pagination.TotalCount + " result");
 
         //#endregion ----- Pagination
 
@@ -341,12 +341,12 @@ function ajaxGetManyProduct(ProductName, PageNumber, PageSize, OrderBy) {
 //#endregion ----- Function AJAX get many product
 //#region -------- Run Ajax first load
 $(document).ready(function () {
-    
+
     //Nếu là index page thì pageSize =10
     if ($("#tab1 div.swiper-wrapper").length > 0) pageSize = 10;
     //Get Product and add to gird and list and quick view
     ajaxGetManyProduct("", 1, pageSize, defaultOrderby);
-    
+
 });
 //#endregion ----- Run Ajax first load
 //#region -------- Click Page and search
@@ -372,7 +372,7 @@ $(document).on('click', 'li.page-item.prev', function () {
 });
 //Search
 $(document).on('click', 'button:has(i.icon-search)', function () {
-    
+
     //if not ShopGrid3
     if ($("div.page-banner-content.text-center h2.title:contains('Products')").length <= 0) {
         if (confirm("Go to Products Page to Search")) {
@@ -382,14 +382,14 @@ $(document).on('click', 'button:has(i.icon-search)', function () {
         } else {
             return;
         }
-        
+
     }
     var searchDesktop = $($(this).prev()[0]).val();
     var searchMobile = $($(this).prev()[1]).val();
-    
+
     if (!isEmpty(searchDesktop)) {
         ajaxGetManyProduct(searchDesktop, 1, pageSize, "Name");
-        
+
     } else if (!isEmpty(searchMobile)) {
         ajaxGetManyProduct(searchMobile, 1, pageSize, "Name");
     }
