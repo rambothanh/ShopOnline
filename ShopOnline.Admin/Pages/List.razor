@@ -70,7 +70,6 @@ else
             }
         <li @onclick="()=>NextPage()" class="page-item"><a class="page-link" >Next</a></li>
     </ul>
-    @((MarkupString)list_li_page)
 }
 
 @code {
@@ -86,7 +85,6 @@ else
     private Pagination pagination;
     private int totalShowPage = 5;
     private int firstPage =1;
-    private string list_li_page = "";
 
     protected override async Task OnParametersSetAsync()
     {
@@ -127,22 +125,6 @@ else
                     firstPage = pagination.CurrentPage - totalLeftPage;
                 }
             }
-            //Create html list_li_page
-            @* <ul class="pagination pagination-sm">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul> *@
-            list_li_page = "<ul class='pagination pagination-sm'><li class='page-item prev'><a class='page-link prev'>Prev</a></li>";
-            for (var i = firstPage; i <= firstPage + totalShowPage - 1; ++i)
-            {
-                var activeSpan = i == pagination.CurrentPage ? "<span class='sr-only'>(current)</span>" : "";
-                list_li_page += "<li page =" + i + " class='page-item'><a class='page-link'>" + i +activeSpan+ "</a></li>";
-            }
-            list_li_page += "<li class='page-item next'><a class='page-link next'>Next</a></li></ul>";
-            #endregion Pagitation
         }
     }
     protected override async Task OnInitializedAsync()
